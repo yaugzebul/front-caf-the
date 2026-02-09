@@ -1,0 +1,36 @@
+.product-list-container {
+    padding: 2rem;
+}
+
+.view-controls {
+    margin-bottom: 2rem;
+    text-align: right;
+}
+
+.view-controls button {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.view-controls button.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Affichage en Grille */
+.product-list.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+/* Affichage en Liste */
+.product-list.list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}

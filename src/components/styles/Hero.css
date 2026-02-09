@@ -1,0 +1,38 @@
+.hero-container {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: #f8f9fa; /* Un fond léger pour délimiter la section */
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+}
+
+.top-products-list {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne sur les petits écrans */
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 1.2rem;
+}
+
+/* Styles pour le skeleton dans le contexte du Hero */
+.product-skeleton {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

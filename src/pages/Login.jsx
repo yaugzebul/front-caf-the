@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext} from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Login = () => {
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [motDePasse, setMotDePasse] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
@@ -18,13 +23,13 @@ const Login = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         email,
-                        mdp_client: motDePasse,
+                        mot_de_passe: motDePasse,
                     }),
                 },
             );
 
             const data = await response.json();
-
+            console.log(data);
             if (!response.ok) {
                 setErrorMsg(data.message || "Erreur de connexion");
                 return;
@@ -33,8 +38,9 @@ const Login = () => {
             const { token, client } = data;
 
             // Appel au login via le contexte
-
+            login(token, client);
             // Puis retour à l'accueil
+            navigate("/");
         } catch (error) {
             console.error("Erreur lors de la connexion: ", error);
             setErrorMsg("Une erreur s'est produite lors de la connexion");

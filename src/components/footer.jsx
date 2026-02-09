@@ -2,9 +2,9 @@ import React from 'react';
 
 function Footer() {
     return (
-        <div>
-            <h2>FOOTER</h2>
-        </div>
+        <footer>
+           <p>© 2026 - {new Date().getFullYear()} Caf'Thé - Tous droits réservés.</p>
+        </footer>
     );
 }
 

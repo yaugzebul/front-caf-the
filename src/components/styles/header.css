@@ -1,0 +1,121 @@
+/* src/components/styles/header.css */
+
+.navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-left, .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.navbar-left {
+    justify-content: flex-start;
+}
+
+.navbar-right {
+    justify-content: flex-end;
+}
+
+.navbar-center {
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-logo {
+    height: 150px;
+    width: auto;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Styles pour la recherche */
+.search-icon {
+    cursor: pointer;
+    display: flex; /* Pour bien centrer le SVG */
+    align-items: center;
+}
+
+.search-icon svg {
+    width: 22px; /* Taille de l'icône */
+    height: 22px;
+    stroke: #333; /* Couleur du trait */
+    transition: stroke 0.2s;
+}
+
+.search-icon:hover svg {
+    stroke: #007bff; /* Couleur au survol */
+}
+
+.search-bar-active {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar-active input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 200px;
+}
+
+.close-search-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 8px;
+    color: #888;
+}
+
+/* Styles pour l'authentification */
+.navbar-user {
+    font-weight: 500;
+}
+
+.navbar-link-auth, .navbar-logout-button {
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.navbar-link-auth {
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.navbar-link-auth:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.navbar-logout-button {
+    background: none;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.navbar-logout-button:hover {
+    background-color: #dc3545;
+    color: white;
+}
