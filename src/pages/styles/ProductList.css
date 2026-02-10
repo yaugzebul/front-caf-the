@@ -1,31 +1,54 @@
+/* Pas besoin d'importer les polices ici */
+
+/* --- Amélioration du style de la liste de produits --- */
+
 .product-list-container {
-    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Conteneur pour les filtres et les contrôles de vue */
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .view-controls {
-    margin-bottom: 2rem;
-    text-align: right;
+    display: flex;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .view-controls button {
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 8px 16px;
+    background: #F4F1EA; /* Crème de Soie */
+    border: none;
+    padding: 10px 16px;
     cursor: pointer;
+    color: #3C2F2F; /* Brun Espresso */
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.view-controls button:not(:last-child) {
+    border-right: 1px solid #e0e0e0;
 }
 
 .view-controls button.active {
-    background: #007bff;
+    background: #1B3022; /* Vert Forêt Profond */
     color: white;
-    border-color: #007bff;
 }
 
 /* Affichage en Grille */
 .product-list.grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
-    justify-content: center;
 }
 
 /* Affichage en Liste */
@@ -33,4 +56,17 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Message si aucun produit ne correspond */
+.no-products-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: #F4F1EA; /* Crème de Soie */
+    border-radius: 12px;
+    color: #3C2F2F; /* Brun Espresso */
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
 }

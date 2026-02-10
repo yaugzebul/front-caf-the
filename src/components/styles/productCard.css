@@ -1,70 +1,282 @@
-/* ... (tous les styles précédents) ... */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+/* Styles de base pour la carte produit */
+.product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #F4F1EA; /* Crème de Soie */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-card-img-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover .product-card-img {
+    transform: scale(1.05);
+}
+
+.promo-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #1B3022; /* Vert Forêt Profond */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.product-card-content {
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-card h3 {
+    min-height: 48px;
+    margin-bottom: 0.5rem;
+}
+
+.product-card h3 a {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #3C2F2F; /* Brun Espresso */
+    transition: color 0.2s;
+}
+
+.product-card h3 a:hover {
+    color: #C5A059; /* Or Doux */
+}
+
+.product-card-description {
+    font-size: 0.9rem;
+    color: #3C2F2F; /* Brun Espresso */
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.product-card-price-container {
+    margin: 1rem 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #95a5a6;
+    font-size: 0.9rem;
+}
+
+.price-new {
+    color: #1B3022; /* Vert Forêt Profond */
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.product-card-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #3C2F2F; /* Brun Espresso */
+}
 
 /* Styles pour les actions (ajout panier / quantité) */
 .product-card-actions {
     margin-top: auto;
     padding-top: 1rem;
+    border-top: 1px solid #e0e0e0; /* Utilisation d'une couleur plus neutre */
 }
 
 .add-to-cart-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
+    padding: 12px;
+    background-color: #C5A059; /* Or Doux */
+    color: #3C2F2F; /* Brun Espresso */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .add-to-cart-btn:hover {
-    background-color: #218838;
+    background-color: #b0904f; /* Or Doux plus foncé */
+    transform: translateY(-2px);
 }
 
 .quantity-control {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1rem;
 }
 
 .quantity-control button {
-    background-color: #f0f0f0;
+    background-color: #f8f9fa;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
     font-size: 1.2rem;
+    color: #3C2F2F; /* Brun Espresso */
+    transition: background-color 0.2s;
+}
+
+.quantity-control button:hover {
+    background-color: #e0e0e0;
 }
 
 .quantity-control span {
+    padding: 0 1rem;
     font-size: 1.1rem;
-    font-weight: bold;
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+    color: #3C2F2F; /* Brun Espresso */
 }
 
 /* Nouveaux styles pour les produits en vrac */
 .vrac-controls {
     display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
 .vrac-controls select {
-    flex-grow: 1;
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #3C2F2F; /* Brun Espresso */
+    background-color: #f8f9fa;
 }
 
-.vrac-controls .add-to-cart-btn {
-    flex-shrink: 0;
-    width: auto; /* La largeur s'adapte au contenu */
-}
-
-
-/* ... (le reste des styles pour le mode grille/liste) ... */
+/* Mode Grille */
 .product-card.grid {
-    width: 280px;
+    width: 100%;
 }
-/* ... etc ... */
+
+.product-card.grid .product-card-img-container {
+    border-radius: 12px 12px 0 0;
+}
+
+/* Mode Liste */
+.product-card.list {
+    flex-direction: row;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 12px;
+}
+
+.product-card.list .product-card-img-container {
+    width: 180px;
+    height: 180px;
+    flex-shrink: 0;
+    border-radius: 12px 0 0 12px;
+}
+
+.product-card.list .product-card-content {
+    text-align: left;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.5rem 1rem;
+}
+
+.product-card.list h3 {
+    grid-column: 1 / 2;
+    margin-bottom: 0;
+}
+
+.product-card.list .product-card-description {
+    grid-column: 1 / 2;
+    margin-bottom: 0;
+}
+
+.product-card.list .product-card-price-container {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.product-card.list .product-card-actions {
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    border-top: none;
+    padding-top: 0;
+}
+
+.product-card.list .add-to-cart-btn {
+    width: auto;
+    min-width: 150px;
+}
+
+.product-card.list .quantity-control {
+    margin-top: 0.5rem;
+}
+
+/* Responsive pour ProductCard */
+@media (max-width: 768px) {
+    .product-card.list {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-card.list .product-card-img-container {
+        width: 100%;
+        height: 200px;
+        border-radius: 12px 12px 0 0;
+    }
+    .product-card.list .product-card-content {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .product-card.list .product-card-price-container,
+    .product-card.list .product-card-actions {
+        align-items: center;
+    }
+    .product-card.list .add-to-cart-btn {
+        width: 100%;
+    }
+}

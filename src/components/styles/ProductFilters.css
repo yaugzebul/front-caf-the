@@ -1,12 +1,13 @@
+/* Pas besoin d'importer les polices ici */
+
 .product-filters {
     display: flex;
     gap: 2rem;
-    padding: 1rem 2rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
+    padding: 1rem 0;
     margin-bottom: 2rem;
     flex-wrap: wrap;
     align-items: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .filter-group {
@@ -18,15 +19,66 @@
 .filter-group label {
     font-weight: 500;
     font-size: 0.9rem;
+    color: #F4F1EA; /* Crème de Soie pour un meilleur contraste sur le fond vert foncé */
 }
 
 .filter-group select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     min-width: 200px;
+    background-color: #F4F1EA; /* Crème de Soie */
+    color: #3C2F2F; /* Brun Espresso */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-group select:hover,
+.filter-group select:focus {
+    border-color: #C5A059; /* Or Doux au survol/focus */
+    outline: none;
 }
 
 .price-slider {
     width: 250px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.2s;
+}
+
+.price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #C5A059; /* Or Doux */
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+    background: #b0904f; /* Or Doux plus foncé au survol */
+    transform: scale(1.1);
+}
+
+.price-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #C5A059; /* Or Doux */
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.price-slider::-moz-range-thumb:hover {
+    background: #b0904f; /* Or Doux plus foncé au survol */
+    transform: scale(1.1);
 }

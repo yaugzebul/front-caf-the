@@ -11,18 +11,13 @@ const ProductList = () => {
     const [viewMode, setViewMode] = useState('grid');
     
     const [filters, setFilters] = useState({
-        category: 'all', // La catégorie est maintenant une chaîne de caractères (ex: "Café")
+        category: 'all',
         maxPrice: 9999,
     });
 
     const location = useLocation();
-
-    // Mapping des catégories de l'URL vers les catégories de la base de données
     const urlCategoryMap = useMemo(() => ({
-        'cafes': 'Café',
-        'thes': 'Thé',
-        'accessoires': 'Accessoire',
-        'cadeaux': 'Cadeau' // Assurez-vous que cela correspond à vos données
+        'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
 
     useEffect(() => {
@@ -36,17 +31,11 @@ const ProductList = () => {
                 setProduits(data.articles);
                 
                 const maxPriceFromData = data.articles.reduce((max, p) => (parseFloat(p.prix_ttc) > max ? parseFloat(p.prix_ttc) : max), 0);
-                
                 const params = new URLSearchParams(location.search);
-                const categoryFromURL = params.get('category'); // ex: "cafes"
-                
-                // Utilisation du mapping pour obtenir la catégorie réelle
+                const categoryFromURL = params.get('category');
                 const initialCategory = categoryFromURL ? urlCategoryMap[categoryFromURL.toLowerCase()] : 'all';
 
-                setFilters({
-                    maxPrice: maxPriceFromData,
-                    category: initialCategory || 'all' // S'assure que c'est 'all' si non mappé
-                });
+                setFilters({ maxPrice: maxPriceFromData, category: initialCategory || 'all' });
 
             } catch (err) {
                 setError("Impossible de charger les produits.");
@@ -55,22 +44,17 @@ const ProductList = () => {
             }
         };
         fetchProduits();
-    }, [location.search, urlCategoryMap]); // Ajout de urlCategoryMap aux dépendances
+    }, [location.search, urlCategoryMap]);
 
-    // Extraire les chaînes de caractères uniques pour les catégories
-    const uniqueCategories = useMemo(() => {
-        return [...new Set(produits.map(p => p.id_categorie).filter(Boolean))];
-    }, [produits]);
-
-    const priceRange = useMemo(() => {
+    const { uniqueCategories, priceRange } = useMemo(() => {
+        const categories = [...new Set(produits.map(p => p.id_categorie).filter(Boolean))];
         const prices = produits.map(p => parseFloat(p.prix_ttc)).filter(p => !isNaN(p));
         return {
-            min: prices.length > 0 ? Math.min(...prices) : 0,
-            max: prices.length > 0 ? Math.max(...prices) : 0,
+            uniqueCategories: categories,
+            priceRange: { min: prices.length > 0 ? Math.min(...prices) : 0, max: prices.length > 0 ? Math.max(...prices) : 0 }
         };
     }, [produits]);
 
-    // Filtrer par comparaison de chaînes de caractères
     const filteredProduits = useMemo(() => {
         return produits.filter(produit => {
             const categoryMatch = filters.category === 'all' || (produit.id_categorie && produit.id_categorie.toLowerCase() === filters.category.toLowerCase());
@@ -89,25 +73,28 @@ const ProductList = () => {
 
     return (
         <div className="product-list-container">
-            {produits.length > 0 && (
-                <ProductFilters 
-                    categories={uniqueCategories}
-                    filters={filters}
-                    onFilterChange={handleFilterChange}
-                    priceRange={priceRange}
-                />
-            )}
-            <div className="view-controls">
-                <button onClick={() => setViewMode('grid')} className={viewMode === 'grid' ? 'active' : ''}>Grille</button>
-                <button onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'active' : ''}>Liste</button>
+            <div className="top-controls">
+                {produits.length > 0 && (
+                    <ProductFilters 
+                        categories={uniqueCategories}
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        priceRange={priceRange}
+                    />
+                )}
+                <div className="view-controls">
+                    <button onClick={() => setViewMode('grid')} className={viewMode === 'grid' ? 'active' : ''}>Grille</button>
+                    <button onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'active' : ''}>Liste</button>
+                </div>
             </div>
+
             <div className={`product-list ${viewMode}`}>
                 {filteredProduits.length > 0 ? (
                     filteredProduits.map((produit) => (
                         <ProductCard key={produit.id_article} produit={produit} viewMode={viewMode} />
                     ))
                 ) : (
-                    <p>Aucun produit ne correspond à vos critères de recherche.</p>
+                    <p className="no-products-message">Aucun produit ne correspond à vos critères de recherche.</p>
                 )}
             </div>
         </div>

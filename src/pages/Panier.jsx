@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import './styles/Panier.css';
 
 const Panier = () => {
-    const { cartItems, increaseQuantity, decreaseQuantity, clearCart, cartTotal } = useCart();
+    // On récupère les nouvelles valeurs du contexte
+    const { cartItems, increaseQuantity, decreaseQuantity, clearCart, cartTotal, cartTotalWithoutPromo, hasPromo } = useCart();
 
     if (cartItems.length === 0) {
         return (
@@ -20,7 +21,6 @@ const Panier = () => {
         <div className="panier-container">
             <h2>Votre Panier</h2>
             
-            {/* En-tête de la liste d'articles */}
             <div className="panier-header">
                 <div className="header-product">Produit</div>
                 <div className="header-quantity">Quantité</div>
@@ -40,14 +40,15 @@ const Panier = () => {
                         ? (effectiveUnitPrice / 1000) * item.quantity
                         : effectiveUnitPrice * item.quantity;
 
+                    const hasImage = item.image_url && item.image_url.trim() !== '' && item.image_url !== 'null';
+                    const imageURL = hasImage 
+                        ? `${import.meta.env.VITE_API_URL}/images/${item.image_url}` 
+                        : `https://placehold.co/600x400/EEE/31343C?text=${encodeURIComponent(item.nom_produit)}`;
+
                     return (
                         <li key={item.id_article} className="panier-item">
                             <div className="item-product">
-                                <img 
-                                    src={`${import.meta.env.VITE_API_URL}/images/${item.image_url}`} 
-                                    alt={item.nom_produit} 
-                                    className="panier-item-img"
-                                />
+                                <img src={imageURL} alt={item.nom_produit} className="panier-item-img" />
                                 <div className="item-details">
                                     <span className="item-name">{item.nom_produit}</span>
                                     <span className="item-unit-price">
@@ -62,9 +63,7 @@ const Panier = () => {
                             <div className="item-quantity">
                                 <div className="quantity-control">
                                     <button onClick={() => decreaseQuantity(item.id_article)}>-</button>
-                                    <span>
-                                        {item.quantity} {item.type_vente === 'vrac' ? 'g' : ''}
-                                    </span>
+                                    <span>{item.quantity} {item.type_vente === 'vrac' ? 'g' : ''}</span>
                                     <button onClick={() => increaseQuantity(item.id_article)}>+</button>
                                 </div>
                             </div>
@@ -80,7 +79,14 @@ const Panier = () => {
             <div className="panier-summary">
                 <div className="panier-total">
                     <span>Total</span>
-                    <span>{cartTotal.toFixed(2)} €</span>
+                    {hasPromo ? (
+                        <div className="total-price-container">
+                            <span className="price-old">{cartTotalWithoutPromo.toFixed(2)} €</span>
+                            <span className="price-new">{cartTotal.toFixed(2)} €</span>
+                        </div>
+                    ) : (
+                        <span>{cartTotal.toFixed(2)} €</span>
+                    )}
                 </div>
                 <div className="panier-actions">
                     <button onClick={clearCart} className="btn-secondary">Vider le panier</button>

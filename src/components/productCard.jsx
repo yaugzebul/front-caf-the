@@ -9,11 +9,14 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
 
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
     
-    // On initialise le poids sélectionné avec le premier choix disponible
     const [selectedWeight, setSelectedWeight] = useState(weightOptions[0] || 0);
 
+    // Logique pour l'image de remplacement avec le nom du produit
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
-    const imageURL = hasImage ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}` : "https://placehold.co/600x400";
+    const imageURL = hasImage 
+        ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}` 
+        : `https://placehold.co/600x400/EEE/31343C?text=${encodeURIComponent(produit.nom_produit)}`;
+
     const shortDescription = produit.description ? produit.description.substring(0, 100) + '...' : '';
     const isPromo = !!(produit.promotion && produit.pourcentage_promo > 0);
     

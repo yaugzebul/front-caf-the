@@ -1,38 +1,60 @@
+/* Pas besoin d'importer les polices ici */
+
 .hero-container {
-    padding: 4rem 2rem;
+    position: relative;
+    padding: 8rem 2rem;
     text-align: center;
-    background-color: #f8f9fa; /* Un fond léger pour délimiter la section */
+    color: #F4F1EA; /* Crème de Soie pour le texte */
+    background-image: url('https://images.unsplash.com/photo-1559787118-2835a1b9e0b0?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    border-radius: 0;
+    margin-bottom: 4rem;
+}
+
+.hero-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(27, 48, 34, 0.7); /* Vert Forêt Profond plus opaque */
+    z-index: 1;
+}
+
+.hero-text, .top-products-list {
+    position: relative;
+    z-index: 2;
 }
 
 .hero-text h1 {
-    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 700;
     margin-bottom: 1rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-text p {
-    font-size: 1.2rem;
-    color: #6c757d;
-    margin-bottom: 3rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    opacity: 0.9;
 }
 
 .top-products-list {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne sur les petits écrans */
+    flex-wrap: wrap;
 }
 
-.error-message {
-    color: #dc3545;
-    font-size: 1.2rem;
-}
-
-/* Styles pour le skeleton dans le contexte du Hero */
-.product-skeleton {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 16px;
+.top-products-list .product-card {
     width: 300px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
+
+/* ... (le reste du fichier reste identique) ... */
