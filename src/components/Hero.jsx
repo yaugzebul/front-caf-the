@@ -1,30 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react'; // 1. Importer useContext
+import React, { useState, useEffect } from 'react'; // Retirer useContext
 import ProductCard from './productCard.jsx';
 import Skeleton from 'react-loading-skeleton';
-import { AuthContext } from '../context/AuthContext.jsx'; // 2. Importer AuthContext
+// Retirer l'import de AuthContext
 import './styles/Hero.css';
 
 const Hero = () => {
     const [topProducts, setTopProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token } = useContext(AuthContext); // 3. Récupérer le token
+    // Retirer la récupération du token
+    // const { token } = useContext(AuthContext); 
 
     useEffect(() => {
-        const fetchTopProducts = async () => {
-            if (!token) {
-                setIsLoading(false);
-                return;
-            }
+        // Retirer la condition isAuthLoading et token
+        // if (isAuthLoading) return;
+        // if (!token) { setIsLoading(false); return; }
 
+        const fetchTopProducts = async () => {
             try {
                 setIsLoading(true);
-                // 4. Ajouter les en-têtes d'authentification
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/top-selling`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                // L'appel se fait maintenant sans token
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/top-selling`);
                 
                 if (!response.ok) {
                     throw new Error(`Erreur HTTP: ${response.status}`);
@@ -41,7 +37,7 @@ const Hero = () => {
         };
 
         fetchTopProducts();
-    }, [token]); // 5. Ajouter token comme dépendance
+    }, []); // Retirer token et isAuthLoading des dépendances
 
     return (
         <section className="hero-container">

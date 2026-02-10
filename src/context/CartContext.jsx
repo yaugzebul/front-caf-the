@@ -1,16 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// 1. Création du Contexte
 export const CartContext = createContext(null);
 
-// 2. Création du Fournisseur (Provider)
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState(() => {
         try {
             const localData = localStorage.getItem('cartItems');
             return localData ? JSON.parse(localData) : [];
         } catch (error) {
-            console.error("Impossible d'afficher les articles du panier", error);
+            console.error("Impossible d'analyser les articles du panier", error);
             return [];
         }
     });
@@ -19,18 +17,60 @@ export const CartProvider = ({ children }) => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    const addToCart = (product) => {
+    // --- Fonctions de gestion du panier ---
+
+    // La fonction addToCart additionne maintenant toujours les quantités.
+    const addToCart = (product, quantity) => {
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id_article === product.id_article);
             if (existingItem) {
                 return prevItems.map(item =>
                     item.id_article === product.id_article
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + quantity } // On additionne la quantité
                         : item
                 );
             } else {
-                return [...prevItems, { ...product, quantity: 1 }];
+                return [...prevItems, { ...product, quantity }];
             }
+        });
+    };
+
+    const increaseQuantity = (productId) => {
+        setCartItems(prevItems =>
+            prevItems.map(item => {
+                if (item.id_article === productId) {
+                    if (item.type_vente === 'unitaire') {
+                        return { ...item, quantity: item.quantity + 1 };
+                    }
+                    if (item.type_vente === 'vrac') {
+                        const step = 100;
+                        return { ...item, quantity: item.quantity + step };
+                    }
+                }
+                return item;
+            })
+        );
+    };
+
+    const decreaseQuantity = (productId) => {
+        setCartItems(prevItems => {
+            const item = prevItems.find(p => p.id_article === productId);
+            if (!item) return prevItems;
+
+            if (item.type_vente === 'unitaire') {
+                return item.quantity === 1
+                    ? prevItems.filter(p => p.id_article !== productId)
+                    : prevItems.map(p => p.id_article === productId ? { ...p, quantity: p.quantity - 1 } : p);
+            }
+            
+            if (item.type_vente === 'vrac') {
+                const step = 100;
+                const newQuantity = item.quantity - step;
+                return newQuantity < step
+                    ? prevItems.filter(p => p.id_article !== productId)
+                    : prevItems.map(p => p.id_article === productId ? { ...p, quantity: newQuantity } : p);
+            }
+            return prevItems;
         });
     };
 
@@ -38,34 +78,33 @@ export const CartProvider = ({ children }) => {
         setCartItems(prevItems => prevItems.filter(item => item.id_article !== productId));
     };
 
-    const clearCart = () => {
-        setCartItems([]);
-    };
+    const clearCart = () => setCartItems([]);
 
-    const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-    const cartTotal = cartItems.reduce((total, item) => total + (item.prix_ttc * item.quantity), 0);
+    const itemCount = cartItems.reduce((total, item) => (item.type_vente === 'unitaire' ? total + item.quantity : total + 1), 0);
 
-    const value = {
-        cartItems,
-        addToCart,
-        removeFromCart,
-        clearCart,
-        itemCount,
-        cartTotal,
-    };
+    const cartTotal = cartItems.reduce((total, item) => {
+        const originalPrice = parseFloat(item.prix_ttc);
+        if (isNaN(originalPrice)) return total;
 
-    return (
-        <CartContext.Provider value={value}>
-            {children}
-        </CartContext.Provider>
-    );
+        const isPromo = !!(item.promotion && item.pourcentage_promo > 0);
+        const effectivePrice = isPromo
+            ? (originalPrice * (1 - item.pourcentage_promo / 100))
+            : originalPrice;
+
+        const itemTotal = item.type_vente === 'vrac'
+            ? (effectivePrice / 1000) * item.quantity
+            : effectivePrice * item.quantity;
+
+        return total + itemTotal;
+    }, 0);
+
+    const value = { cartItems, addToCart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity, itemCount, cartTotal };
+
+    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
-// 3. Hook personnalisé pour une utilisation facile
 export const useCart = () => {
     const context = useContext(CartContext);
-    if (!context) {
-        throw new Error(`Le hook useCart doit être utilisé à l'intérieur du CartProvider`);
-    }
+    if (!context) throw new Error('Le hook useCart doit être utilisé à l\'intérieur du CartProvider');
     return context;
 };

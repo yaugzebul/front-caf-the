@@ -1,99 +1,70 @@
-/* Styles de base pour la carte produit */
-.product-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    background-color: #fff;
+/* ... (tous les styles précédents) ... */
+
+/* Styles pour les actions (ajout panier / quantité) */
+.product-card-actions {
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.add-to-cart-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
-.product-card-link {
-    text-decoration: none;
-    color: inherit;
+.add-to-cart-btn:hover {
+    background-color: #218838;
 }
 
-.product-card-content {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.product-card h3 a {
-    font-size: 1.2rem;
-    margin: 0 0 0.5rem 0;
-    text-decoration: none;
-    color: #333;
-}
-
-.product-card-footer {
+.quantity-control {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto; /* Pousse le footer en bas */
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.product-card-price {
+.quantity-control button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.quantity-control span {
     font-size: 1.1rem;
     font-weight: bold;
-    margin: 0;
 }
 
-.details-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-/* Mode Grille */
-.product-card.grid {
+/* Nouveaux styles pour les produits en vrac */
+.vrac-controls {
     display: flex;
-    flex-direction: column;
+    gap: 10px;
+}
+
+.vrac-controls select {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.vrac-controls .add-to-cart-btn {
+    flex-shrink: 0;
+    width: auto; /* La largeur s'adapte au contenu */
+}
+
+
+/* ... (le reste des styles pour le mode grille/liste) ... */
+.product-card.grid {
     width: 280px;
 }
-
-.product-card.grid .product-card-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-/* Mode Liste */
-.product-card.list {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.product-card.list .product-card-link {
-    flex-shrink: 0;
-}
-
-.product-card.list .product-card-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px 0 0 8px;
-}
-
-.product-card.list .product-card-content {
-    text-align: left;
-}
-
-.product-card.list .product-card-description {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 1rem;
-}
+/* ... etc ... */

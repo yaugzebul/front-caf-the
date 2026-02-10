@@ -13,11 +13,12 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
 
     return (
         <div className="product-filters">
-            {/* Filtre par catégorie */}
-           /* <div className="filter-group">
+            {/* Filtre par catégorie (simplifié) */}
+            <div className="filter-group">
                 <label htmlFor="category-select">Catégorie</label>
                 <select id="category-select" value={filters.category} onChange={handleCategoryChange}>
                     <option value="all">Toutes</option>
+                    {/* On utilise maintenant une simple liste de chaînes de caractères */}
                     {categories.map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
                     ))}

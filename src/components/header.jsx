@@ -47,7 +47,7 @@ const Header = () => {
                 {isAuthenticated ? (
                     <>
                         <span className="navbar-user">
-                            Bonjour, {user.prenom}
+                            Bonjour, {user.prenom} {user.nom}
                         </span>
                         <button className="navbar-logout-button" onClick={handleLogout}>
                             Déconnexion
