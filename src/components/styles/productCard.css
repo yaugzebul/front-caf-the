@@ -11,6 +11,7 @@
     flex-direction: column;
     overflow: hidden;
     font-family: 'Montserrat', sans-serif;
+    position: relative; /* Nécessaire pour le message de confirmation */
 }
 
 .product-card:hover {
@@ -254,6 +255,24 @@
 
 .product-card.list .quantity-control {
     margin-top: 0.5rem;
+}
+
+/* Message de confirmation */
+.card-confirmation-message {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1B3022; /* Vert Forêt Profond */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 20;
+    opacity: 1;
+    transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    white-space: nowrap;
 }
 
 /* Responsive pour ProductCard */

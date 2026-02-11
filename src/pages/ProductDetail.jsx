@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import { useCart } from "../context/CartContext.jsx";
+import "./styles/ProductDetail.css";
 
 const ProductDetails = () => {
     const { id } = useParams();
+    const { addToCart } = useCart();
 
     const [produit, setProduit] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [quantity, setQuantity] = useState(1);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
         const fetchProduit = async () => {
@@ -25,6 +30,13 @@ const ProductDetails = () => {
 
                 const data = await response.json();
                 setProduit(data.article);
+
+                if (data.article.type_vente === 'vrac') {
+                    setQuantity(100);
+                } else {
+                    setQuantity(1);
+                }
+
             } catch (err) {
                 console.error("Erreur lors du chargement du produit :", err);
                 setError("Impossible de charger le produit");
@@ -36,56 +48,125 @@ const ProductDetails = () => {
         void fetchProduit();
     }, [id]);
 
+    const handleIncrement = () => {
+        if (produit.type_vente === 'vrac') {
+            setQuantity(prev => prev + 100);
+        } else {
+            setQuantity(prev => prev + 1);
+        }
+    };
+
+    const handleDecrement = () => {
+        if (produit.type_vente === 'vrac') {
+            setQuantity(prev => (prev > 100 ? prev - 100 : 100));
+        } else {
+            setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+        }
+    };
+
+    const handleAddToCart = () => {
+        addToCart(produit, quantity);
+        setShowConfirmation(true);
+        setTimeout(() => {
+            setShowConfirmation(false);
+        }, 3000);
+    };
+
     if (isLoading) {
         return (
             <div className="product-details-skeleton">
                 <Skeleton height={400} width={400} />
-                <div style={{ marginTop: 20 }}>
+                <div style={{ marginTop: 20, flex: 1 }}>
                     <Skeleton height={30} width="50%" />
-                </div>
-                <div style={{ marginTop: 10 }}>
-                    <Skeleton height={20} width="80%" />
-                    <Skeleton height={20} width="60%" />
-                    <Skeleton height={20} width="40%" />
+                    <div style={{ marginTop: 20 }}>
+                        <Skeleton count={3} />
+                    </div>
+                    <div style={{ marginTop: 20 }}>
+                        <Skeleton height={40} width="30%" />
+                    </div>
                 </div>
             </div>
         );
     }
 
-    // Erreur
     if (error) {
         return (
             <div className="product-list-error">
                 <div className="error-container">
                     <h3> Une erreur est survenue</h3>
                     <p>{error}</p>
-                    <Link to="/" className="back-link">
-                        Retour à l'accueil
+                    <Link to="/produits" className="back-link">
+                        Retour aux produits
                     </Link>
                 </div>
             </div>
         );
     }
 
-    // Image provenant de l'API
     const imageUrl = produit.image_url
         ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}`
         : `https://placehold.co/300x300?text=${produit.nom_produit}`;
 
+    const isPromo = produit.promotion && produit.pourcentage_promo > 0;
+    const originalPrice = parseFloat(produit.prix_ttc);
+    const discountedPrice = isPromo ? originalPrice * (1 - produit.pourcentage_promo / 100) : originalPrice;
+
     return (
         <div className="product-details">
-            <img src={imageUrl} alt={produit.nom_produit} />
-            <h2>{produit.nom_produit}</h2>
-            <p>{produit.description}</p>
-            <p>
-                <strong>Prix TTC :</strong> {produit.prix_ttc} €
-            </p>
-            <p>
-                <strong>Stock :</strong> {produit.quantite_stock} unités disponibles
-            </p>
-            <Link to="/" className="back-link">
-                Retour aux produits
-            </Link>
+            <div className="product-image-container">
+                <img src={imageUrl} alt={produit.nom_produit} />
+            </div>
+            <div className="product-info">
+                <h2>{produit.nom_produit}</h2>
+                <p className="description">{produit.description}</p>
+                
+                <div className="price-container">
+                    {isPromo ? (
+                        <>
+                            <span className="original-price">
+                                {originalPrice.toFixed(2)} €
+                            </span>
+                            <span className="discounted-price">
+                                {discountedPrice.toFixed(2)} €
+                            </span>
+                            <span className="promo-badge">
+                                -{produit.pourcentage_promo}%
+                            </span>
+                        </>
+                    ) : (
+                        <span className="price">
+                            {originalPrice.toFixed(2)} €
+                        </span>
+                    )}
+                    {produit.type_vente === 'vrac' && <span style={{fontSize: '0.6em', color: '#666', marginLeft: '5px'}}> / kg</span>}
+                </div>
+
+                <p>
+                    <strong>Stock :</strong> {produit.quantite_stock > 0 ? `${produit.quantite_stock} ${produit.type_vente === 'vrac' ? 'g' : 'unités'} disponibles` : <span style={{color: 'red'}}>Rupture de stock</span>}
+                </p>
+
+                {produit.quantite_stock > 0 && (
+                    <div className="add-to-cart-section">
+                        <div className="quantity-selector">
+                            <button onClick={handleDecrement}>-</button>
+                            <span>
+                                {quantity} {produit.type_vente === 'vrac' ? 'g' : ''}
+                            </span>
+                            <button onClick={handleIncrement}>+</button>
+                        </div>
+                        <button onClick={handleAddToCart} className="add-to-cart-btn">
+                            Ajouter au panier
+                        </button>
+                        {showConfirmation && <div className="confirmation-message">Produit ajouté au panier !</div>}
+                    </div>
+                )}
+
+                <div>
+                    <Link to="/produits" className="back-link">
+                        ← Retour aux produits
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 };

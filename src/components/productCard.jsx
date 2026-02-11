@@ -10,8 +10,8 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
     
     const [selectedWeight, setSelectedWeight] = useState(weightOptions[0] || 0);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
-    // Logique pour l'image de remplacement avec le nom du produit
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
     const imageURL = hasImage 
         ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}` 
@@ -34,6 +34,10 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
         const quantityToAdd = produit.type_vente === 'vrac' ? selectedWeight : 1;
         if (quantityToAdd > 0) {
             addToCart(produit, quantityToAdd);
+            setShowConfirmation(true);
+            setTimeout(() => {
+                setShowConfirmation(false);
+            }, 2000); // Disparaît après 2 secondes
         }
     };
 
@@ -90,6 +94,7 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
                     )}
                 </div>
             </div>
+            {showConfirmation && <div className="card-confirmation-message">Produit ajouté au panier !</div>}
         </div>
     );
 };
