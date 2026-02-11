@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useCart } from "../context/CartContext.jsx";
 import "./styles/ProductDetail.css";
 
 const ProductDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { addToCart } = useCart();
 
     const [produit, setProduit] = useState(null);
@@ -67,9 +68,6 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         addToCart(produit, quantity);
         setShowConfirmation(true);
-        setTimeout(() => {
-            setShowConfirmation(false);
-        }, 3000);
     };
 
     if (isLoading) {
@@ -112,62 +110,89 @@ const ProductDetails = () => {
     const discountedPrice = isPromo ? originalPrice * (1 - produit.pourcentage_promo / 100) : originalPrice;
 
     return (
-        <div className="product-details">
-            <div className="product-image-container">
-                <img src={imageUrl} alt={produit.nom_produit} />
-            </div>
-            <div className="product-info">
-                <h2>{produit.nom_produit}</h2>
-                <p className="description">{produit.description}</p>
-                
-                <div className="price-container">
-                    {isPromo ? (
-                        <>
-                            <span className="original-price">
+        <>
+            <div className="product-details">
+                <div className="product-image-container">
+                    <img src={imageUrl} alt={produit.nom_produit} />
+                </div>
+                <div className="product-info">
+                    <h2>{produit.nom_produit}</h2>
+                    <p className="description">{produit.description}</p>
+                    
+                    <div className="price-container">
+                        {isPromo ? (
+                            <>
+                                <span className="original-price">
+                                    {originalPrice.toFixed(2)} €
+                                </span>
+                                <span className="discounted-price">
+                                    {discountedPrice.toFixed(2)} €
+                                </span>
+                                <span className="promo-badge">
+                                    -{produit.pourcentage_promo}%
+                                </span>
+                            </>
+                        ) : (
+                            <span className="price">
                                 {originalPrice.toFixed(2)} €
                             </span>
-                            <span className="discounted-price">
-                                {discountedPrice.toFixed(2)} €
-                            </span>
-                            <span className="promo-badge">
-                                -{produit.pourcentage_promo}%
-                            </span>
-                        </>
-                    ) : (
-                        <span className="price">
-                            {originalPrice.toFixed(2)} €
-                        </span>
-                    )}
-                    {produit.type_vente === 'vrac' && <span style={{fontSize: '0.6em', color: '#666', marginLeft: '5px'}}> / kg</span>}
-                </div>
-
-                <p>
-                    <strong>Stock :</strong> {produit.quantite_stock > 0 ? `${produit.quantite_stock} ${produit.type_vente === 'vrac' ? 'g' : 'unités'} disponibles` : <span style={{color: 'red'}}>Rupture de stock</span>}
-                </p>
-
-                {produit.quantite_stock > 0 && (
-                    <div className="add-to-cart-section">
-                        <div className="quantity-selector">
-                            <button onClick={handleDecrement}>-</button>
-                            <span>
-                                {quantity} {produit.type_vente === 'vrac' ? 'g' : ''}
-                            </span>
-                            <button onClick={handleIncrement}>+</button>
-                        </div>
-                        <button onClick={handleAddToCart} className="add-to-cart-btn">
-                            Ajouter au panier
-                        </button>
-                        {showConfirmation && <div className="confirmation-message">Produit ajouté au panier !</div>}
+                        )}
+                        {produit.type_vente === 'vrac' && <span style={{fontSize: '0.6em', color: '#666', marginLeft: '5px'}}> / kg</span>}
                     </div>
-                )}
 
-                <div>
-                    <Link to="/produits" className="back-link">
-                        ← Retour aux produits
-                    </Link>
+                    <p>
+                        <strong>Stock :</strong> {produit.quantite_stock > 0 ? `${produit.quantite_stock} ${produit.type_vente === 'vrac' ? 'g' : 'unités'} disponibles` : <span style={{color: 'red'}}>Rupture de stock</span>}
+                    </p>
+
+                    {produit.quantite_stock > 0 && (
+                        <div className="add-to-cart-section">
+                            <div className="quantity-selector">
+                                <button onClick={handleDecrement}>-</button>
+                                <span>
+                                    {quantity} {produit.type_vente === 'vrac' ? 'g' : ''}
+                                </span>
+                                <button onClick={handleIncrement}>+</button>
+                            </div>
+                            <button onClick={handleAddToCart} className="add-to-cart-btn">
+                                Ajouter au panier
+                            </button>
+                        </div>
+                    )}
+
+                    <div>
+                        <Link to="/produits" className="back-link">
+                            ← Retour aux produits
+                        </Link>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {showConfirmation && (
+                <div className="confirmation-modal-overlay">
+                    <div className="confirmation-modal">
+                        <h3>Produit ajouté au panier !</h3>
+                        <div className="confirmation-product">
+                            <img src={imageUrl} alt={produit.nom_produit} />
+                            <span>{produit.nom_produit}</span>
+                        </div>
+                        <div className="confirmation-actions">
+                            <button 
+                                onClick={() => setShowConfirmation(false)} 
+                                className="btn-secondary"
+                            >
+                                Continuer mes achats
+                            </button>
+                            <button 
+                                onClick={() => navigate('/panier')} 
+                                className="btn-primary"
+                            >
+                                Voir le panier
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
