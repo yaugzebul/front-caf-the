@@ -41,6 +41,10 @@ body {
 }
 .nav-link:hover { color: #C5A059; /* Or Doux */ }
 
+/* --- Barre de recherche --- */
+.search-icon {
+    cursor: pointer;
+}
 .search-icon svg {
     width: 22px;
     height: 22px;
@@ -49,6 +53,51 @@ body {
 }
 .search-icon:hover svg { stroke: #C5A059; /* Or Doux */ }
 
+.search-bar-active {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 5px 10px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.search-bar-active input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: #3C2F2F;
+    width: 200px;
+}
+
+.close-search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #95a5a6;
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+.close-search-btn:hover {
+    color: #3C2F2F;
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 220px; /* Largeur finale de la barre + padding */
+        opacity: 1;
+    }
+}
+
+/* --- Authentification --- */
 .navbar-user {
     font-weight: 500;
     color: #3C2F2F; /* Brun Espresso */

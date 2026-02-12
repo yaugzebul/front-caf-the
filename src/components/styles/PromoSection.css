@@ -1,0 +1,56 @@
+/* Conteneur externe pour la couleur de fond pleine largeur */
+.promo-section-wrapper {
+    background-color: #C5A059; /* Or Doux pour un impact visuel fort */
+    padding: 4rem 0; /* Espacement vertical généreux */
+    margin-top: -4rem; /* Compense la marge basse du Hero pour une transition douce */
+    z-index: 5;
+    position: relative;
+}
+
+/* Conteneur interne pour centrer le contenu */
+.promo-section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.promo-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.promo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; /* --- Modifié --- */
+    color: #3C2F2F; /* Brun Espresso pour un excellent contraste sur l'or */
+    margin-bottom: 1rem; /* Augmenté pour correspondre au Hero */
+}
+
+.promo-subtitle {
+    font-size: 1.3rem; /* --- Modifié --- */
+    color: #3C2F2F; /* Brun Espresso également pour l'harmonie */
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+.promo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.product-card-skeleton {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.error-message {
+    text-align: center;
+    color: #e74c3c;
+    background-color: #fdd;
+    padding: 1rem;
+    border-radius: 8px;
+}

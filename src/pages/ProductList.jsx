@@ -10,12 +10,15 @@ const ProductList = () => {
     const [error, setError] = useState(null);
     const [viewMode, setViewMode] = useState('grid');
     
+    const location = useLocation();
+    const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const searchQuery = searchParams.get('search') || '';
+
     const [filters, setFilters] = useState({
         category: 'all',
         maxPrice: 9999,
     });
 
-    const location = useLocation();
     const urlCategoryMap = useMemo(() => ({
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
@@ -31,8 +34,7 @@ const ProductList = () => {
                 setProduits(data.articles);
                 
                 const maxPriceFromData = data.articles.reduce((max, p) => (parseFloat(p.prix_ttc) > max ? parseFloat(p.prix_ttc) : max), 0);
-                const params = new URLSearchParams(location.search);
-                const categoryFromURL = params.get('category');
+                const categoryFromURL = searchParams.get('category');
                 const initialCategory = categoryFromURL ? urlCategoryMap[categoryFromURL.toLowerCase()] : 'all';
 
                 setFilters({ maxPrice: maxPriceFromData, category: initialCategory || 'all' });
@@ -44,7 +46,7 @@ const ProductList = () => {
             }
         };
         fetchProduits();
-    }, [location.search, urlCategoryMap]);
+    }, [location.search, urlCategoryMap, searchParams]);
 
     const { uniqueCategories, priceRange } = useMemo(() => {
         const categories = [...new Set(produits.map(p => p.id_categorie).filter(Boolean))];
@@ -57,12 +59,21 @@ const ProductList = () => {
 
     const filteredProduits = useMemo(() => {
         return produits.filter(produit => {
+            // Filtre par catégorie
             const categoryMatch = filters.category === 'all' || (produit.id_categorie && produit.id_categorie.toLowerCase() === filters.category.toLowerCase());
+            
+            // Filtre par prix
             const price = parseFloat(produit.prix_ttc);
             const priceMatch = !isNaN(price) && price <= filters.maxPrice;
-            return categoryMatch && priceMatch;
+
+            // Filtre par recherche textuelle
+            const searchMatch = searchQuery 
+                ? produit.nom_produit.toLowerCase().includes(searchQuery.toLowerCase())
+                : true;
+
+            return categoryMatch && priceMatch && searchMatch;
         });
-    }, [produits, filters]);
+    }, [produits, filters, searchQuery]);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prevFilters => ({ ...prevFilters, [filterName]: value }));
@@ -73,6 +84,9 @@ const ProductList = () => {
 
     return (
         <div className="product-list-container">
+            <h2 className="product-list-title">
+                {searchQuery ? `Résultats pour "${searchQuery}"` : "Nos Produits"}
+            </h2>
             <div className="top-controls">
                 {produits.length > 0 && (
                     <ProductFilters 
@@ -94,7 +108,7 @@ const ProductList = () => {
                         <ProductCard key={produit.id_article} produit={produit} viewMode={viewMode} />
                     ))
                 ) : (
-                    <p className="no-products-message">Aucun produit ne correspond à vos critères de recherche.</p>
+                    <p className="no-products-message">Aucun produit ne correspond à vos critères.</p>
                 )}
             </div>
         </div>

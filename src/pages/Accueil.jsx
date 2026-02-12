@@ -1,14 +1,14 @@
 import React from 'react';
 import Hero from '../components/Hero.jsx';
-import ProductList from "./ProductList.jsx"; // 1. Importer le composant Hero
+import PromoSection from '../components/PromoSection.jsx';
+import RSE from '../components/RSE.jsx';
 
 function Accueil() {
     return (
         <div>
-            {/* 2. Utiliser le composant Hero */}
             <Hero />
-
-            {/* Vous pourrez ajouter d'autres sections ici plus tard */}
+            <PromoSection />
+            <RSE />
         </div>
     );
 }

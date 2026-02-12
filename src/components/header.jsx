@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import {Link} from "react-router-dom";
-import {AuthContext} from "../context/AuthContext.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.jsx";
 import CartIcon from './CartIcon.jsx';
 import './styles/header.css';
 import logo from '/images/logo-site.svg';
@@ -8,10 +8,21 @@ import logo from '/images/logo-site.svg';
 const Header = () => {
     const { user, isAuthenticated, logout } = useContext(AuthContext);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
     }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/produits?search=${encodeURIComponent(searchQuery.trim())}`);
+            setIsSearchVisible(false);
+            setSearchQuery("");
+        }
+    };
 
     return (
         <nav className="navbar">
@@ -29,12 +40,17 @@ const Header = () => {
 
             <div className="navbar-right">
                 {isSearchVisible ? (
-                    <div className="search-bar-active">
-                        <input type="text" placeholder="Rechercher..." autoFocus />
-                        <button onClick={() => setIsSearchVisible(false)} className="close-search-btn">X</button>
-                    </div>
+                    <form onSubmit={handleSearchSubmit} className="search-bar-active">
+                        <input 
+                            type="text" 
+                            placeholder="Rechercher..." 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            autoFocus 
+                        />
+                        <button type="button" onClick={() => setIsSearchVisible(false)} className="close-search-btn">X</button>
+                    </form>
                 ) : (
-                    // Remplacement de l'emoji par une icône SVG
                     <div className="search-icon" onClick={() => setIsSearchVisible(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
