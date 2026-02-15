@@ -4,9 +4,8 @@
     display: flex;
     gap: 2rem;
     padding: 1rem 0;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-end; /* Aligne les groupes de filtres par le bas */
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -19,7 +18,7 @@
 .filter-group label {
     font-weight: 500;
     font-size: 0.9rem;
-    color: #F4F1EA; /* Crème de Soie pour un meilleur contraste sur le fond vert foncé */
+    color: #3C2F2F; /* Changé pour Brun Espresso pour fond clair */
 }
 
 .filter-group select {
@@ -27,7 +26,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     min-width: 200px;
-    background-color: #F4F1EA; /* Crème de Soie */
+    background-color: #fff; /* Fond blanc pour les contrôles */
     color: #3C2F2F; /* Brun Espresso */
     font-size: 1rem;
     cursor: pointer;
@@ -49,6 +48,7 @@
     border-radius: 5px;
     outline: none;
     transition: background 0.2s;
+    margin-bottom: 10px; /* Pour aligner avec les selects */
 }
 
 .price-slider::-webkit-slider-thumb {

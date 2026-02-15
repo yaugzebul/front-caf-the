@@ -2,14 +2,19 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import ProductCard from "../components/productCard.jsx";
 import ProductFilters from "../components/ProductFilters.jsx";
+import Pagination from "../components/Pagination.jsx"; // Importer la pagination
 import './styles/ProductList.css';
+
+const ITEMS_PER_PAGE = 12; // Nombre de produits par page
 
 const ProductList = () => {
     const [produits, setProduits] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [viewMode, setViewMode] = useState('grid');
-    
+    const [sortOrder, setSortOrder] = useState('default');
+    const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
+
     const location = useLocation();
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
     const searchQuery = searchParams.get('search') || '';
@@ -57,26 +62,42 @@ const ProductList = () => {
         };
     }, [produits]);
 
-    const filteredProduits = useMemo(() => {
-        return produits.filter(produit => {
-            // Filtre par catégorie
+    const sortedAndFilteredProduits = useMemo(() => {
+        let filtered = produits.filter(produit => {
             const categoryMatch = filters.category === 'all' || (produit.id_categorie && produit.id_categorie.toLowerCase() === filters.category.toLowerCase());
-            
-            // Filtre par prix
             const price = parseFloat(produit.prix_ttc);
             const priceMatch = !isNaN(price) && price <= filters.maxPrice;
-
-            // Filtre par recherche textuelle
             const searchMatch = searchQuery 
                 ? produit.nom_produit.toLowerCase().includes(searchQuery.toLowerCase())
                 : true;
-
             return categoryMatch && priceMatch && searchMatch;
         });
-    }, [produits, filters, searchQuery]);
+
+        if (sortOrder === 'price-asc') {
+            filtered.sort((a, b) => parseFloat(a.prix_ttc) - parseFloat(b.prix_ttc));
+        } else if (sortOrder === 'price-desc') {
+            filtered.sort((a, b) => parseFloat(b.prix_ttc) - parseFloat(a.prix_ttc));
+        }
+
+        return filtered;
+    }, [produits, filters, searchQuery, sortOrder]);
+
+    // Calculer les produits pour la page actuelle
+    const paginatedProduits = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        return sortedAndFilteredProduits.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    }, [currentPage, sortedAndFilteredProduits]);
+
+    const totalPages = Math.ceil(sortedAndFilteredProduits.length / ITEMS_PER_PAGE);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prevFilters => ({ ...prevFilters, [filterName]: value }));
+        setCurrentPage(1); // Revenir à la première page lors d'un changement de filtre
+    };
+    
+    const handleSortChange = (value) => {
+        setSortOrder(value);
+        setCurrentPage(1); // Revenir à la première page lors d'un changement de tri
     };
 
     if (isLoading) { return <div>Chargement...</div> }
@@ -94,6 +115,8 @@ const ProductList = () => {
                         filters={filters}
                         onFilterChange={handleFilterChange}
                         priceRange={priceRange}
+                        sortOrder={sortOrder}
+                        onSortChange={handleSortChange}
                     />
                 )}
                 <div className="view-controls">
@@ -103,14 +126,20 @@ const ProductList = () => {
             </div>
 
             <div className={`product-list ${viewMode}`}>
-                {filteredProduits.length > 0 ? (
-                    filteredProduits.map((produit) => (
+                {paginatedProduits.length > 0 ? (
+                    paginatedProduits.map((produit) => (
                         <ProductCard key={produit.id_article} produit={produit} viewMode={viewMode} />
                     ))
                 ) : (
                     <p className="no-products-message">Aucun produit ne correspond à vos critères.</p>
                 )}
             </div>
+
+            <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 };

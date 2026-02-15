@@ -84,14 +84,29 @@
     margin-left: 1rem;
 }
 
+.origin-info, .stock-info {
+    margin-bottom: 1rem; /* Espacement cohérent */
+}
+
+.stock-out {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.stock-in-cart {
+    font-size: 0.9rem;
+    color: #555;
+    margin-left: 0.5rem;
+    font-style: italic;
+}
+
 .add-to-cart-section {
-    margin-top: 2rem;
+    margin-top: auto; /* Pousse la section vers le bas */
     padding-top: 2rem;
     border-top: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    position: relative; /* Pour positionner le message de confirmation */
 }
 
 .quantity-selector {
@@ -125,6 +140,27 @@
     font-weight: bold;
     min-width: 60px;
     text-align: center;
+}
+
+.total-price-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #e9e4d9; /* Un peu plus foncé que Crème de Soie */
+    border-radius: 8px;
+}
+
+.total-price-display span:first-child {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #3C2F2F;
+}
+
+.total-price-amount {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #1B3022;
 }
 
 .add-to-cart-btn {

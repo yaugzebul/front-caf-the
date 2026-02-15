@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/ProductFilters.css';
 
-const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => {
+const ProductFilters = ({ categories, filters, onFilterChange, priceRange, sortOrder, onSortChange }) => {
     
     const handleCategoryChange = (e) => {
         onFilterChange('category', e.target.value);
@@ -11,14 +11,17 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
         onFilterChange('maxPrice', Number(e.target.value));
     };
 
+    const handleSortChange = (e) => {
+        onSortChange(e.target.value);
+    };
+
     return (
         <div className="product-filters">
-            {/* Filtre par catégorie (simplifié) */}
+            {/* Filtre par catégorie */}
             <div className="filter-group">
                 <label htmlFor="category-select">Catégorie</label>
                 <select id="category-select" value={filters.category} onChange={handleCategoryChange}>
                     <option value="all">Toutes</option>
-                    {/* On utilise maintenant une simple liste de chaînes de caractères */}
                     {categories.map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
                     ))}
@@ -27,7 +30,7 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
 
             {/* Filtre par prix */}
             <div className="filter-group">
-                <label htmlFor="price-slider">Prix maximum : {filters.maxPrice} €</label>
+                <label htmlFor="price-slider">Prix max : {filters.maxPrice} €</label>
                 <input
                     type="range"
                     id="price-slider"
@@ -37,6 +40,16 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
                     onChange={handlePriceChange}
                     className="price-slider"
                 />
+            </div>
+
+            {/* Contrôle de tri */}
+            <div className="filter-group">
+                <label htmlFor="sort-order">Trier par</label>
+                <select id="sort-order" value={sortOrder} onChange={handleSortChange}>
+                    <option value="default">Pertinence</option>
+                    <option value="price-asc">Prix croissant</option>
+                    <option value="price-desc">Prix décroissant</option>
+                </select>
             </div>
         </div>
     );
