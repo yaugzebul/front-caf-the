@@ -14,6 +14,8 @@ const ProductDetails = () => {
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
     const itemInCart = cartItems.find(item => String(item.id_article) === id);
 
@@ -23,17 +25,12 @@ const ProductDetails = () => {
                 setIsLoading(true);
                 setError(null);
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/${id}`);
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
                 const data = await response.json();
                 setProduit(data.article);
 
-                if (data.article.type_vente === 'vrac') {
-                    setQuantity(100);
-                } else {
-                    setQuantity(1);
-                }
+                if (data.article.type_vente === 'vrac') setQuantity(100);
+                else setQuantity(1);
             } catch (err) {
                 console.error("Erreur lors du chargement du produit :", err);
                 setError("Impossible de charger le produit");
@@ -57,6 +54,14 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         addToCart(produit, quantity);
         setShowConfirmation(true);
+    };
+
+    const closeImageModal = () => {
+        setIsAnimatingOut(true);
+        setTimeout(() => {
+            setIsImageModalVisible(false);
+            setIsAnimatingOut(false);
+        }, 300); // Doit correspondre à la durée de l'animation CSS
     };
 
     if (isLoading) {
@@ -101,8 +106,13 @@ const ProductDetails = () => {
     return (
         <>
             <div className="product-details">
-                <div className="product-image-container">
-                    <img src={imageUrl} alt={produit.nom_produit} />
+                <div className="product-image-wrapper">
+                    <div className="product-image-container">
+                        <img src={imageUrl} alt={produit.nom_produit} />
+                        <button className="view-image-btn" onClick={() => setIsImageModalVisible(true)}>
+                            Voir le produit
+                        </button>
+                    </div>
                 </div>
                 <div className="product-info">
                     <h2>{produit.nom_produit}</h2>
@@ -179,6 +189,20 @@ const ProductDetails = () => {
                                 Voir le panier
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {isImageModalVisible && (
+                <div className="image-modal-overlay" onClick={closeImageModal}>
+                    <div 
+                        className={`image-modal-content ${isAnimatingOut ? 'animating-out' : ''}`} 
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button className="image-modal-close-btn" onClick={closeImageModal}>
+                            &times;
+                        </button>
+                        <img src={imageUrl} alt={`Image en grand de ${produit.nom_produit}`} />
                     </div>
                 </div>
             )}
