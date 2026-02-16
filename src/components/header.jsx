@@ -1,28 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
 import CartIcon from './CartIcon.jsx';
+import { Search } from 'lucide-react'; // Nettoyage des imports inutilisés
 import './styles/header.css';
 import logo from '/images/logo-site.svg';
 
 const Header = () => {
     const { user, isAuthenticated, logout } = useContext(AuthContext);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
     }
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate(`/produits?search=${encodeURIComponent(searchQuery.trim())}`);
-            setIsSearchVisible(false);
-            setSearchQuery("");
-        }
-    };
 
     return (
         <nav className="navbar">
@@ -39,23 +29,16 @@ const Header = () => {
             </div>
 
             <div className="navbar-right">
+                {/* Les liens incorrects ont été supprimés */}
+                
                 {isSearchVisible ? (
-                    <form onSubmit={handleSearchSubmit} className="search-bar-active">
-                        <input 
-                            type="text" 
-                            placeholder="Rechercher..." 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            autoFocus 
-                        />
-                        <button type="button" onClick={() => setIsSearchVisible(false)} className="close-search-btn">X</button>
-                    </form>
+                    <div className="search-bar-active">
+                        <input type="text" placeholder="Rechercher..." autoFocus />
+                        <button onClick={() => setIsSearchVisible(false)} className="close-search-btn">X</button>
+                    </div>
                 ) : (
                     <div className="search-icon" onClick={() => setIsSearchVisible(true)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
+                        <Search size={22} />
                     </div>
                 )}
 
@@ -63,7 +46,7 @@ const Header = () => {
                 {isAuthenticated ? (
                     <>
                         <span className="navbar-user">
-                            Bonjour, {user.prenom} {user.nom}
+                            Bonjour, {user.prenom}
                         </span>
                         <button className="navbar-logout-button" onClick={handleLogout}>
                             Déconnexion

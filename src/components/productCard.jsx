@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from '../context/CartContext';
 import './styles/productCard.css';
 
 const ProductCard = ({ produit, viewMode = 'grid' }) => {
+    // On utilise la fonction addToCart du contexte, qui gère maintenant la modale
     const { addToCart } = useCart();
-    const navigate = useNavigate();
 
-    // États locaux pour la sélection de quantité/poids
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
     const [selectedWeight, setSelectedWeight] = useState(weightOptions[0] || 0);
     const [quantity, setQuantity] = useState(1); // Pour les produits unitaires
-
-    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
     const imageURL = hasImage 
@@ -32,93 +29,62 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
         const quantityToAdd = produit.type_vente === 'vrac' ? selectedWeight : quantity;
         if (quantityToAdd > 0) {
             addToCart(produit, quantityToAdd);
-            setShowConfirmation(true);
-            setTimeout(() => {
-                setShowConfirmation(false);
-            }, 2000);
         }
     };
 
     return (
-        <>
-            <div className={`product-card ${viewMode}`}>
-                <Link to={`/produit/${produit.id_article}`} className="product-card-link">
-                    <div className="product-card-img-container">
-                        <img src={imageURL} alt={produit.nom_produit} className="product-card-img" />
-                        {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}
-                    </div>
-                </Link>
+        // On retire le fragment et la logique de modale locale
+        <div className={`product-card ${viewMode}`}>
+            <Link to={`/produit/${produit.id_article}`} className="product-card-link">
+                <div className="product-card-img-container">
+                    <img src={imageURL} alt={produit.nom_produit} className="product-card-img" />
+                    {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}
+                </div>
+            </Link>
 
-                <div className="product-card-content">
-                    <h3><Link to={`/produit/${produit.id_article}`}>{produit.nom_produit}</Link></h3>
-                    {viewMode === 'list' && <p className="product-card-description">{shortDescription}</p>}
-                    
-                    <div className="product-card-price-container">
-                        {isPromo ? (
-                            <>
-                                <span className="price-old">{parseFloat(produit.prix_ttc).toFixed(2)} €</span>
-                                <span className="price-new">{displayPrice}</span>
-                            </>
-                        ) : (
-                            <p className="product-card-price">{displayPrice}</p>
-                        )}
-                    </div>
+            <div className="product-card-content">
+                <h3><Link to={`/produit/${produit.id_article}`}>{produit.nom_produit}</Link></h3>
+                {viewMode === 'list' && <p className="product-card-description">{shortDescription}</p>}
+                
+                <div className="product-card-price-container">
+                    {isPromo ? (
+                        <>
+                            <span className="price-old">{parseFloat(produit.prix_ttc).toFixed(2)} €</span>
+                            <span className="price-new">{displayPrice}</span>
+                        </>
+                    ) : (
+                        <p className="product-card-price">{displayPrice}</p>
+                    )}
+                </div>
 
-                    <div className="product-card-actions">
-                        {produit.type_vente === 'vrac' ? (
-                            <div className="vrac-controls">
-                                <select 
-                                    value={selectedWeight} 
-                                    onChange={(e) => setSelectedWeight(Number(e.target.value))} 
-                                >
-                                    {weightOptions.map(w => <option key={w} value={w}>{w}g</option>)}
-                                </select>
-                                <button onClick={handleAddToCart} className="add-to-cart-btn">
-                                    Ajouter
-                                </button>
+                <div className="product-card-actions">
+                    {produit.type_vente === 'vrac' ? (
+                        <div className="vrac-controls">
+                            <select 
+                                value={selectedWeight} 
+                                onChange={(e) => setSelectedWeight(Number(e.target.value))} 
+                            >
+                                {weightOptions.map(w => <option key={w} value={w}>{w}g</option>)}
+                            </select>
+                            <button onClick={handleAddToCart} className="add-to-cart-btn">
+                                Ajouter
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="unitaire-controls">
+                            <div className="quantity-control">
+                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
+                                <span>{quantity}</span>
+                                <button onClick={() => setQuantity(q => q + 1)}>+</button>
                             </div>
-                        ) : (
-                            <div className="unitaire-controls">
-                                <div className="quantity-control">
-                                    <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
-                                    <span>{quantity}</span>
-                                    <button onClick={() => setQuantity(q => q + 1)}>+</button>
-                                </div>
-                                <button onClick={handleAddToCart} className="add-to-cart-btn">
-                                    Ajouter au panier
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                            <button onClick={handleAddToCart} className="add-to-cart-btn">
+                                Ajouter au panier
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
-
-            {showConfirmation && (
-                <div className="confirmation-modal-overlay">
-                    <div className="confirmation-modal">
-                        <h3>Produit ajouté au panier !</h3>
-                        <div className="confirmation-product">
-                            <img src={imageURL} alt={produit.nom_produit} />
-                            <span>{produit.nom_produit}</span>
-                        </div>
-                        <div className="confirmation-actions">
-                            <button 
-                                onClick={() => setShowConfirmation(false)} 
-                                className="btn-secondary"
-                            >
-                                Continuer mes achats
-                            </button>
-                            <button 
-                                onClick={() => navigate('/panier')} 
-                                className="btn-primary"
-                            >
-                                Voir le panier
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
+        </div>
     );
 };
 

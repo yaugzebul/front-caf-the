@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/footer.jsx';
 import Header from '../components/header.jsx';
+import ConfirmationModal from '../components/ConfirmationModal.jsx';
+import { CartContext } from '../context/CartContext.jsx';
 
-// Structure de la page
+const Layout = () => {
+    const { confirmation, closeConfirmation } = useContext(CartContext);
 
-function Layout() {
     return (
         <>
-        <Header />
-        <Outlet />
-        <Footer />
+            <Header />
+            <Outlet />
+            <Footer />
+
+            {/* La modale s'affichera ici si elle est active */}
+            {confirmation.isVisible && (
+                <ConfirmationModal
+                    product={confirmation.product}
+                    quantity={confirmation.quantity}
+                    onClose={closeConfirmation}
+                />
+            )}
         </>
     );
-}
+};
 
 export default Layout;

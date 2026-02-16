@@ -8,26 +8,27 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 import Panier from "./pages/Panier.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
-import './App.css'; // Importer le CSS global
+import './App.css';
 
+// On revient à une structure simple
 function App() {
-return (
-  <AuthProvider>
-    <CartProvider>
-      <Router>
-          <Routes>
-                  <Route path="/" element={<Layout />}>
-                  <Route index element={<Accueil />} />
-                  <Route path="produits" element={<Products />} />
-                  <Route path="produit/:id" element={<ProductDetail />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="panier" element={<Panier />} />
-              </Route>
-          </Routes>
-      </Router>
-    </CartProvider>
-  </AuthProvider>
-)
+    return (
+        <AuthProvider>
+            <CartProvider>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<Layout />}>
+                            <Route index element={<Accueil />} />
+                            <Route path="produits" element={<Products />} />
+                            <Route path="produit/:id" element={<ProductDetail />} />
+                            <Route path="login" element={<Login />} />
+                            <Route path="panier" element={<Panier />} />
+                        </Route>
+                    </Routes>
+                </Router>
+            </CartProvider>
+        </AuthProvider>
+    );
 }
 
 export default App;

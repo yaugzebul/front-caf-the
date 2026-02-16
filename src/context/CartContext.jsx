@@ -13,6 +13,13 @@ export const CartProvider = ({ children }) => {
         }
     });
 
+    // État pour la modale de confirmation
+    const [confirmation, setConfirmation] = useState({
+        product: null,
+        quantity: 0,
+        isVisible: false,
+    });
+
     useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }, [cartItems]);
@@ -29,6 +36,8 @@ export const CartProvider = ({ children }) => {
                 return [...prevItems, { ...product, quantity }];
             }
         });
+        // On déclenche la modale
+        setConfirmation({ product, quantity, isVisible: true });
     };
 
     const increaseQuantity = (productId) => {
@@ -76,6 +85,10 @@ export const CartProvider = ({ children }) => {
 
     const clearCart = () => setCartItems([]);
 
+    const closeConfirmation = () => {
+        setConfirmation({ product: null, quantity: 0, isVisible: false });
+    };
+
     const itemCount = cartItems.reduce((total, item) => (item.type_vente === 'unitaire' ? total + item.quantity : total + 1), 0);
 
     const { cartTotal, cartTotalWithoutPromo, hasPromo } = cartItems.reduce((totals, item) => {
@@ -103,12 +116,14 @@ export const CartProvider = ({ children }) => {
         addToCart, 
         removeFromCart, 
         clearCart, 
-        increaseQuantity, // On les remet ici
-        decreaseQuantity, // On les remet ici
+        increaseQuantity,
+        decreaseQuantity,
         itemCount, 
         cartTotal,
         cartTotalWithoutPromo,
         hasPromo,
+        confirmation,
+        closeConfirmation,
     };
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

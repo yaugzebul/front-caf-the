@@ -13,7 +13,6 @@ const ProductDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const [isImageModalVisible, setIsImageModalVisible] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
@@ -53,7 +52,8 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         addToCart(produit, quantity);
-        setShowConfirmation(true);
+        // La logique de la modale est maintenant gérée par le CartContext
+        // La logique de la modale est maintenant gérée par le CartContext
     };
 
     const closeImageModal = () => {
@@ -61,8 +61,21 @@ const ProductDetails = () => {
         setTimeout(() => {
             setIsImageModalVisible(false);
             setIsAnimatingOut(false);
-        }, 300); // Doit correspondre à la durée de l'animation CSS
+        }, 300);
     };
+
+    if (isLoading) {
+        return (
+            <div className="product-details-skeleton">
+                <Skeleton height={400} width={400} />
+                <div style={{ marginTop: 20, flex: 1 }}>
+                    <Skeleton height={30} width="50%" />
+                    <div style={{ marginTop: 20 }}><Skeleton count={3} /></div>
+                    <div style={{ marginTop: 20 }}><Skeleton height={40} width="30%" /></div>
+                </div>
+            </div>
+        );
+    }
 
     if (isLoading) {
         return (
@@ -172,26 +185,6 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
-
-            {showConfirmation && (
-                <div className="confirmation-modal-overlay">
-                    <div className="confirmation-modal">
-                        <h3>Produit ajouté au panier !</h3>
-                        <div className="confirmation-product">
-                            <img src={imageUrl} alt={produit.nom_produit} />
-                            <span>{produit.nom_produit}</span>
-                        </div>
-                        <div className="confirmation-actions">
-                            <button onClick={() => setShowConfirmation(false)} className="btn-secondary">
-                                Continuer mes achats
-                            </button>
-                            <button onClick={() => navigate('/panier')} className="btn-primary">
-                                Voir le panier
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {isImageModalVisible && (
                 <div className="image-modal-overlay" onClick={closeImageModal}>

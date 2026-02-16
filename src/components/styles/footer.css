@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+.site-footer {
+    background-color: var(--color-background-cream); /* Or Doux */
+    color: #1B3022; /* Vert Forêt Profond pour un meilleur contraste */
+    padding: 4rem 2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    padding: 1rem;
+}
+
+.footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #1B3022; /* Vert Forêt Profond */
+}
+
+.footer-section p {
+    line-height: 1.6;
+}
+
+.footer-section.links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section.links ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-section.links a {
+    text-decoration: none;
+    color: #1B3022; /* Vert Forêt Profond */
+    transition: color 0.2s;
+}
+
+.footer-section.links a:hover {
+    color: #3C2F2F; /* Brun Espresso au survol */
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icons a {
+    display: flex; /* Utiliser flex pour centrer */
+    align-items: center; /* Centrer verticalement */
+    justify-content: center; /* Centrer horizontalement */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1B3022; /* Vert Forêt Profond */
+    color: #F4F1EA; /* Crème de Soie */
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.social-icons a:hover {
+    background-color: #3C2F2F; /* Brun Espresso */
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(27, 48, 34, 0.2); /* Ligne de séparation avec opacité */
+    font-size: 0.9rem;
+}

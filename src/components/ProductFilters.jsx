@@ -1,18 +1,10 @@
 import React from 'react';
 import './styles/ProductFilters.css';
 
-const ProductFilters = ({ categories, filters, onFilterChange, priceRange, sortOrder, onSortChange }) => {
+const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => {
     
-    const handleCategoryChange = (e) => {
-        onFilterChange('category', e.target.value);
-    };
-
-    const handlePriceChange = (e) => {
-        onFilterChange('maxPrice', Number(e.target.value));
-    };
-
-    const handleSortChange = (e) => {
-        onSortChange(e.target.value);
+    const handleFilter = (e) => {
+        onFilterChange(e.target.name, e.target.value);
     };
 
     return (
@@ -20,10 +12,15 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange, sortO
             {/* Filtre par catégorie */}
             <div className="filter-group">
                 <label htmlFor="category-select">Catégorie</label>
-                <select id="category-select" value={filters.category} onChange={handleCategoryChange}>
+                <select 
+                    id="category-select" 
+                    name="category" 
+                    value={filters.category} 
+                    onChange={handleFilter}
+                >
                     <option value="all">Toutes</option>
                     {categories.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
+                        <option key={cat} value={cat.toLowerCase()}>{cat}</option>
                     ))}
                 </select>
             </div>
@@ -34,10 +31,11 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange, sortO
                 <input
                     type="range"
                     id="price-slider"
+                    name="maxPrice"
                     min={priceRange.min}
                     max={priceRange.max}
                     value={filters.maxPrice}
-                    onChange={handlePriceChange}
+                    onChange={handleFilter}
                     className="price-slider"
                 />
             </div>
@@ -45,7 +43,12 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange, sortO
             {/* Contrôle de tri */}
             <div className="filter-group">
                 <label htmlFor="sort-order">Trier par</label>
-                <select id="sort-order" value={sortOrder} onChange={handleSortChange}>
+                <select 
+                    id="sort-order" 
+                    name="sort" 
+                    value={filters.sort} 
+                    onChange={handleFilter}
+                >
                     <option value="default">Pertinence</option>
                     <option value="price-asc">Prix croissant</option>
                     <option value="price-desc">Prix décroissant</option>

@@ -1,0 +1,115 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Fond plus sombre */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #F4F1EA; /* Crème de Soie */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px; /* Un peu plus large */
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.3rem; /* Plus grand */
+    font-weight: 600;
+    color: #1B3022; /* Vert Forêt Profond */
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+}
+
+.modal-body {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem; /* Espace avant les boutons */
+}
+
+.modal-product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.modal-product-details {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.modal-product-name {
+    font-weight: 600;
+    color: #3C2F2F; /* Brun Espresso */
+    margin: 0 0 0.5rem 0;
+}
+
+.modal-product-quantity {
+    color: #3C2F2F;
+    margin: 0;
+}
+
+/* --- Nouveaux styles pour les boutons --- */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+    flex: 1; /* Pour que les boutons prennent la même largeur */
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.modal-actions .btn-primary {
+    background-color: #C5A059; /* Or Doux */
+    color: #3C2F2F; /* Brun Espresso */
+    border: none;
+}
+
+.modal-actions .btn-primary:hover {
+    background-color: #b0904f; /* Or Doux plus foncé */
+}
+
+.modal-actions .btn-secondary {
+    background: none;
+    border: 1px solid #1B3022; /* Vert Forêt Profond */
+    color: #1B3022;
+}
+
+.modal-actions .btn-secondary:hover {
+    background-color: #1B3022;
+    color: #F4F1EA;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
