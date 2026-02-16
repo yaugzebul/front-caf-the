@@ -4,13 +4,14 @@ import { useCart } from '../context/CartContext';
 import './styles/productCard.css';
 
 const ProductCard = ({ produit, viewMode = 'grid' }) => {
-    const { cartItems, addToCart, increaseQuantity, decreaseQuantity } = useCart();
+    const { addToCart } = useCart();
     const navigate = useNavigate();
-    const itemInCart = cartItems.find(item => item.id_article === produit.id_article);
 
+    // États locaux pour la sélection de quantité/poids
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
-    
     const [selectedWeight, setSelectedWeight] = useState(weightOptions[0] || 0);
+    const [quantity, setQuantity] = useState(1); // Pour les produits unitaires
+
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
@@ -27,15 +28,14 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
 
     const displayPrice = `${prixFinal.toFixed(2)} € ${produit.type_vente === 'vrac' ? '/ kg' : '/ unité'}`;
 
-    const handleWeightChange = (e) => {
-        setSelectedWeight(Number(e.target.value));
-    };
-
     const handleAddToCart = () => {
-        const quantityToAdd = produit.type_vente === 'vrac' ? selectedWeight : 1;
+        const quantityToAdd = produit.type_vente === 'vrac' ? selectedWeight : quantity;
         if (quantityToAdd > 0) {
             addToCart(produit, quantityToAdd);
             setShowConfirmation(true);
+            setTimeout(() => {
+                setShowConfirmation(false);
+            }, 2000);
         }
     };
 
@@ -69,7 +69,7 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
                             <div className="vrac-controls">
                                 <select 
                                     value={selectedWeight} 
-                                    onChange={handleWeightChange} 
+                                    onChange={(e) => setSelectedWeight(Number(e.target.value))} 
                                 >
                                     {weightOptions.map(w => <option key={w} value={w}>{w}g</option>)}
                                 </select>
@@ -78,18 +78,16 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
                                 </button>
                             </div>
                         ) : (
-                            <>
+                            <div className="unitaire-controls">
+                                <div className="quantity-control">
+                                    <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
+                                    <span>{quantity}</span>
+                                    <button onClick={() => setQuantity(q => q + 1)}>+</button>
+                                </div>
                                 <button onClick={handleAddToCart} className="add-to-cart-btn">
                                     Ajouter au panier
                                 </button>
-                                {itemInCart && (
-                                    <div className="quantity-control">
-                                        <button onClick={() => decreaseQuantity(produit.id_article)}>-</button>
-                                        <span>{itemInCart.quantity}</span>
-                                        <button onClick={() => increaseQuantity(produit.id_article)}>+</button>
-                                    </div>
-                                )}
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>

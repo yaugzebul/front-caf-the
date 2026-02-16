@@ -43,7 +43,7 @@
 }
 
 .view-controls button.active {
-    background: var(--color-primary-green);
+    background: var(--color-accent-gold);
     color: var(--color-white);
 }
 
