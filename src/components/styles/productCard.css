@@ -10,7 +10,6 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    font-family: 'Montserrat', sans-serif;
     position: relative; /* Nécessaire pour le message de confirmation */
 }
 
@@ -67,7 +66,6 @@
 }
 
 .product-card h3 a {
-    font-family: 'Playfair Display', serif;
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
@@ -211,7 +209,6 @@
 }
 
 .confirmation-modal h3 {
-    font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
     color: #1B3022;
     margin-bottom: 1.5rem;

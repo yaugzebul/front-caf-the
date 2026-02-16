@@ -18,7 +18,6 @@
 }
 
 .rse-title {
-    font-family: 'Playfair Display', serif;
     font-size: 4rem;
     color: #F4F1EA; /* --- Modifié: Crème de Soie --- */
     margin-bottom: 1rem;
@@ -40,7 +39,6 @@
 }
 
 .commitment-item h3 {
-    font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
     color: #C5A059; /* Or Doux (contraste bien sur le fond sombre) */
     margin-bottom: 1rem;
