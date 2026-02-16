@@ -1,12 +1,11 @@
-/* Pas besoin d'importer les polices ici */
+/* L'import des polices a été déplacé dans App.css */
 
 .product-filters {
     display: flex;
     gap: 2rem;
     padding: 1rem 0;
     flex-wrap: wrap;
-    align-items: flex-end; /* Aligne les groupes de filtres par le bas */
-    font-family: 'Montserrat', sans-serif;
+    align-items: flex-end;
 }
 
 .filter-group {
@@ -18,16 +17,16 @@
 .filter-group label {
     font-weight: 500;
     font-size: 0.9rem;
-    color: #3C2F2F; /* Changé pour Brun Espresso pour fond clair */
+    color: var(--color-text-dark);
 }
 
 .filter-group select {
     padding: 10px 12px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     min-width: 200px;
-    background-color: #fff; /* Fond blanc pour les contrôles */
-    color: #3C2F2F; /* Brun Espresso */
+    background-color: var(--color-white);
+    color: var(--color-text-dark);
     font-size: 1rem;
     cursor: pointer;
     transition: border-color 0.2s;
@@ -35,7 +34,7 @@
 
 .filter-group select:hover,
 .filter-group select:focus {
-    border-color: #C5A059; /* Or Doux au survol/focus */
+    border-color: var(--color-accent-gold);
     outline: none;
 }
 
@@ -44,11 +43,11 @@
     -webkit-appearance: none;
     appearance: none;
     height: 8px;
-    background: #e0e0e0;
+    background: var(--color-border);
     border-radius: 5px;
     outline: none;
     transition: background 0.2s;
-    margin-bottom: 10px; /* Pour aligner avec les selects */
+    margin-bottom: 10px;
 }
 
 .price-slider::-webkit-slider-thumb {
@@ -56,7 +55,7 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    background: #C5A059; /* Or Doux */
+    background: var(--color-accent-gold);
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -64,14 +63,14 @@
 }
 
 .price-slider::-webkit-slider-thumb:hover {
-    background: #b0904f; /* Or Doux plus foncé au survol */
+    background: var(--color-accent-gold-darker);
     transform: scale(1.1);
 }
 
 .price-slider::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: #C5A059; /* Or Doux */
+    background: var(--color-accent-gold);
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -79,6 +78,6 @@
 }
 
 .price-slider::-moz-range-thumb:hover {
-    background: #b0904f; /* Or Doux plus foncé au survol */
+    background: var(--color-accent-gold-darker);
     transform: scale(1.1);
 }

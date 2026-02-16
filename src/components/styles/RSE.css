@@ -1,8 +1,8 @@
 /* Conteneur externe pour la bande pleine largeur */
 .rse-section-wrapper {
-    background-color: #1B3022; /* --- Modifié: Vert Forêt Profond --- */
+    background-color: var(--color-primary-green);
     padding: 6rem 0;
-    color: #F4F1EA; /* --- Modifié: Couleur de texte par défaut pour la section --- */
+    color: var(--color-text-light);
 }
 
 /* Conteneur interne pour centrer le contenu */
@@ -19,13 +19,13 @@
 
 .rse-title {
     font-size: 4rem;
-    color: #F4F1EA; /* --- Modifié: Crème de Soie --- */
+    color: var(--color-text-light);
     margin-bottom: 1rem;
 }
 
 .rse-subtitle {
     font-size: 1.3rem;
-    color: #F4F1EA; /* --- Modifié: Crème de Soie --- */
+    color: var(--color-text-light);
     max-width: 700px;
     margin: 0 auto;
     opacity: 0.9;
@@ -40,19 +40,19 @@
 
 .commitment-item h3 {
     font-size: 1.5rem;
-    color: #C5A059; /* Or Doux (contraste bien sur le fond sombre) */
+    color: var(--color-accent-gold);
     margin-bottom: 1rem;
 }
 
 .commitment-item p {
     font-size: 1rem;
     line-height: 1.6;
-    color: #F4F1EA; /* --- Modifié: Crème de Soie --- */
-    opacity: 0.8; /* Légère transparence pour hiérarchiser l'information */
+    color: var(--color-text-light);
+    opacity: 0.8;
 }
 
 .commitment-icon {
     font-size: 3rem;
-    color: #C5A059; /* Or Doux (inchangé, parfait sur fond sombre) */
+    color: var(--color-accent-gold);
     margin-bottom: 1.5rem;
 }

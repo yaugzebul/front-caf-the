@@ -1,18 +1,35 @@
 /* --- Importation Globale des Polices --- */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
+/* --- Définition des Variables de Couleur --- */
+:root {
+    --color-primary-green: #1B3022;      /* Vert Forêt Profond (pour les fonds sombres, titres importants) */
+    --color-text-dark: #3C2F2F;          /* Brun Espresso (texte principal sur fond clair) */
+    --color-accent-gold: #C5A059;        /* Or Doux (boutons, icônes, accents) */
+    --color-accent-gold-darker: #b0904f; /* Or Doux plus foncé (pour le survol) */
+    --color-background-cream: #F4F1EA;   /* Crème de Soie (fond principal des cartes, header) */
+    --color-background-offwhite: #F9F8F6;/* Blanc cassé (fond de la fiche produit) */
+    --color-background-subtle: #e9e4d9;  /* Crème plus foncée (pour les zones de prix) */
+    --color-accent-danger: #e74c3c;      /* Rouge (promotions, erreurs) */
+    --color-text-muted: #95a5a6;         /* Gris (texte secondaire, prix barrés) */
+    --color-text-light: #F4F1EA;         /* Crème de Soie (texte sur fond sombre) */
+    --color-white: #fff;                 /* Blanc pur (fonds de contrôles) */
+    --color-border: #e0e0e0;             /* Gris clair (bordures principales) */
+    --color-border-light: #bdc3c7;       /* Gris moyen (bordures de contrôles) */
+}
+
 /* --- Styles Globaux de Typographie --- */
 body {
-    font-family: 'Montserrat', sans-serif; /* Police par défaut pour tout le corps de texte */
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #fff;
-    color: #3C2F2F;
+    background-color: var(--color-white);
+    color: var(--color-text-dark);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif; /* Police par défaut pour tous les titres */
+    font-family: 'Playfair Display', serif;
 }
 
 *, *::before, *::after {

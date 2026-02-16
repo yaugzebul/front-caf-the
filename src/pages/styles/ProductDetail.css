@@ -7,8 +7,8 @@
     display: flex;
     gap: 4rem;
     align-items: flex-start;
-    color: #3C2F2F;
-    background-color: #F9F8F6;
+    color: var(--color-text-dark);
+    background-color: var(--color-background-offwhite);
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
@@ -58,7 +58,7 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    color: #3C2F2F;
+    color: var(--color-text-dark);
     backdrop-filter: blur(8px);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -71,14 +71,14 @@
 }
 
 .view-image-btn:hover {
-    background-color: #fff;
-    border-color: #C5A059;
+    background-color: var(--color-white);
+    border-color: var(--color-accent-gold);
 }
 
 .product-info h2 {
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
     line-height: 1.2;
 }
 
@@ -86,7 +86,7 @@
     font-size: 1.1rem;
     line-height: 1.7;
     margin-bottom: 2.5rem;
-    color: #555;
+    color: #555; /* Note: couleur non standard */
 }
 
 .price-container {
@@ -98,18 +98,18 @@
 
 .origin-info, .stock-info {
     font-size: 1rem;
-    color: #555;
+    color: #555; /* Note: couleur non standard */
     margin-bottom: 1rem;
 }
 
 .stock-out {
-    color: #e74c3c;
+    color: var(--color-accent-danger);
     font-weight: bold;
 }
 
 .stock-in-cart {
     font-size: 0.9rem;
-    color: #555;
+    color: #555; /* Note: couleur non standard */
     margin-left: 0.5rem;
     font-style: italic;
 }
@@ -117,9 +117,9 @@
 .add-to-cart-section {
     margin-top: auto;
     padding: 2rem;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 12px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -135,8 +135,8 @@
 .quantity-selector button {
     width: 48px;
     height: 48px;
-    border: 1px solid #bdc3c7;
-    background-color: white;
+    border: 1px solid var(--color-border-light);
+    background-color: var(--color-white);
     border-radius: 50%;
     font-size: 1.5rem;
     cursor: pointer;
@@ -144,12 +144,12 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    color: #3C2F2F;
+    color: var(--color-text-dark);
 }
 
 .quantity-selector button:hover {
-    background-color: #f0f0f0;
-    border-color: #3C2F2F;
+    background-color: #f0f0f0; /* Note: couleur non standard */
+    border-color: var(--color-text-dark);
 }
 
 .quantity-selector span {
@@ -166,14 +166,14 @@
 .total-price-amount {
     font-weight: bold;
     font-size: 1.8rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
 }
 
 .add-to-cart-btn {
     width: 100%;
     padding: 18px 30px;
-    background-color: #C5A059;
-    color: #3C2F2F;
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-dark);
     border: none;
     border-radius: 8px;
     font-size: 1.2rem;
@@ -184,20 +184,19 @@
 }
 
 .add-to-cart-btn:hover {
-    background-color: #b0904f;
+    background-color: var(--color-accent-gold-darker);
     transform: translateY(-2px);
 }
 
 .back-link {
     display: inline-block;
     margin-top: 2rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
 }
 
-/* --- Image Modal --- */
 .image-modal-overlay {
     position: fixed;
     top: 0;
@@ -220,11 +219,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: zoomIn 0.3s ease-out forwards; /* Animation d'ouverture */
+    animation: zoomIn 0.3s ease-out forwards;
 }
 
 .image-modal-content.animating-out {
-    animation: zoomOut 0.3s ease-in forwards; /* Animation de fermeture */
+    animation: zoomOut 0.3s ease-in forwards;
 }
 
 .image-modal-content img {
@@ -242,7 +241,7 @@
     right: -25px;
     background: none;
     border: none;
-    color: white;
+    color: var(--color-white);
     font-size: 3rem;
     cursor: pointer;
     line-height: 1;
@@ -254,7 +253,6 @@
     opacity: 1;
 }
 
-/* --- Keyframes pour les animations --- */
 @keyframes zoomIn {
     from {
         opacity: 0;
@@ -291,7 +289,7 @@
 }
 
 .confirmation-modal {
-    background-color: #fff;
+    background-color: var(--color-white);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
@@ -302,7 +300,7 @@
 
 .confirmation-modal h3 {
     font-size: 1.8rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
     margin-bottom: 1.5rem;
 }
 
@@ -311,7 +309,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background-color: #F4F1EA;
+    background-color: var(--color-background-cream);
     border-radius: 8px;
     margin-bottom: 2rem;
     text-align: left;
@@ -326,7 +324,7 @@
 
 .confirmation-product span {
     font-weight: 500;
-    color: #3C2F2F;
+    color: var(--color-text-dark);
 }
 
 .confirmation-actions {

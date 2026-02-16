@@ -4,40 +4,36 @@
     max-width: 1100px;
     margin: 3rem auto;
     padding: 2rem;
-    font-family: 'Montserrat', sans-serif;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
 }
 
 .panier-container h2 {
-    font-family: 'Playfair Display', serif;
     font-size: 2.8rem;
     margin-bottom: 2.5rem;
     text-align: center;
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-primary-green);
 }
 
-/* Style pour le panier vide */
 .empty-cart {
     text-align: center;
     padding: 4rem 2rem;
-    background-color: #F4F1EA; /* Crème de Soie */
+    background-color: var(--color-background-cream);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 .empty-cart p {
     margin-bottom: 2rem;
     font-size: 1.1rem;
-    color: #555;
+    color: #555; /* Note: couleur non standard */
 }
 
-/* En-tête de la liste */
 .panier-header {
     display: flex;
     justify-content: space-between;
     padding: 0 1.5rem 1rem 1.5rem;
     margin-bottom: 1rem;
-    border-bottom: 1px solid #e0e0e0;
-    color: #888;
+    border-bottom: 1px solid var(--color-border);
+    color: #888; /* Note: couleur non standard */
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -47,7 +43,6 @@
 .header-quantity { flex-basis: 25%; text-align: center; }
 .header-total { flex-basis: 25%; text-align: right; }
 
-/* Liste des articles */
 .panier-items {
     list-style: none;
     padding: 0;
@@ -58,7 +53,7 @@
     display: flex;
     align-items: center;
     padding: 1.5rem;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     margin-bottom: 1.5rem;
@@ -77,23 +72,22 @@
 }
 
 .item-details { display: flex; flex-direction: column; gap: 0.25rem; }
-.item-name { font-weight: 600; font-size: 1.1rem; color: #3C2F2F; }
-.item-unit-price { color: #1B3022; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
-.price-old { text-decoration: line-through; color: #95a5a6; }
-.price-new { color: #e74c3c; font-weight: bold; }
+.item-name { font-weight: 600; font-size: 1.1rem; color: var(--color-text-dark); }
+.item-unit-price { color: var(--color-primary-green); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+.price-old { text-decoration: line-through; color: var(--color-text-muted); }
+.price-new { color: var(--color-accent-danger); font-weight: bold; }
 
-.quantity-control { display: flex; align-items: center; border: 1px solid #bdc3c7; border-radius: 8px; overflow: hidden; }
-.quantity-control button { background-color: #f8f9fa; border: none; padding: 8px 14px; cursor: pointer; font-size: 1.2rem; color: #3C2F2F; }
-.quantity-control button:hover { background-color: #e0e0e0; }
-.quantity-control span { padding: 0 1rem; font-size: 1.1rem; font-weight: 500; min-width: 40px; text-align: center; color: #3C2F2F; }
+.quantity-control { display: flex; align-items: center; border: 1px solid var(--color-border-light); border-radius: 8px; overflow: hidden; }
+.quantity-control button { background-color: #f8f9fa; border: none; padding: 8px 14px; cursor: pointer; font-size: 1.2rem; color: var(--color-text-dark); }
+.quantity-control button:hover { background-color: var(--color-border); }
+.quantity-control span { padding: 0 1rem; font-size: 1.1rem; font-weight: 500; min-width: 40px; text-align: center; color: var(--color-text-dark); }
 
-.item-line-total { font-weight: 600; font-size: 1.2rem; color: #3C2F2F; }
+.item-line-total { font-weight: 600; font-size: 1.2rem; color: var(--color-text-dark); }
 
-/* Résumé du panier */
 .panier-summary {
     margin-top: 3rem;
     padding: 2rem;
-    background-color: #F4F1EA; /* Crème de Soie */
+    background-color: var(--color-background-cream);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -106,13 +100,13 @@
 .panier-total {
     font-size: 1.2rem;
     font-weight: 500;
-    color: #3C2F2F;
+    color: var(--color-text-dark);
     flex-grow: 1;
 }
 .panier-total span {
     font-weight: bold;
     font-size: 2rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
     margin-left: 1rem;
 }
 .total-price-container {
@@ -126,7 +120,7 @@
 }
 .total-price-container .price-new {
     font-size: 2rem;
-    color: #e74c3c;
+    color: var(--color-accent-danger);
 }
 
 .panier-actions {
@@ -146,12 +140,11 @@
     transition: all 0.2s;
     text-align: center;
 }
-.btn-primary { background-color: #C5A059; color: #3C2F2F; }
-.btn-primary:hover { background-color: #b0904f; transform: translateY(-2px); }
-.btn-secondary { background: none; border: 1px solid #bdc3c7; color: #555; }
-.btn-secondary:hover { background-color: #e0e0e0; border-color: #95a5a6; }
+.btn-primary { background-color: var(--color-accent-gold); color: var(--color-text-dark); }
+.btn-primary:hover { background-color: var(--color-accent-gold-darker); transform: translateY(-2px); }
+.btn-secondary { background: none; border: 1px solid var(--color-border-light); color: #555; }
+.btn-secondary:hover { background-color: var(--color-border); border-color: var(--color-text-muted); }
 
-/* Responsive */
 @media (max-width: 768px) {
     .panier-header { display: none; }
     .panier-item {

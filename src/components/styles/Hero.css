@@ -1,10 +1,10 @@
-/* Pas besoin d'importer les polices ici */
+/* L'import des polices a été déplacé dans App.css */
 
 .hero-container {
     position: relative;
     padding: 8rem 2rem;
     text-align: center;
-    color: #F4F1EA; /* Crème de Soie pour le texte */
+    color: var(--color-text-light);
     background-image: url('https://images.unsplash.com/photo-1559787118-2835a1b9e0b0?q=80&w=2070&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
@@ -30,7 +30,6 @@
 }
 
 .hero-text h1 {
-    font-family: 'Playfair Display', serif;
     font-size: 4rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -38,7 +37,6 @@
 }
 
 .hero-text p {
-    font-family: 'Montserrat', sans-serif;
     font-size: 1.3rem;
     max-width: 600px;
     margin: 0 auto 3rem auto;
@@ -56,5 +54,3 @@
     width: 300px;
     flex-shrink: 0;
 }
-
-/* ... (le reste du fichier reste identique) ... */

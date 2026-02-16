@@ -1,23 +1,18 @@
-/* Pas besoin d'importer les polices ici */
-
-/* --- Amélioration du style de la liste de produits --- */
+/* L'import des polices a été déplacé dans App.css */
 
 .product-list-container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
-    font-family: 'Montserrat', sans-serif;
 }
 
 .product-list-title {
-    font-family: 'Playfair Display', serif;
     font-size: 2.8rem;
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-primary-green);
     text-align: center;
     margin-bottom: 2.5rem;
 }
 
-/* Conteneur pour les filtres et les contrôles de vue */
 .top-controls {
     display: flex;
     justify-content: space-between;
@@ -29,37 +24,35 @@
 
 .view-controls {
     display: flex;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     overflow: hidden;
 }
 
 .view-controls button {
-    background: #F4F1EA; /* Crème de Soie */
+    background: var(--color-background-cream);
     border: none;
     padding: 10px 16px;
     cursor: pointer;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
     transition: background-color 0.2s, color 0.2s;
 }
 
 .view-controls button:not(:last-child) {
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid var(--color-border);
 }
 
 .view-controls button.active {
-    background: #1B3022; /* Vert Forêt Profond */
-    color: white;
+    background: var(--color-primary-green);
+    color: var(--color-white);
 }
 
-/* Affichage en Grille */
 .product-list.grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
 }
 
-/* Affichage en Liste */
 .product-list.list {
     display: flex;
     flex-direction: column;
@@ -68,13 +61,11 @@
     margin: 0 auto;
 }
 
-/* Message si aucun produit ne correspond */
 .no-products-message {
     text-align: center;
     padding: 4rem 2rem;
-    background-color: #F4F1EA; /* Crème de Soie */
+    background-color: var(--color-background-cream);
     border-radius: 12px;
-    color: #3C2F2F; /* Brun Espresso */
-    font-family: 'Playfair Display', serif;
+    color: var(--color-text-dark);
     font-size: 1.5rem;
 }

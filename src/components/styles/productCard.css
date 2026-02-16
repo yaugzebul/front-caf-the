@@ -2,15 +2,15 @@
 
 /* Styles de base pour la carte produit */
 .product-card {
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    background-color: #F4F1EA; /* Crème de Soie */
+    background-color: var(--color-background-cream);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    position: relative; /* Nécessaire pour le message de confirmation */
+    position: relative;
 }
 
 .product-card:hover {
@@ -44,8 +44,8 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background-color: #1B3022; /* Vert Forêt Profond */
-    color: white;
+    background-color: var(--color-primary-green);
+    color: var(--color-white);
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -69,17 +69,17 @@
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
     transition: color 0.2s;
 }
 
 .product-card h3 a:hover {
-    color: #C5A059; /* Or Doux */
+    color: var(--color-accent-gold);
 }
 
 .product-card-description {
     font-size: 0.9rem;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
     margin-bottom: 1rem;
     line-height: 1.5;
 }
@@ -93,12 +93,12 @@
 
 .price-old {
     text-decoration: line-through;
-    color: #95a5a6;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
 }
 
 .price-new {
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-primary-green);
     font-weight: bold;
     font-size: 1.3rem;
 }
@@ -106,21 +106,20 @@
 .product-card-price {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
 }
 
-/* Styles pour les actions (ajout panier / quantité) */
 .product-card-actions {
     margin-top: auto;
     padding-top: 1rem;
-    border-top: 1px solid #e0e0e0; /* Utilisation d'une couleur plus neutre */
+    border-top: 1px solid var(--color-border);
 }
 
 .add-to-cart-btn {
     width: 100%;
     padding: 12px;
-    background-color: #C5A059; /* Or Doux */
-    color: #3C2F2F; /* Brun Espresso */
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-dark);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -130,7 +129,7 @@
 }
 
 .add-to-cart-btn:hover {
-    background-color: #b0904f; /* Or Doux plus foncé */
+    background-color: var(--color-accent-gold-darker);
     transform: translateY(-2px);
 }
 
@@ -138,24 +137,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #bdc3c7;
+    border: 1px solid var(--color-border-light);
     border-radius: 8px;
     overflow: hidden;
     margin-top: 1rem;
 }
 
 .quantity-control button {
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; /* Note: couleur non standard, laissée telle quelle pour l'instant */
     border: none;
     padding: 10px 15px;
     cursor: pointer;
     font-size: 1.2rem;
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-text-dark);
     transition: background-color 0.2s;
 }
 
 .quantity-control button:hover {
-    background-color: #e0e0e0;
+    background-color: var(--color-border);
 }
 
 .quantity-control span {
@@ -164,27 +163,19 @@
     font-weight: 500;
     min-width: 40px;
     text-align: center;
-    color: #3C2F2F; /* Brun Espresso */
-}
-
-/* Nouveaux styles pour les produits en vrac */
-.vrac-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    color: var(--color-text-dark);
 }
 
 .vrac-controls select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #bdc3c7;
+    border: 1px solid var(--color-border-light);
     border-radius: 8px;
     font-size: 1rem;
-    color: #3C2F2F; /* Brun Espresso */
-    background-color: #f8f9fa;
+    color: var(--color-text-dark);
+    background-color: #f8f9fa; /* Note: couleur non standard */
 }
 
-/* --- Confirmation Modal (partagé) --- */
 .confirmation-modal-overlay {
     position: fixed;
     top: 0;
@@ -199,7 +190,7 @@
 }
 
 .confirmation-modal {
-    background-color: #fff;
+    background-color: var(--color-white);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
@@ -210,7 +201,7 @@
 
 .confirmation-modal h3 {
     font-size: 1.8rem;
-    color: #1B3022;
+    color: var(--color-primary-green);
     margin-bottom: 1.5rem;
 }
 
@@ -219,7 +210,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background-color: #F4F1EA;
+    background-color: var(--color-background-cream);
     border-radius: 8px;
     margin-bottom: 2rem;
     text-align: left;
@@ -234,7 +225,7 @@
 
 .confirmation-product span {
     font-weight: 500;
-    color: #3C2F2F;
+    color: var(--color-text-dark);
 }
 
 .confirmation-actions {
@@ -250,16 +241,6 @@
     font-size: 0.9rem;
 }
 
-/* Mode Grille */
-.product-card.grid {
-    width: 100%;
-}
-
-.product-card.grid .product-card-img-container {
-    border-radius: 12px 12px 0 0;
-}
-
-/* Mode Liste */
 .product-card.list {
     flex-direction: row;
     width: 100%;
@@ -321,7 +302,6 @@
     margin-top: 0.5rem;
 }
 
-/* Responsive pour ProductCard */
 @media (max-width: 768px) {
     .product-card.list {
         flex-direction: column;
