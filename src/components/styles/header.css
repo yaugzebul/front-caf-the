@@ -119,6 +119,6 @@
     cursor: pointer;
 }
 .navbar-logout-button:hover {
-    background-color: var(--color-text-dark);
+    background-color: var(--color-primary-green);
     color: var(--color-text-light);
 }
