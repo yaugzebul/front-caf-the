@@ -1,11 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
-
-/* --- Styles Globaux --- */
-body {
-    background-color: #1B3022; /* Vert Forêt Profond */
-    color: #F4F1EA; /* Crème de Soie pour le texte sur fond sombre */
-    font-family: 'Montserrat', sans-serif;
-}
+/* L'import des polices a été déplacé dans App.css */
 
 /* --- Styles du Header --- */
 .navbar {

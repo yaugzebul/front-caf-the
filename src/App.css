@@ -1,0 +1,19 @@
+/* --- Importation Globale des Polices --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+/* --- Styles Globaux --- */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #fff; /* Fond blanc par défaut */
+    color: #3C2F2F; /* Brun Espresso par défaut */
+}
+
+/* Les styles du body du header ont été fusionnés ici.
+   Le fond vert foncé sera appliqué par des wrappers de section spécifiques si besoin. */
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}

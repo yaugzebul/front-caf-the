@@ -5,9 +5,10 @@ import Layout from "./layout/Layout.jsx";
 import Accueil from "./pages/Accueil.jsx";
 import Products from "./pages/ProductList.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
-import Panier from "./pages/Panier.jsx"; // Importer la page Panier
+import Panier from "./pages/Panier.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
+import './App.css'; // Importer le CSS global
 
 function App() {
 return (
@@ -20,7 +21,7 @@ return (
                   <Route path="produits" element={<Products />} />
                   <Route path="produit/:id" element={<ProductDetail />} />
                   <Route path="login" element={<Login />} />
-                  <Route path="panier" element={<Panier />} /> {/* Ajouter la route pour le panier */}
+                  <Route path="panier" element={<Panier />} />
               </Route>
           </Routes>
       </Router>
