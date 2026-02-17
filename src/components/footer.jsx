@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter } from 'lucide-react'; // 1. Importer les icônes
+ // 1. Importer les icônes
 import './styles/footer.css';
+import {FaFacebook, FaInstagram, FaTwitter} from "react-icons/fa";
 
 const Footer = () => {
     return (
@@ -34,13 +35,13 @@ const Footer = () => {
                     <div className="social-icons">
                         {/* 2. Remplacer le texte par les composants d'icônes */}
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                            <Facebook size={20} />
+                            <FaFacebook  size={20} />
                         </a>
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                            <Instagram size={20} />
+                            <FaInstagram  size={20} />
                         </a>
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                            <Twitter size={20} />
+                            <FaTwitter  size={20} />
                         </a>
                     </div>
                 </div>
