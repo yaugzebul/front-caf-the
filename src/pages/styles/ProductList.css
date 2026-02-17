@@ -1,18 +1,15 @@
-/* L'import des polices a été déplacé dans App.css */
+/* Pas besoin d'importer les polices ici */
+
+/* --- Amélioration du style de la liste de produits --- */
 
 .product-list-container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.product-list-title {
-    font-size: 2.8rem;
-    color: var(--color-primary-green);
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
-
+/* Conteneur pour les filtres et les contrôles de vue */
 .top-controls {
     display: flex;
     justify-content: space-between;
@@ -43,16 +40,18 @@
 }
 
 .view-controls button.active {
-    background: var(--color-accent-gold);
-    color: var(--color-white);
+    background: var(--color-primary-green);
+    color: var(--color-text-light);
 }
 
+/* Affichage en Grille */
 .product-list.grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
 }
 
+/* Affichage en Liste */
 .product-list.list {
     display: flex;
     flex-direction: column;
@@ -61,11 +60,13 @@
     margin: 0 auto;
 }
 
+/* Message si aucun produit ne correspond */
 .no-products-message {
     text-align: center;
     padding: 4rem 2rem;
     background-color: var(--color-background-cream);
     border-radius: 12px;
     color: var(--color-text-dark);
+    font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
 }

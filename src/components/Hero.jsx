@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from 'react'; // Retirer useContext
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
 import Skeleton from 'react-loading-skeleton';
-// Retirer l'import de AuthContext
 import './styles/Hero.css';
 
 const Hero = () => {
     const [topProducts, setTopProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    // Retirer la récupération du token
-    // const { token } = useContext(AuthContext); 
 
     useEffect(() => {
-        // Retirer la condition isAuthLoading et token
-        // if (isAuthLoading) return;
-        // if (!token) { setIsLoading(false); return; }
-
         const fetchTopProducts = async () => {
             try {
                 setIsLoading(true);
-                // L'appel se fait maintenant sans token
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/top-selling`);
                 
                 if (!response.ok) {
@@ -37,7 +30,7 @@ const Hero = () => {
         };
 
         fetchTopProducts();
-    }, []); // Retirer token et isAuthLoading des dépendances
+    }, []);
 
     return (
         <section className="hero-container">
@@ -66,6 +59,13 @@ const Hero = () => {
                         ))}
                     </>
                 )}
+            </div>
+
+            {/* Bouton CTA déplacé ici, après la liste des produits */}
+            <div className="hero-cta-container">
+                <Link to="/produits" className="hero-cta-btn">
+                    Découvrez notre catalogue de produits !
+                </Link>
             </div>
         </section>
     );

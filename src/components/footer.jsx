@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
- // 1. Importer les icônes
 import './styles/footer.css';
 import {FaFacebook, FaInstagram, FaTwitter} from "react-icons/fa";
 
@@ -25,15 +24,16 @@ const Footer = () => {
 
                 <div className="footer-section contact">
                     <h3 className="footer-title">Contactez-nous</h3>
-                    <p>Email : contact@cafthe.com</p>
-                    <p>Téléphone : 01 23 45 67 89</p>
-                    <p>Adresse : 123 Rue du Goût, 75001 Paris</p>
+                    <address className="footer-address">
+                        <a href="mailto:contact@cafthe.com" className="footer-link">contact@cafthe.com</a><br />
+                        <a href="tel:+33123456789" className="footer-link">01 23 45 67 89</a><br />
+                        <span>123 Rue du Goût, 75001 Paris</span>
+                    </address>
                 </div>
 
                 <div className="footer-section social">
                     <h3 className="footer-title">Suivez-nous</h3>
                     <div className="social-icons">
-                        {/* 2. Remplacer le texte par les composants d'icônes */}
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                             <FaFacebook  size={20} />
                         </a>

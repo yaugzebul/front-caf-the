@@ -1,11 +1,13 @@
-/* L'import des polices a été déplacé dans App.css */
+/* Pas besoin d'importer les polices ici */
 
 .product-filters {
     display: flex;
     gap: 2rem;
     padding: 1rem 0;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
-    align-items: flex-end;
+    align-items: flex-start;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .filter-group {
@@ -21,33 +23,63 @@
 }
 
 .filter-group select {
-    padding: 10px 12px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid var(--color-border-light);
+    border-radius: 5px;
     min-width: 200px;
     background-color: var(--color-white);
     color: var(--color-text-dark);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: border-color 0.2s;
 }
 
-.filter-group select:hover,
-.filter-group select:focus {
-    border-color: var(--color-accent-gold);
-    outline: none;
+/* Styles spécifiques pour le groupe de prix */
+.price-filter-group {
+    min-width: 250px;
+}
+
+.price-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.price-header input[type="checkbox"] {
+    accent-color: var(--color-accent-gold);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.price-label {
+    cursor: pointer;
+    user-select: none;
+    color: var(--color-text-dark);
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: opacity 0.3s;
+}
+
+.slider-container label {
+    color: var(--color-text-dark);
+}
+
+.slider-container.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .price-slider {
-    width: 250px;
+    width: 100%;
     -webkit-appearance: none;
     appearance: none;
     height: 8px;
     background: var(--color-border);
     border-radius: 5px;
     outline: none;
-    transition: background 0.2s;
-    margin-bottom: 10px;
 }
 
 .price-slider::-webkit-slider-thumb {
@@ -58,13 +90,6 @@
     background: var(--color-accent-gold);
     cursor: pointer;
     border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background 0.2s, transform 0.2s;
-}
-
-.price-slider::-webkit-slider-thumb:hover {
-    background: var(--color-accent-gold-darker);
-    transform: scale(1.1);
 }
 
 .price-slider::-moz-range-thumb {
@@ -73,11 +98,14 @@
     background: var(--color-accent-gold);
     cursor: pointer;
     border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background 0.2s, transform 0.2s;
 }
 
-.price-slider::-moz-range-thumb:hover {
-    background: var(--color-accent-gold-darker);
-    transform: scale(1.1);
+/* Style désactivé pour le slider */
+.price-slider:disabled {
+    background: var(--color-border-light);
+}
+
+.price-slider:disabled::-webkit-slider-thumb {
+    background: var(--color-text-muted);
+    cursor: not-allowed;
 }

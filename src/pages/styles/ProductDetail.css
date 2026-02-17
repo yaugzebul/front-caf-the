@@ -86,7 +86,7 @@
     font-size: 1.1rem;
     line-height: 1.7;
     margin-bottom: 2.5rem;
-    color: #555; /* Note: couleur non standard */
+    color: var(--color-text-dark);
 }
 
 .price-container {
@@ -96,9 +96,39 @@
     font-size: 1.5rem;
 }
 
+.original-price {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.discounted-price {
+    color: var(--color-accent-danger);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.price {
+    color: var(--color-text-dark);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.promo-badge {
+    background-color: var(--color-accent-danger);
+    color: var(--color-text-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 1rem;
+    align-self: center;
+}
+
 .origin-info, .stock-info {
     font-size: 1rem;
-    color: #555; /* Note: couleur non standard */
+    color: var(--color-text-dark);
     margin-bottom: 1rem;
 }
 
@@ -109,7 +139,7 @@
 
 .stock-in-cart {
     font-size: 0.9rem;
-    color: #555; /* Note: couleur non standard */
+    color: var(--color-text-muted);
     margin-left: 0.5rem;
     font-style: italic;
 }
@@ -148,7 +178,7 @@
 }
 
 .quantity-selector button:hover {
-    background-color: #f0f0f0; /* Note: couleur non standard */
+    background-color: var(--color-background-subtle);
     border-color: var(--color-text-dark);
 }
 

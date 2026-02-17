@@ -1,4 +1,4 @@
-/* L'import des polices a été déplacé dans App.css */
+/* Pas besoin d'importer les polices ici */
 
 .hero-container {
     position: relative;
@@ -20,16 +20,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(27, 48, 34, 0.7); /* Vert Forêt Profond plus opaque */
+    background-color: rgba(27, 48, 34, 0.7); /* Vert Forêt Profond plus opaque - Gardé en RGBA pour l'opacité */
     z-index: 1;
 }
 
-.hero-text, .top-products-list {
+.hero-text, .top-products-list, .hero-cta-container {
     position: relative;
     z-index: 2;
 }
 
 .hero-text h1 {
+    font-family: 'Playfair Display', serif;
     font-size: 4rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -37,6 +38,7 @@
 }
 
 .hero-text p {
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.3rem;
     max-width: 600px;
     margin: 0 auto 3rem auto;
@@ -48,9 +50,78 @@
     justify-content: center;
     gap: 2rem;
     flex-wrap: wrap;
+    margin-bottom: 4rem;
 }
 
 .top-products-list .product-card {
     width: 300px;
     flex-shrink: 0;
+}
+
+/* Style du bouton CTA */
+.hero-cta-container {
+    margin-top: 3rem;
+}
+
+.hero-cta-btn {
+    display: inline-block;
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-dark);
+    padding: 20px 40px;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-decoration: none;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s, color 0.2s;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero-cta-btn:hover {
+    background-color: var(--color-text-dark);
+    color: var(--color-accent-gold);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.product-skeleton {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+    color: #ffdddd; /* Couleur spécifique erreur claire */
+    font-size: 1.2rem;
+    background-color: rgba(231, 76, 60, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-container {
+        padding: 6rem 1rem;
+    }
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    .hero-text p {
+        font-size: 1.1rem;
+    }
+    .top-products-list .product-card,
+    .top-products-list .product-skeleton {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Changement du fond de page */
+body {
+    background-color: var(--color-background-cream);
 }

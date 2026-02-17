@@ -17,18 +17,29 @@ const ProductList = () => {
     const navigate = useNavigate();
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
-    // Les filtres sont dérivés de l'URL
     const filters = {
         category: searchParams.get('category') || 'all',
-        maxPrice: searchParams.get('maxPrice') || 9999,
+        minPrice: Number(searchParams.get('minPrice')) || 0,
+        maxPrice: Number(searchParams.get('maxPrice')) || 9999,
         sort: searchParams.get('sort') || 'default',
         search: searchParams.get('search') || '',
+        page: Number(searchParams.get('page')) || 1,
     };
 
-    // Mapping pour la traduction URL <-> Catégorie BD
     const urlCategoryMap = useMemo(() => ({
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
+
+    // On prépare les filtres pour l'affichage (traduction de la catégorie)
+    const displayFilters = useMemo(() => {
+        const mappedCategory = urlCategoryMap[filters.category];
+        return {
+            ...filters,
+            // Si on a un mapping (ex: 'accessoires' -> 'Accessoire'), on l'utilise en minuscule pour matcher le select
+            // Sinon on garde la valeur originale
+            category: mappedCategory ? mappedCategory.toLowerCase() : filters.category
+        };
+    }, [filters, urlCategoryMap]);
 
     useEffect(() => {
         const fetchProduits = async () => {
@@ -52,28 +63,42 @@ const ProductList = () => {
         const prices = produits.map(p => parseFloat(p.prix_ttc)).filter(p => !isNaN(p));
         return {
             uniqueCategories: categories,
-            priceRange: { min: prices.length > 0 ? Math.min(...prices) : 0, max: prices.length > 0 ? Math.max(...prices) : 100 }
+            priceRange: { min: prices.length > 0 ? Math.floor(Math.min(...prices)) : 0, max: prices.length > 0 ? Math.ceil(Math.max(...prices)) : 100 }
         };
     }, [produits]);
 
     const handleFilterChange = (filterName, value) => {
         const newParams = new URLSearchParams(location.search);
+        
+        // Si on change la catégorie via le select, on doit peut-être faire l'inverse du mapping ?
+        // Pour l'instant, on suppose que le select renvoie la valeur brute (ex: 'accessoire')
+        // Si on veut garder des URLs propres ('accessoires'), il faudrait un reverse map.
+        // Mais pour simplifier et faire marcher le select, on utilise la valeur directe.
+        
         if (value === 'all' || !value) {
             newParams.delete(filterName);
         } else {
             newParams.set(filterName, value);
         }
+        
         newParams.set('page', '1');
         navigate(`?${newParams.toString()}`);
     };
 
     const sortedAndFilteredProduits = useMemo(() => {
-        const categoryFromUrl = urlCategoryMap[filters.category] || filters.category;
+        const categoryTarget = urlCategoryMap[filters.category] || filters.category;
 
         let filtered = produits.filter(produit => {
-            const categoryMatch = filters.category === 'all' || (produit.id_categorie && produit.id_categorie.toLowerCase() === categoryFromUrl.toLowerCase());
-            const priceMatch = parseFloat(produit.prix_ttc) <= filters.maxPrice;
-            const searchMatch = filters.search ? produit.nom_produit.toLowerCase().includes(filters.search.toLowerCase()) : true;
+            const categoryMatch = filters.category === 'all' || 
+                (produit.id_categorie && produit.id_categorie.toLowerCase() === categoryTarget.toLowerCase());
+            
+            const price = parseFloat(produit.prix_ttc);
+            const priceMatch = price >= filters.minPrice && price <= filters.maxPrice;
+            
+            const searchMatch = filters.search 
+                ? produit.nom_produit.toLowerCase().includes(filters.search.toLowerCase()) 
+                : true;
+
             return categoryMatch && priceMatch && searchMatch;
         });
 
@@ -86,11 +111,10 @@ const ProductList = () => {
         return filtered;
     }, [produits, filters, urlCategoryMap]);
 
-    const currentPage = parseInt(searchParams.get('page') || '1', 10);
     const paginatedProduits = useMemo(() => {
-        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const startIndex = (filters.page - 1) * ITEMS_PER_PAGE;
         return sortedAndFilteredProduits.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-    }, [currentPage, sortedAndFilteredProduits]);
+    }, [filters.page, sortedAndFilteredProduits]);
 
     const totalPages = Math.ceil(sortedAndFilteredProduits.length / ITEMS_PER_PAGE);
 
@@ -102,11 +126,12 @@ const ProductList = () => {
             <h2 className="product-list-title">
                 {filters.search ? `Résultats pour "${filters.search}"` : "Nos Produits"}
             </h2>
+            
             <div className="top-controls">
                 {produits.length > 0 && (
                     <ProductFilters 
                         categories={uniqueCategories}
-                        filters={filters}
+                        filters={displayFilters} // On passe les filtres "corrigés" pour l'affichage
                         onFilterChange={handleFilterChange}
                         priceRange={priceRange}
                     />
@@ -127,11 +152,13 @@ const ProductList = () => {
                 )}
             </div>
 
-            <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(page) => handleFilterChange('page', page)}
-            />
+            {totalPages > 1 && (
+                <Pagination 
+                    currentPage={filters.page}
+                    totalPages={totalPages}
+                    onPageChange={(page) => handleFilterChange('page', page)}
+                />
+            )}
         </div>
     );
 };

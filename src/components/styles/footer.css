@@ -80,3 +80,19 @@
     border-top: 1px solid rgba(27, 48, 34, 0.2); /* Ligne de séparation avec opacité */
     font-size: 0.9rem;
 }
+
+/* Styles pour l'adresse */
+.footer-address {
+    font-style: normal;
+    line-height: 1.8;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: #1B3022; /* Vert Forêt Profond */
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: #3C2F2F; /* Brun Espresso */
+}

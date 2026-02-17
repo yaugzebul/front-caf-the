@@ -1,4 +1,4 @@
-/* L'import des polices a été déplacé dans App.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
 
 /* Styles de base pour la carte produit */
 .product-card {
@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    position: relative;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .product-card:hover {
@@ -44,8 +44,8 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background-color: var(--color-accent-danger);
-    color: var(--color-white);
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -66,6 +66,7 @@
 }
 
 .product-card h3 a {
+    font-family: 'Playfair Display', serif;
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
@@ -109,6 +110,7 @@
     color: var(--color-text-dark);
 }
 
+/* Styles pour les actions (ajout panier / quantité) */
 .product-card-actions {
     margin-top: auto;
     padding-top: 1rem;
@@ -133,23 +135,33 @@
     transform: translateY(-2px);
 }
 
+/* Styles communs pour les contrôles (vrac et unitaire) */
+.vrac-controls, .unitaire-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .quantity-control {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Espace entre les boutons et le texte */
     align-items: center;
     border: 1px solid var(--color-border-light);
     border-radius: 8px;
     overflow: hidden;
+    padding: 5px; /* Un peu de padding interne */
+    background-color: var(--color-background-offwhite); /* Même fond que le select */
 }
 
 .quantity-control button {
-    background-color: #f8f9fa;
+    background-color: transparent;
     border: none;
-    padding: 10px 15px;
+    padding: 5px 10px;
     cursor: pointer;
     font-size: 1.2rem;
     color: var(--color-text-dark);
     transition: background-color 0.2s;
+    border-radius: 4px;
 }
 
 .quantity-control button:hover {
@@ -158,17 +170,11 @@
 
 .quantity-control span {
     padding: 0 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     min-width: 40px;
     text-align: center;
     color: var(--color-text-dark);
-}
-
-.vrac-controls, .unitaire-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 .vrac-controls select {
@@ -178,75 +184,19 @@
     border-radius: 8px;
     font-size: 1rem;
     color: var(--color-text-dark);
-    background-color: #f8f9fa;
+    background-color: var(--color-background-offwhite);
 }
 
-/* ... (le reste des styles reste identique) ... */
-.confirmation-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* Mode Grille */
+.product-card.grid {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
 }
 
-.confirmation-modal {
-    background-color: var(--color-white);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
+.product-card.grid .product-card-img-container {
+    border-radius: 12px 12px 0 0;
 }
 
-.confirmation-modal h3 {
-    font-size: 1.8rem;
-    color: var(--color-primary-green);
-    margin-bottom: 1.5rem;
-}
-
-.confirmation-product {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: var(--color-background-cream);
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    text-align: left;
-}
-
-.confirmation-product img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.confirmation-product span {
-    font-weight: 500;
-    color: var(--color-text-dark);
-}
-
-.confirmation-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.confirmation-actions .btn-primary,
-.confirmation-actions .btn-secondary {
-    padding: 12px 24px;
-    font-size: 0.9rem;
-}
-
+/* Mode Liste */
 .product-card.list {
     flex-direction: row;
     width: 100%;
@@ -305,9 +255,10 @@
 }
 
 .product-card.list .quantity-control {
-    margin-top: 0.5rem;
+    margin-top: 0; /* Plus besoin de marge top spécifique en mode liste */
 }
 
+/* Responsive pour ProductCard */
 @media (max-width: 768px) {
     .product-card.list {
         flex-direction: column;
