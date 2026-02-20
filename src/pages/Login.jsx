@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext} from "../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Importer Link
 import "./styles/Login.css";
 
 const Login = () => {
@@ -35,12 +35,12 @@ const Login = () => {
                 return;
             }
 
-
-
             // Appel au login via le contexte
             login(data.client);
-            // Puis retour à l'accueil
-            navigate("/");
+            
+            // Force le rechargement de la page pour s'assurer que toutes les données sont à jour
+            window.location.href = "/";
+
         } catch (error) {
             console.error("Erreur lors de la connexion: ", error);
             setErrorMsg("Une erreur s'est produite lors de la connexion");
@@ -83,6 +83,10 @@ const Login = () => {
                     Se Connecter
                 </button>
             </form>
+
+            <div className="register-link" style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem' }}>
+                Pas encore de compte ? <Link to="/register" style={{ color: 'var(--color-primary-green)', fontWeight: '600', textDecoration: 'none' }}>S'inscrire</Link>
+            </div>
         </div>
     );
 };

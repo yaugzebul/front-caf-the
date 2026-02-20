@@ -1,12 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React from 'react';
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Account from "./pages/Account.jsx"; // Importer la page Account
 import Layout from "./layout/Layout.jsx";
 import Accueil from "./pages/Accueil.jsx";
 import Products from "./pages/ProductList.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Panier from "./pages/Panier.jsx";
-import ScrollToTop from "./components/ScrollToTop.jsx"; // 1. Importer le composant
+import ScrollToTop from "./components/ScrollToTop.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import './App.css';
@@ -16,13 +18,15 @@ function App() {
         <AuthProvider>
             <CartProvider>
                 <Router>
-                    <ScrollToTop /> {/* 2. L'ajouter ici, à l'intérieur du Router */}
+                    <ScrollToTop />
                     <Routes>
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Accueil />} />
                             <Route path="produits" element={<Products />} />
                             <Route path="produit/:id" element={<ProductDetail />} />
                             <Route path="login" element={<Login />} />
+                            <Route path="register" element={<Register />} />
+                            <Route path="compte" element={<Account />} /> {/* Ajouter la route */}
                             <Route path="panier" element={<Panier />} />
                         </Route>
                     </Routes>

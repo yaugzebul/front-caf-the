@@ -59,7 +59,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    position: relative; /* Important pour le positionnement absolu de la recherche */
+    position: relative;
 }
 
 /* --- Barre de recherche --- */
@@ -91,10 +91,10 @@ body {
     animation: expandSearch 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     transform-origin: right center;
     position: absolute;
-    right: 100%; /* Se positionne à gauche du conteneur navbar-right */
-    margin-right: 10px; /* Un peu d'espace */
+    right: 100%;
+    margin-right: 10px;
     z-index: 10;
-    white-space: nowrap; /* Empêche le retour à la ligne */
+    white-space: nowrap;
 }
 
 .search-bar-active input {
@@ -133,7 +133,7 @@ body {
 
 @keyframes expandSearch {
     from { width: 40px; opacity: 0; transform: scaleX(0.8); }
-    to { width: 250px; opacity: 1; transform: scaleX(1); } /* Ajusté pour correspondre à la largeur réelle */
+    to { width: 250px; opacity: 1; transform: scaleX(1); }
 }
 
 /* --- Authentification --- */
@@ -150,6 +150,18 @@ body {
 .navbar-user {
     font-weight: 500;
     color: var(--color-text-dark);
+}
+
+/* Style pour l'icône de compte */
+.account-icon-link {
+    color: var(--color-text-dark);
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.account-icon-link:hover {
+    color: var(--color-accent-gold);
 }
 
 .navbar-link-auth, .navbar-logout-button {

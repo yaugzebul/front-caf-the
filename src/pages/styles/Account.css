@@ -1,0 +1,123 @@
+/* L'import des polices a été déplacé dans App.css */
+
+.account-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    gap: 3rem;
+    min-height: 60vh;
+}
+
+/* Sidebar de navigation */
+.account-sidebar {
+    flex: 0 0 250px;
+    background-color: var(--color-background-cream);
+    padding: 2rem;
+    border-radius: 12px;
+    height: fit-content;
+}
+
+.account-sidebar h3 {
+    color: var(--color-primary-green);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.account-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.account-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.account-nav button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 15px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.account-nav button:hover {
+    background-color: var(--color-white);
+    color: var(--color-accent-gold);
+}
+
+.account-nav button.active {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+}
+
+/* Contenu principal */
+.account-content {
+    flex: 1;
+    background-color: var(--color-white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+}
+
+.account-content h2 {
+    color: var(--color-primary-green);
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+}
+
+/* Styles pour les formulaires */
+.account-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.account-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+}
+
+.account-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border-light);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-save {
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-dark);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn-save:hover {
+    background-color: var(--color-accent-gold-darker);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .account-container {
+        flex-direction: column;
+    }
+
+    .account-sidebar {
+        width: 100%;
+        flex: none;
+    }
+}
