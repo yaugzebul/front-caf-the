@@ -1,0 +1,35 @@
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-light);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+    opacity: 0.9;
+}
+
+.scroll-to-top-btn:hover {
+    background-color: var(--color-accent-gold-darker);
+    transform: translateY(-3px);
+    opacity: 1;
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 0.9; transform: translateY(0); }
+}
+
+.scroll-to-top-btn {
+    animation: fadeIn 0.3s ease-out;
+}

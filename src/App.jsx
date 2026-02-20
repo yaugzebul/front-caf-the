@@ -6,16 +6,17 @@ import Accueil from "./pages/Accueil.jsx";
 import Products from "./pages/ProductList.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Panier from "./pages/Panier.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx"; // 1. Importer le composant
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import './App.css';
 
-// On revient à une structure simple
 function App() {
     return (
         <AuthProvider>
             <CartProvider>
                 <Router>
+                    <ScrollToTop /> {/* 2. L'ajouter ici, à l'intérieur du Router */}
                     <Routes>
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Accueil />} />

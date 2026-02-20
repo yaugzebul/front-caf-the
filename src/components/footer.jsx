@@ -18,16 +18,17 @@ const Footer = () => {
                         <li><Link to="/about">À Propos</Link></li>
                         <li><Link to="/faq">FAQ</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
-                        <li><Link to="/terms">Conditions d'Utilisation</Link></li>
+                        <li><Link to="#">CGV</Link></li>
+                        <li><Link to="#">Politique de confidentialité</Link></li>
                     </ul>
                 </div>
 
                 <div className="footer-section contact">
                     <h3 className="footer-title">Contactez-nous</h3>
                     <address className="footer-address">
-                        <a href="mailto:contact@cafthe.com" className="footer-link">contact@cafthe.com</a><br />
-                        <a href="tel:+33123456789" className="footer-link">01 23 45 67 89</a><br />
-                        <span>123 Rue du Goût, 75001 Paris</span>
+                        <a href="mailto:contact@cafthe.com" className="footer-link">Email : contact@cafthe.com</a><br />
+                        <a href="tel:+33123456789" className="footer-link">Téléphone : 01 23 45 67 89</a><br />
+                        <span>Adresse : 123 Rue du Goût, 75001 Paris</span>
                     </address>
                 </div>
 
