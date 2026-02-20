@@ -30,13 +30,10 @@ const ProductList = () => {
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
 
-    // On prépare les filtres pour l'affichage (traduction de la catégorie)
     const displayFilters = useMemo(() => {
         const mappedCategory = urlCategoryMap[filters.category];
         return {
             ...filters,
-            // Si on a un mapping (ex: 'accessoires' -> 'Accessoire'), on l'utilise en minuscule pour matcher le select
-            // Sinon on garde la valeur originale
             category: mappedCategory ? mappedCategory.toLowerCase() : filters.category
         };
     }, [filters, urlCategoryMap]);
@@ -70,18 +67,22 @@ const ProductList = () => {
     const handleFilterChange = (filterName, value) => {
         const newParams = new URLSearchParams(location.search);
         
-        // Si on change la catégorie via le select, on doit peut-être faire l'inverse du mapping ?
-        // Pour l'instant, on suppose que le select renvoie la valeur brute (ex: 'accessoire')
-        // Si on veut garder des URLs propres ('accessoires'), il faudrait un reverse map.
-        // Mais pour simplifier et faire marcher le select, on utilise la valeur directe.
-        
-        if (value === 'all' || !value) {
-            newParams.delete(filterName);
+        if (filterName === 'price') {
+            newParams.set('minPrice', value.min);
+            newParams.set('maxPrice', value.max);
         } else {
-            newParams.set(filterName, value);
+            if (value === 'all' || !value) {
+                newParams.delete(filterName);
+            } else {
+                newParams.set(filterName, value);
+            }
         }
         
-        newParams.set('page', '1');
+        // Correction : On ne réinitialise la page à 1 que si on change un filtre AUTRE que la page
+        if (filterName !== 'page') {
+            newParams.set('page', '1');
+        }
+        
         navigate(`?${newParams.toString()}`);
     };
 
@@ -131,7 +132,7 @@ const ProductList = () => {
                 {produits.length > 0 && (
                     <ProductFilters 
                         categories={uniqueCategories}
-                        filters={displayFilters} // On passe les filtres "corrigés" pour l'affichage
+                        filters={displayFilters}
                         onFilterChange={handleFilterChange}
                         priceRange={priceRange}
                     />
