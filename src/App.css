@@ -1,21 +1,44 @@
 /* --- Importation Globale des Polices --- */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
-/* --- Définition des Variables de Couleur --- */
+/* --- Définition des Variables de Couleur (Thème Clair par défaut) --- */
 :root {
-    --color-primary-green: #1B3022;      /* Vert Forêt Profond (pour les fonds sombres, titres importants) */
-    --color-text-dark: #3C2F2F;          /* Brun Espresso (texte principal sur fond clair) */
-    --color-accent-gold: #C5A059;        /* Or Doux (boutons, icônes, accents) */
-    --color-accent-gold-darker: #b0904f; /* Or Doux plus foncé (pour le survol) */
-    --color-background-cream: #F4F1EA;   /* Crème de Soie (fond principal des cartes, header) */
-    --color-background-offwhite: #F9F8F6;/* Blanc cassé (fond de la fiche produit) */
-    --color-background-subtle: #e9e4d9;  /* Crème plus foncée (pour les zones de prix) */
-    --color-accent-danger: #e74c3c;      /* Rouge (promotions, erreurs) */
-    --color-text-muted: #95a5a6;         /* Gris (texte secondaire, prix barrés) */
+    --color-primary-green: #1B3022;      /* Vert Forêt Profond */
+    --color-text-dark: #3C2F2F;          /* Brun Espresso */
+    --color-accent-gold: #C5A059;        /* Or Doux */
+    --color-accent-gold-darker: #b0904f; /* Or Doux plus foncé */
+    --color-background-cream: #F4F1EA;   /* Crème de Soie */
+    --color-background-offwhite: #F9F8F6;/* Blanc cassé */
+    --color-background-subtle: #e9e4d9;  /* Crème plus foncée */
+    --color-accent-danger: #e74c3c;      /* Rouge */
+    --color-text-muted: #95a5a6;         /* Gris */
     --color-text-light: #F4F1EA;         /* Crème de Soie (texte sur fond sombre) */
-    --color-white: #fff;                 /* Blanc pur (fonds de contrôles) */
-    --color-border: #e0e0e0;             /* Gris clair (bordures principales) */
-    --color-border-light: #bdc3c7;       /* Gris moyen (bordures de contrôles) */
+    --color-white: #fff;                 /* Blanc pur */
+    --color-border: #e0e0e0;             /* Gris clair */
+    --color-border-light: #bdc3c7;       /* Gris moyen */
+
+    /* Variables sémantiques pour les boutons */
+    --color-btn-text: #3C2F2F;           /* Texte sur bouton doré (toujours foncé) */
+}
+
+/* --- Thème Sombre --- */
+[data-theme="dark"] {
+    --color-primary-green: #81C784;      /* Vert plus doux et lisible sur fond noir */
+    --color-text-dark: #E0E0E0;          /* Gris très clair (presque blanc) pour le texte principal */
+    --color-accent-gold: #D4AF37;        /* Or légèrement plus vif */
+    --color-accent-gold-darker: #C5A059;
+    --color-background-cream: #121212;   /* Fond principal très sombre (presque noir) */
+    --color-background-offwhite: #1E1E1E;/* Fond secondaire (cartes) */
+    --color-background-subtle: #2C2C2C;  /* Fond tertiaire */
+    --color-accent-danger: #ff6b6b;      /* Rouge plus doux */
+    --color-text-muted: #B0B0B0;         /* Gris clair */
+    --color-text-light: #E0E0E0;         /* Texte clair sur fond sombre (reste clair) */
+    --color-white: #1E1E1E;              /* Les zones blanches deviennent gris foncé */
+    --color-border: #333333;             /* Bordures sombres */
+    --color-border-light: #444444;
+
+    /* Le texte sur bouton doré reste foncé pour le contraste */
+    --color-btn-text: #121212;
 }
 
 /* --- Styles Globaux de Typographie --- */
@@ -24,8 +47,9 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: var(--color-white);
+    background-color: var(--color-background-cream);
     color: var(--color-text-dark);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {

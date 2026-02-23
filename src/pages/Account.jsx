@@ -1,18 +1,48 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import PasswordChangeModal from '../components/PasswordChangeModal.jsx';
+import DetailedOrderModal from '../components/DetailedOrderModal.jsx';
+import OrderList from '../components/OrderList.jsx'; // Import du composant OrderList
 import './styles/Account.css';
 
 const Account = () => {
     const { user, logout, login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('infos');
+    
+    // État pour les commandes (remonté ici)
+    const [orders, setOrders] = useState([]);
+    const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+    const [ordersError, setOrdersError] = useState(null);
+    const [selectedOrderId, setSelectedOrderId] = useState(null); // État pour la modale de détails
 
     useEffect(() => {
         if (user) {
             console.log("Données utilisateur complètes :", user);
+            fetchOrders(); // Charger les commandes dès que l'utilisateur est là
         }
     }, [user]);
+
+    const fetchOrders = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des commandes');
+            }
+            
+            const data = await response.json();
+            setOrders(data.orders || data);
+        } catch (err) {
+            console.error(err);
+            setOrdersError('Impossible de charger l\'historique des commandes.');
+        } finally {
+            setIsLoadingOrders(false);
+        }
+    };
 
     if (!user) {
         navigate('/login');
@@ -24,11 +54,21 @@ const Account = () => {
             case 'infos':
                 return <InfosPersonnelles user={user} onUpdateUser={login} />;
             case 'adresses':
-                return <Adresses user={user} onUpdateUser={login} />; // Passer onUpdateUser
+                return <Adresses user={user} onUpdateUser={login} />;
             case 'historique':
-                return <HistoriqueCommandes />;
+                return <HistoriqueCommandes 
+                            orders={orders} 
+                            isLoading={isLoadingOrders} 
+                            error={ordersError} 
+                            onViewDetails={setSelectedOrderId} 
+                        />;
             case 'suivi':
-                return <SuiviCommandes />;
+                return <SuiviCommandes 
+                            orders={orders} 
+                            isLoading={isLoadingOrders} 
+                            error={ordersError} 
+                            onViewDetails={setSelectedOrderId} 
+                        />;
             default:
                 return <InfosPersonnelles user={user} onUpdateUser={login} />;
         }
@@ -82,6 +122,14 @@ const Account = () => {
             <main className="account-content">
                 {renderContent()}
             </main>
+
+            {/* Modale de détails affichée au niveau global de la page Account */}
+            {selectedOrderId && (
+                <DetailedOrderModal 
+                    orderId={selectedOrderId} 
+                    onClose={() => setSelectedOrderId(null)} 
+                />
+            )}
         </div>
     );
 };
@@ -91,11 +139,11 @@ const Account = () => {
 const InfosPersonnelles = ({ user, onUpdateUser }) => {
     const [formData, setFormData] = useState({
         nom: user.nom || '',
-        prenom: user.prenom || '',
-        mot_de_passe: ''
+        prenom: user.prenom || ''
     });
     const [message, setMessage] = useState({ type: '', text: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -126,8 +174,6 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
             
             const updatedUser = { ...user, nom: formData.nom, prenom: formData.prenom };
             onUpdateUser(updatedUser);
-            
-            setFormData(prev => ({ ...prev, mot_de_passe: '' }));
 
         } catch (err) {
             console.error(err);
@@ -182,26 +228,33 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
                     <input type="email" defaultValue={user.email} disabled style={{backgroundColor: '#f0f0f0', cursor: 'not-allowed'}} />
                     <small style={{color: 'var(--color-text-muted)', display: 'block', marginTop: '5px'}}>L'email ne peut pas être modifié.</small>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="mot_de_passe">Nouveau mot de passe</label>
-                    <input 
-                        type="password" 
-                        id="mot_de_passe"
-                        name="mot_de_passe"
-                        value={formData.mot_de_passe}
-                        onChange={handleChange}
-                        placeholder="Laisser vide pour ne pas changer" 
-                    />
+                
+                <div className="form-group" style={{marginTop: '1.5rem', borderTop: '1px solid var(--color-border)', paddingTop: '1.5rem'}}>
+                    <label>Sécurité</label>
+                    <button 
+                        type="button" 
+                        className="btn-secondary" 
+                        onClick={() => setIsPasswordModalOpen(true)}
+                        style={{width: 'auto', display: 'inline-block'}}
+                    >
+                        Modifier mon mot de passe
+                    </button>
                 </div>
-                <button className="btn-save" disabled={isSubmitting}>
-                    {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                </button>
+
+                <div style={{marginTop: '2rem'}}>
+                    <button className="btn-save" disabled={isSubmitting}>
+                        {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                    </button>
+                </div>
             </form>
+
+            {isPasswordModalOpen && (
+                <PasswordChangeModal onClose={() => setIsPasswordModalOpen(false)} />
+            )}
         </div>
     );
 };
 
-// Nouveau composant pour le formulaire d'adresse
 const AddressForm = ({ type, initialData, onCancel, onSave }) => {
     const [formData, setFormData] = useState({
         adresse: initialData?.adresse || '',
@@ -267,27 +320,18 @@ const AddressForm = ({ type, initialData, onCancel, onSave }) => {
 };
 
 const Adresses = ({ user, onUpdateUser }) => {
-    const [editingAddress, setEditingAddress] = useState(null); // 'livraison' ou 'facturation' ou null
+    const [editingAddress, setEditingAddress] = useState(null);
     const [message, setMessage] = useState({ type: '', text: '' });
 
     const handleSaveAddress = async (type, addressData) => {
         setMessage({ type: '', text: '' });
         
-        // Préparer les données pour l'API
-        // On doit envoyer TOUTES les infos de l'utilisateur, pas juste l'adresse modifiée
-        // car le PUT remplace tout (selon l'implémentation classique)
-        // Mais ici on va supposer que l'API gère les mises à jour partielles ou on renvoie tout.
-        
         const dataToSend = {
-            ...user, // On garde les autres infos
-            // On écrase seulement l'adresse modifiée
+            ...user, 
             [`adresse_${type}`]: addressData.adresse,
             [`cp_${type}`]: addressData.cp,
             [`ville_${type}`]: addressData.ville
         };
-
-        // Nettoyage des champs inutiles si besoin (ex: id_client, id_employe qui ne doivent pas être envoyés)
-        // Pour l'instant on envoie tout ce qu'on a dans user + modifs
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clients/me`, {
@@ -305,10 +349,9 @@ const Adresses = ({ user, onUpdateUser }) => {
                 throw new Error(data.message || 'Erreur lors de la mise à jour de l\'adresse');
             }
 
-            // Mise à jour réussie
             setMessage({ type: 'success', text: 'Adresse mise à jour avec succès !' });
-            onUpdateUser(dataToSend); // Mettre à jour le contexte
-            setEditingAddress(null); // Quitter le mode édition
+            onUpdateUser(dataToSend); 
+            setEditingAddress(null);
 
         } catch (err) {
             console.error(err);
@@ -431,101 +474,37 @@ const Adresses = ({ user, onUpdateUser }) => {
     );
 };
 
-const HistoriqueCommandes = () => {
-    const [orders, setOrders] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+// --- Composants Historique et Suivi utilisant OrderList ---
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-                    credentials: 'include' // Important pour envoyer le cookie de session
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des commandes');
-                }
-                
-                const data = await response.json();
-                // On suppose que l'API renvoie { orders: [...] } ou directement [...]
-                setOrders(data.orders || data);
-            } catch (err) {
-                console.error(err);
-                setError('Impossible de charger l\'historique des commandes.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchOrders();
-    }, []);
-
+const HistoriqueCommandes = ({ orders, isLoading, error, onViewDetails }) => {
     if (isLoading) return <div>Chargement de l'historique...</div>;
     if (error) return <div style={{color: 'var(--color-accent-danger)'}}>{error}</div>;
 
     return (
         <div className="account-section">
             <h2>Historique des commandes</h2>
-            {orders.length === 0 ? (
-                <p>Vous n'avez pas encore passé de commande.</p>
-            ) : (
-                <div className="orders-list">
-                    <table style={{width: '100%', borderCollapse: 'collapse', marginTop: '1rem'}}>
-                        <thead>
-                            <tr style={{borderBottom: '2px solid var(--color-border)', textAlign: 'left'}}>
-                                <th style={{padding: '10px'}}>N° Commande</th>
-                                <th style={{padding: '10px'}}>Date</th>
-                                <th style={{padding: '10px'}}>Montant</th>
-                                <th style={{padding: '10px'}}>Statut</th>
-                                <th style={{padding: '10px'}}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orders.map(order => (
-                                <tr key={order.id_commande} style={{borderBottom: '1px solid var(--color-border-light)'}}>
-                                    <td style={{padding: '15px 10px'}}>#{order.id_commande}</td>
-                                    <td style={{padding: '15px 10px'}}>{new Date(order.date_commande).toLocaleDateString()}</td>
-                                    <td style={{padding: '15px 10px', fontWeight: 'bold'}}>{order.montant_paiement} €</td>
-                                    <td style={{padding: '15px 10px'}}>
-                                        <span style={{
-                                            padding: '4px 8px', 
-                                            borderRadius: '4px', 
-                                            backgroundColor: order.statut_commande === 'Livré' ? '#d4edda' : '#fff3cd',
-                                            color: order.statut_commande === 'Livré' ? '#155724' : '#856404',
-                                            fontSize: '0.9rem'
-                                        }}>
-                                            {order.statut_commande}
-                                        </span>
-                                    </td>
-                                    <td style={{padding: '15px 10px'}}>
-                                        <button style={{
-                                            backgroundColor: 'var(--color-primary-green)', 
-                                            color: 'white', 
-                                            border: 'none', 
-                                            padding: '6px 12px', 
-                                            borderRadius: '4px', 
-                                            cursor: 'pointer',
-                                            fontSize: '0.9rem'
-                                        }}>
-                                            Détails
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+            <OrderList orders={orders} onViewDetails={onViewDetails} />
         </div>
     );
 };
 
-const SuiviCommandes = () => {
+const SuiviCommandes = ({ orders, isLoading, error, onViewDetails }) => {
+    if (isLoading) return <div>Chargement du suivi...</div>;
+    if (error) return <div style={{color: 'var(--color-accent-danger)'}}>{error}</div>;
+
+    // Filtrer les commandes en cours (tout ce qui n'est pas Livré ou Annulé)
+    const activeOrders = orders.filter(order => 
+        order.statut_commande !== 'Livré' && order.statut_commande !== 'Annulé'
+    );
+
     return (
         <div className="account-section">
             <h2>Suivi des commandes</h2>
-            <p>Commandes en cours de traitement à venir...</p>
+            {activeOrders.length === 0 ? (
+                <p>Aucune commande en cours de traitement.</p>
+            ) : (
+                <OrderList orders={activeOrders} onViewDetails={onViewDetails} />
+            )}
         </div>
     );
 };

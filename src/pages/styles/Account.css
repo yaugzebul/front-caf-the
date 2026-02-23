@@ -93,11 +93,13 @@
     border: 1px solid var(--color-border-light);
     border-radius: 6px;
     font-size: 1rem;
+    background-color: var(--color-white); /* Assure que le fond de l'input suit le thème */
+    color: var(--color-text-dark);
 }
 
 .btn-save {
     background-color: var(--color-accent-gold);
-    color: var(--color-text-dark);
+    color: var(--color-btn-text); /* Utilisation de la nouvelle variable */
     border: none;
     padding: 12px 24px;
     border-radius: 6px;

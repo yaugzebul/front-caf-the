@@ -45,7 +45,7 @@
     top: 15px;
     right: 15px;
     background-color: var(--color-primary-green);
-    color: var(--color-text-light);
+    color: var(--color-text-light); /* Reste clair sur fond vert */
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -121,7 +121,7 @@
     width: 100%;
     padding: 12px;
     background-color: var(--color-accent-gold);
-    color: var(--color-text-dark);
+    color: var(--color-btn-text); /* Utilisation de la nouvelle variable */
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -144,13 +144,13 @@
 
 .quantity-control {
     display: flex;
-    justify-content: space-between; /* Espace entre les boutons et le texte */
+    justify-content: space-between;
     align-items: center;
     border: 1px solid var(--color-border-light);
     border-radius: 8px;
     overflow: hidden;
-    padding: 5px; /* Un peu de padding interne */
-    background-color: var(--color-background-offwhite); /* Même fond que le select */
+    padding: 5px;
+    background-color: var(--color-white); /* Fond qui change selon le thème */
 }
 
 .quantity-control button {
@@ -184,7 +184,7 @@
     border-radius: 8px;
     font-size: 1rem;
     color: var(--color-text-dark);
-    background-color: var(--color-background-offwhite);
+    background-color: var(--color-white);
 }
 
 /* Mode Grille */
@@ -255,7 +255,7 @@
 }
 
 .product-card.list .quantity-control {
-    margin-top: 0; /* Plus besoin de marge top spécifique en mode liste */
+    margin-top: 0;
 }
 
 /* Responsive pour ProductCard */

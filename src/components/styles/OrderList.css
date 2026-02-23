@@ -1,0 +1,122 @@
+.order-list-container {
+    overflow-x: auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.no-orders {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: 2rem;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background-color: var(--color-white);
+    border-radius: 8px;
+    overflow: hidden; /* Pour les coins arrondis */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.order-table th {
+    background-color: var(--color-background-cream);
+    color: var(--color-primary-green);
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.order-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border-light);
+    color: var(--color-text-dark);
+}
+
+.order-table tr:last-child td {
+    border-bottom: none;
+}
+
+.order-table tr:hover {
+    background-color: var(--color-background-offwhite);
+}
+
+.order-amount {
+    font-weight: 700;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pill.livré { background-color: #d4edda; color: #155724; }
+.status-pill.en-cours, .status-pill.en-préparation { background-color: #fff3cd; color: #856404; }
+.status-pill.annulé { background-color: #f8d7da; color: #721c24; }
+.status-pill.inconnu { background-color: var(--color-border-light); color: var(--color-text-muted); }
+
+.btn-details {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-details:hover {
+    background-color: var(--color-text-dark);
+}
+
+/* Responsive : Transformation en cartes sur mobile */
+@media (max-width: 768px) {
+    .order-table, .order-table thead, .order-table tbody, .order-table th, .order-table td, .order-table tr {
+        display: block;
+    }
+
+    .order-table thead {
+        display: none; /* Cacher l'en-tête */
+    }
+
+    .order-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        background-color: var(--color-white);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .order-table td {
+        border-bottom: 1px solid var(--color-border-light);
+        position: relative;
+        padding-left: 50%; /* Espace pour le label */
+        text-align: right;
+    }
+
+    .order-table td:last-child {
+        border-bottom: none;
+        text-align: center;
+        padding-left: 1rem; /* Centrer le bouton */
+    }
+
+    .order-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: var(--color-text-muted);
+    }
+}
