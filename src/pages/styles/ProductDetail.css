@@ -78,7 +78,7 @@
 .product-info h2 {
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    color: var(--color-primary-green);
+    color: var(--color-text-dark);
     line-height: 1.2;
 }
 
@@ -196,14 +196,14 @@
 .total-price-amount {
     font-weight: bold;
     font-size: 1.8rem;
-    color: var(--color-primary-green);
+    color: var(--color-text-dark);
 }
 
 .add-to-cart-btn {
     width: 100%;
     padding: 18px 30px;
     background-color: var(--color-accent-gold);
-    color: var(--color-text-dark);
+    color: var(--color-white);
     border: none;
     border-radius: 8px;
     font-size: 1.2rem;
@@ -221,7 +221,7 @@
 .back-link {
     display: inline-block;
     margin-top: 2rem;
-    color: var(--color-primary-green);
+    color: var(--color-text-dark);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;

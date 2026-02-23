@@ -80,7 +80,7 @@
 }
 
 .hero-cta-btn:hover {
-    background-color: var(--color-text-dark);
+    background-color: var(--color-btn-text);
     color: var(--color-accent-gold);
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);

@@ -82,6 +82,11 @@ const Login = () => {
                 <button type="submit" className="login-button">
                     Se Connecter
                 </button>
+
+                <button type="submit" className="login-button" disabled>
+                    Mot de passe oublié
+                </button>
+
             </form>
 
             <div className="register-link" style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem' }}>

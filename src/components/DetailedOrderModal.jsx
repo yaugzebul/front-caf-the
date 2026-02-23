@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { X, Package, CreditCard, Calendar, DollarSign, Truck } from 'lucide-react';
+import { X } from 'lucide-react';
 import './styles/DetailedOrderModal.css';
 
 const DetailedOrderModal = ({ orderId, onClose }) => {
@@ -67,7 +67,14 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
             <div className="order-modal" onClick={(e) => e.stopPropagation()}>
                 
                 <div className="modal-header">
-                    <h3>Commande #{order?.id_commande}</h3>
+                    <div className="header-left">
+                        <h3>Commande #{order?.id_commande}</h3>
+                        {order && (
+                            <span className={`status-badge ${order.statut_commande ? order.statut_commande.toLowerCase().replace(' ', '-') : 'inconnu'}`}>
+                                {order.statut_commande || 'Statut inconnu'}
+                            </span>
+                        )}
+                    </div>
                     <button className="modal-close-btn" onClick={onClose}>
                         <X size={24} />
                     </button>
@@ -80,67 +87,68 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
                         <div className="error-state">{error}</div>
                     ) : order ? (
                         <>
-                            {/* Statut */}
-                            <div className="status-section">
-                                <span className={`status-badge ${order.statut_commande ? order.statut_commande.toLowerCase().replace(' ', '-') : 'inconnu'}`}>
-                                    {order.statut_commande || 'Statut inconnu'}
-                                </span>
-                            </div>
-
-                            {/* Informations Générales */}
-                            <ul className="info-list">
-                                <li className="info-row">
-                                    <span className="info-label"> Date d'achat</span>
+                            {/* Grille d'informations clés */}
+                            <div className="info-grid">
+                                <div className="info-card">
+                                    <span className="info-label">Date de commande</span>
                                     <span className="info-value">{order.date_commande ? new Date(order.date_commande).toLocaleDateString() : 'Inconnue'}</span>
-                                </li>
-                                <li className="info-row">
-                                    <span className="info-label"> Prix total</span>
-                                    <span className="info-value">{order.montant_paiement ? `${order.montant_paiement} €` : 'Non défini'}</span>
-                                </li>
-                                <li className="info-row">
-                                    <span className="info-label"> Mode de commande</span>
-                                    <span className="info-value">{order.mode_commande || 'Non spécifié'}</span>
-                                </li>
-                            </ul>
-
-                            {/* Articles */}
-                            <div className="order-section">
-                                <h4 className="section-title"><Package size={20} /> Articles</h4>
-                                <div className="articles-list">
-                                    {order.items && order.items.length > 0 ? (
-                                        order.items.map((item, index) => {
-                                            const itemPrice = calculateItemPrice(item);
-                                            return (
-                                                <div key={index} className="article-item">
-                                                    <div className="article-info">
-                                                        <span className="article-name">{item.nom_produit}</span>
-                                                    </div>
-                                                    <div className="article-details">
-                                                        <span className="article-quantity">{formatQuantity(item)}</span>
-                                                        {itemPrice && <span className="article-price">{itemPrice} €</span>}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })
-                                    ) : (
-                                        <p>Aucun article trouvé.</p>
-                                    )}
+                                </div>
+                                <div className="info-card">
+                                    <span className="info-label">Mode de commande</span>
+                                    <span className="info-value">{order.mode_commande || 'Web'}</span>
+                                </div>
+                                <div className="info-card">
+                                    <span className="info-label">Moyen de paiement</span>
+                                    <span className="info-value">{order.moyen_paiement || 'Non spécifié'}</span>
+                                </div>
+                                <div className="info-card">
+                                    <span className="info-label">Date de paiement</span>
+                                    <span className="info-value">{order.date_paiement ? new Date(order.date_paiement).toLocaleDateString() : 'En attente'}</span>
                                 </div>
                             </div>
 
-                            {/* Paiement */}
+                            {/* Liste des articles */}
                             <div className="order-section">
-                                <h4 className="section-title"><CreditCard size={20} /> Paiement</h4>
-                                <ul className="info-list">
-                                    <li className="info-row">
-                                        <span className="info-label">Moyen de paiement</span>
-                                        <span className="info-value">{order.moyen_paiement || 'Non spécifié'}</span>
-                                    </li>
-                                    <li className="info-row">
-                                        <span className="info-label">Date de paiement</span>
-                                        <span className="info-value">{order.date_paiement ? new Date(order.date_paiement).toLocaleDateString() : 'En attente'}</span>
-                                    </li>
-                                </ul>
+                                <h4 className="section-title">Articles commandés</h4>
+                                <table className="articles-table">
+                                    <thead>
+                                        <tr>
+                                            <th style={{width: '50%'}}>Produit</th>
+                                            <th style={{textAlign: 'right'}}>Quantité</th>
+                                            <th style={{textAlign: 'right'}}>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {order.items && order.items.length > 0 ? (
+                                            order.items.map((item, index) => {
+                                                const itemPrice = calculateItemPrice(item);
+                                                return (
+                                                    <tr key={index}>
+                                                        <td data-label="Produit">
+                                                            <span className="article-name">{item.nom_produit}</span>
+                                                        </td>
+                                                        <td data-label="Quantité" style={{textAlign: 'right'}}>
+                                                            <span className="article-quantity">{formatQuantity(item)}</span>
+                                                        </td>
+                                                        <td data-label="Total" style={{textAlign: 'right'}}>
+                                                            <span className="article-price">{itemPrice ? `${itemPrice} €` : '-'}</span>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        ) : (
+                                            <tr><td colSpan="3">Aucun article trouvé.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Total Général */}
+                            <div className="order-total-summary">
+                                <div className="total-row">
+                                    <span className="total-label">Total TTC</span>
+                                    <span className="total-amount">{order.montant_paiement} €</span>
+                                </div>
                             </div>
                         </>
                     ) : null}

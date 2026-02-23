@@ -225,7 +225,7 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
                 </div>
                 <div className="form-group">
                     <label>Email</label>
-                    <input type="email" defaultValue={user.email} disabled style={{backgroundColor: '#f0f0f0', cursor: 'not-allowed'}} />
+                    <input type="email" defaultValue={user.email} disabled style={{backgroundColor: 'var(--color-background-subtle)', cursor: 'not-allowed'}} />
                     <small style={{color: 'var(--color-text-muted)', display: 'block', marginTop: '5px'}}>L'email ne peut pas être modifié.</small>
                 </div>
                 

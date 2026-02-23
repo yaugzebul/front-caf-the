@@ -11,7 +11,7 @@ const OrderList = ({ orders, onViewDetails }) => {
             <table className="order-table">
                 <thead>
                     <tr>
-                        <th>N°</th>
+                        <th className="OrderList-th">N°</th>
                         <th>Date</th>
                         <th>Montant</th>
                         <th>Statut</th>

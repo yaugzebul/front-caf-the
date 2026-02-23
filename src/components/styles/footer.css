@@ -2,7 +2,7 @@
 
 .site-footer {
     background-color: var(--color-background-cream); /* Or Doux */
-    color: #1B3022; /* Vert Forêt Profond pour un meilleur contraste */
+    color: var(--color-text-footer); /* Vert Forêt Profond pour un meilleur contraste */
     padding: 4rem 2rem;
     font-family: 'Montserrat', sans-serif;
 }
@@ -23,7 +23,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-text-footer); /* Vert Forêt Profond */
 }
 
 .footer-section p {
@@ -42,12 +42,12 @@
 
 .footer-section.links a {
     text-decoration: none;
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-text-footer); /* Vert Forêt Profond */
     transition: color 0.2s;
 }
 
 .footer-section.links a:hover {
-    color: #3C2F2F; /* Brun Espresso au survol */
+    color: var(--color-accent-gold); /* Brun Espresso au survol */
 }
 
 .social-icons {
@@ -89,10 +89,10 @@
 
 .footer-link {
     text-decoration: none;
-    color: #1B3022; /* Vert Forêt Profond */
+    color: var(--color-text-footer); /* Vert Forêt Profond */
     transition: color 0.2s;
 }
 
 .footer-link:hover {
-    color: #3C2F2F; /* Brun Espresso */
+    color: var(--color-accent-gold); /* Brun Espresso */
 }

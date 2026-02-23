@@ -21,7 +21,7 @@
 }
 
 .order-table th {
-    background-color: var(--color-background-cream);
+    background-color: var(--color-tr-bg);
     color: var(--color-primary-green);
     font-weight: 600;
     text-align: left;
@@ -75,6 +75,7 @@
 
 .btn-details:hover {
     background-color: var(--color-text-dark);
+    color: var(--color-background-cream);
 }
 
 /* Responsive : Transformation en cartes sur mobile */
@@ -120,3 +121,4 @@
         color: var(--color-text-muted);
     }
 }
+

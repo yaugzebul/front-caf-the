@@ -16,17 +16,19 @@
     --color-white: #fff;                 /* Blanc pur */
     --color-border: #e0e0e0;             /* Gris clair */
     --color-border-light: #bdc3c7;       /* Gris moyen */
-
+    --color-text-footer: #1B3022;
     /* Variables sémantiques pour les boutons */
-    --color-btn-text: #3C2F2F;           /* Texte sur bouton doré (toujours foncé) */
+    --color-btn-text: #3C2F2F;
+    --color-titles: #1B3022;/* Texte sur bouton doré (toujours foncé) */
+    --color-tr-bg: #f4f1ea;
 }
 
 /* --- Thème Sombre --- */
 [data-theme="dark"] {
-    --color-primary-green: #81C784;      /* Vert plus doux et lisible sur fond noir */
+    --color-primary-green: #1B3022;      /* Vert plus doux et lisible sur fond noir */
     --color-text-dark: #E0E0E0;          /* Gris très clair (presque blanc) pour le texte principal */
-    --color-accent-gold: #D4AF37;        /* Or légèrement plus vif */
-    --color-accent-gold-darker: #C5A059;
+    --color-accent-gold: #C5A059;        /* Or légèrement plus vif */
+    --color-accent-gold-darker: #b0904f;
     --color-background-cream: #121212;   /* Fond principal très sombre (presque noir) */
     --color-background-offwhite: #1E1E1E;/* Fond secondaire (cartes) */
     --color-background-subtle: #2C2C2C;  /* Fond tertiaire */
@@ -36,9 +38,11 @@
     --color-white: #1E1E1E;              /* Les zones blanches deviennent gris foncé */
     --color-border: #333333;             /* Bordures sombres */
     --color-border-light: #444444;
-
+    --color-text-footer: #E0E0E0;
+    --color-titles: #E0E0E0;
     /* Le texte sur bouton doré reste foncé pour le contraste */
     --color-btn-text: #121212;
+    --color-tr-bg: #f4f1ea;
 }
 
 /* --- Styles Globaux de Typographie --- */
