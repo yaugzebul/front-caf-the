@@ -37,7 +37,7 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
         <div className={`product-card ${viewMode}`}>
             <Link to={`/produit/${produit.id_article}`} className="product-card-link">
                 <div className="product-card-img-container">
-                    <img src={imageURL} alt={produit.nom_produit} className="product-card-img" />
+                    <img loading={"lazy"} src={imageURL} alt={produit.nom_produit} className="product-card-img" />
                     {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}
                 </div>
             </Link>

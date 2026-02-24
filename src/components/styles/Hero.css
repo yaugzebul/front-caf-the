@@ -5,10 +5,6 @@
     padding: 8rem 2rem;
     text-align: center;
     color: var(--color-text-light);
-    background-image: url('https://images.unsplash.com/photo-1559787118-2835a1b9e0b0?q=80&w=2070&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
     border-radius: 0;
     margin-bottom: 4rem;
 }

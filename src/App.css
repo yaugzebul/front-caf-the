@@ -1,6 +1,3 @@
-/* --- Importation Globale des Polices --- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
-
 /* --- Définition des Variables de Couleur (Thème Clair par défaut) --- */
 :root {
     --color-primary-green: #1B3022;      /* Vert Forêt Profond */
@@ -21,7 +18,8 @@
     --color-btn-text: #3C2F2F;
     --color-titles: #1B3022;/* Texte sur bouton doré (toujours foncé) */
     --color-tr-bg: #f4f1ea;
-    --color-btn-account: #1b3022
+    --color-btn-account: #1b3022;
+    --color-bg-header: #f4f1ea;
 }
 
 /* --- Thème Sombre --- */
@@ -45,6 +43,9 @@
     --color-btn-text: #121212;
     --color-tr-bg: #f4f1ea;
     --color-btn-account: #1b3022;
+    --color-bg-header: #121212
+;
+
 }
 
 /* --- Styles Globaux de Typographie --- */
