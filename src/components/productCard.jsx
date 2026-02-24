@@ -13,7 +13,7 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
 
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
     const imageURL = hasImage 
-        ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}` 
+        ? `${import.meta.env.VITE_API_URL}/images/sm${produit.image_url}`
         : `https://placehold.co/600x400/EEE/31343C?text=${encodeURIComponent(produit.nom_produit)}`;
 
     const shortDescription = produit.description ? produit.description.substring(0, 100) + '...' : '';
