@@ -50,8 +50,8 @@
 }
 
 .account-nav button:hover {
-    background-color: var(--color-white);
-    color: var(--color-accent-gold);
+    background-color: var(--color-btn-account);
+    color: var(--color-text-light);
 }
 
 .account-nav button.active {
@@ -68,14 +68,34 @@
     border: 1px solid var(--color-border);
 }
 
-.account-content h2 {
+.account-section h2 {
     color: var(--color-titles);
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 1rem;
 }
 
-/* Styles pour les formulaires */
+/* Messages (Succès/Erreur) */
+.account-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.account-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.account-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Formulaires */
 .account-form .form-group {
     margin-bottom: 1.5rem;
 }
@@ -93,13 +113,46 @@
     border: 1px solid var(--color-border-light);
     border-radius: 6px;
     font-size: 1rem;
-    background-color: var(--color-white); /* Assure que le fond de l'input suit le thème */
+    background-color: var(--color-white);
     color: var(--color-text-dark);
+}
+
+.account-form input:disabled {
+    background-color: var(--color-background-offwhite);
+    cursor: not-allowed;
+    color: var(--color-text-muted);
+}
+
+.input-help {
+    color: var(--color-text-muted);
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85rem;
+}
+
+.security-section {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+}
+
+.form-actions {
+    margin-top: 2rem;
+}
+
+/* Boutons */
+.account-nav .btn-logout {
+    background-color: var(--color-accent-danger);
+    color: #ffffff
+}
+
+.account-nav .btn-logout:hover {
+    background-color: red;
 }
 
 .btn-save {
     background-color: var(--color-accent-gold);
-    color: var(--color-btn-text); /* Utilisation de la nouvelle variable */
+    color: var(--color-btn-text);
     border: none;
     padding: 12px 24px;
     border-radius: 6px;
@@ -112,6 +165,191 @@
     background-color: var(--color-accent-gold-darker);
 }
 
+.btn-save:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-dark);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-background-offwhite);
+    border-color: var(--color-text-dark);
+}
+
+/* Adresses */
+.addresses-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.address-card {
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+    border-radius: 8px;
+    background-color: var(--color-background-offwhite);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.address-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--color-titles);
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: 0.5rem;
+}
+
+.address-details {
+    flex-grow: 1;
+}
+
+.address-details p {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-dark);
+}
+
+.no-address-msg {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.btn-edit-address {
+    margin-top: 1rem;
+    color: var(--color-accent-gold);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+    font-size: 0.95rem;
+    align-self: flex-start;
+}
+
+.btn-edit-address:hover {
+    text-decoration: underline;
+}
+
+.btn-add-address {
+    margin-top: 1rem;
+    color: var(--color-primary-green);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+    font-size: 0.95rem;
+    align-self: flex-start;
+}
+
+.btn-add-address:hover {
+    text-decoration: underline;
+}
+
+/* Formulaire d'adresse (inline) */
+.address-form-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-white);
+}
+
+.address-form-container h4 {
+    margin-bottom: 1rem;
+    color: var(--color-text-dark);
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+.address-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Historique Commandes (Tableau) */
+.orders-list {
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.orders-table th {
+    border-bottom: 2px solid var(--color-border);
+    text-align: left;
+    padding: 10px;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.orders-table td {
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 15px 10px;
+    color: var(--color-text-dark);
+}
+
+.order-amount {
+    font-weight: 700;
+    color: var(--color-primary-green);
+}
+
+.status-pill {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pill.livré { background-color: #d4edda; color: #155724; }
+.status-pill.en-cours { background-color: #fff3cd; color: #856404; }
+.status-pill.annulé { background-color: #f8d7da; color: #721c24; }
+
+.btn-details-small {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-light);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-details-small:hover {
+    background-color: var(--color-text-dark);
+}
+
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .account-container {
@@ -121,5 +359,10 @@
     .account-sidebar {
         width: 100%;
         flex: none;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
     }
 }

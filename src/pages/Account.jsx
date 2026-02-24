@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import PasswordChangeModal from '../components/PasswordChangeModal.jsx';
 import DetailedOrderModal from '../components/DetailedOrderModal.jsx';
-import OrderList from '../components/OrderList.jsx'; // Import du composant OrderList
+import OrderList from '../components/OrderList.jsx';
 import './styles/Account.css';
 
 const Account = () => {
@@ -11,16 +11,14 @@ const Account = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('infos');
     
-    // État pour les commandes (remonté ici)
     const [orders, setOrders] = useState([]);
     const [isLoadingOrders, setIsLoadingOrders] = useState(true);
     const [ordersError, setOrdersError] = useState(null);
-    const [selectedOrderId, setSelectedOrderId] = useState(null); // État pour la modale de détails
+    const [selectedOrderId, setSelectedOrderId] = useState(null);
 
     useEffect(() => {
         if (user) {
-            console.log("Données utilisateur complètes :", user);
-            fetchOrders(); // Charger les commandes dès que l'utilisateur est là
+            fetchOrders();
         }
     }, [user]);
 
@@ -80,39 +78,39 @@ const Account = () => {
                 <h3>Mon Compte</h3>
                 <ul className="account-nav">
                     <li>
-                        <button 
-                            className={activeTab === 'infos' ? 'active' : ''} 
+                        <button
+                            className={`account-btn ${activeTab === 'infos' ? 'active' : ''}`}
                             onClick={() => setActiveTab('infos')}
                         >
                             Infos personnelles
                         </button>
                     </li>
                     <li>
-                        <button 
-                            className={activeTab === 'adresses' ? 'active' : ''} 
+                        <button
+                            className={`account-btn ${activeTab === 'adresses' ? 'active' : ''}`}
                             onClick={() => setActiveTab('adresses')}
                         >
                             Mes adresses
                         </button>
                     </li>
                     <li>
-                        <button 
-                            className={activeTab === 'historique' ? 'active' : ''} 
+                        <button
+                            className={`account-btn ${activeTab === 'historique' ? 'active' : ''}`}
                             onClick={() => setActiveTab('historique')}
                         >
                             Historique commandes
                         </button>
                     </li>
                     <li>
-                        <button 
-                            className={activeTab === 'suivi' ? 'active' : ''} 
+                        <button
+                            className={`account-btn ${activeTab === 'suivi' ? 'active' : ''}`}
                             onClick={() => setActiveTab('suivi')}
                         >
                             Suivi commandes
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => { logout(); navigate('/'); }} style={{color: 'var(--color-accent-danger)'}}>
+                        <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>
                             Déconnexion
                         </button>
                     </li>
@@ -123,7 +121,6 @@ const Account = () => {
                 {renderContent()}
             </main>
 
-            {/* Modale de détails affichée au niveau global de la page Account */}
             {selectedOrderId && (
                 <DetailedOrderModal 
                     orderId={selectedOrderId} 
@@ -188,14 +185,7 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
             <h2>Mes informations personnelles</h2>
             
             {message.text && (
-                <div style={{
-                    padding: '10px',
-                    marginBottom: '15px',
-                    borderRadius: '6px',
-                    backgroundColor: message.type === 'success' ? '#d4edda' : '#f8d7da',
-                    color: message.type === 'success' ? '#155724' : '#721c24',
-                    border: `1px solid ${message.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`
-                }}>
+                <div className={`account-message ${message.type}`}>
                     {message.text}
                 </div>
             )}
@@ -225,23 +215,22 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
                 </div>
                 <div className="form-group">
                     <label>Email</label>
-                    <input type="email" defaultValue={user.email} disabled style={{backgroundColor: 'var(--color-background-subtle)', cursor: 'not-allowed'}} />
-                    <small style={{color: 'var(--color-text-muted)', display: 'block', marginTop: '5px'}}>L'email ne peut pas être modifié.</small>
+                    <input type="email" defaultValue={user.email} disabled />
+                    <small className="input-help">L'email ne peut pas être modifié.</small>
                 </div>
                 
-                <div className="form-group" style={{marginTop: '1.5rem', borderTop: '1px solid var(--color-border)', paddingTop: '1.5rem'}}>
+                <div className="security-section">
                     <label>Sécurité</label>
                     <button 
                         type="button" 
                         className="btn-secondary" 
                         onClick={() => setIsPasswordModalOpen(true)}
-                        style={{width: 'auto', display: 'inline-block'}}
                     >
                         Modifier mon mot de passe
                     </button>
                 </div>
 
-                <div style={{marginTop: '2rem'}}>
+                <div className="form-actions">
                     <button className="btn-save" disabled={isSubmitting}>
                         {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
                     </button>
@@ -272,47 +261,44 @@ const AddressForm = ({ type, initialData, onCancel, onSave }) => {
     };
 
     return (
-        <div className="address-form-container" style={{ marginTop: '1rem', padding: '1rem', border: '1px solid var(--color-border)', borderRadius: '8px' }}>
-            <h4 style={{ marginBottom: '1rem' }}>Modifier l'adresse de {type}</h4>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group" style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Adresse</label>
+        <div className="address-form-container">
+            <h4>Modifier l'adresse de {type}</h4>
+            <form onSubmit={handleSubmit} className="account-form">
+                <div className="form-group">
+                    <label>Adresse</label>
                     <input 
                         type="text" 
                         name="adresse" 
                         value={formData.adresse} 
                         onChange={handleChange} 
                         required 
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--color-border-light)' }}
                     />
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                <div className="form-row">
                     <div className="form-group" style={{ flex: 1 }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Code Postal</label>
+                        <label>Code Postal</label>
                         <input 
                             type="text" 
                             name="cp" 
                             value={formData.cp} 
                             onChange={handleChange} 
                             required 
-                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--color-border-light)' }}
                         />
                     </div>
                     <div className="form-group" style={{ flex: 2 }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Ville</label>
+                        <label>Ville</label>
                         <input 
                             type="text" 
                             name="ville" 
                             value={formData.ville} 
                             onChange={handleChange} 
                             required 
-                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--color-border-light)' }}
                         />
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button type="submit" className="btn-save" style={{ padding: '8px 16px' }}>Enregistrer</button>
-                    <button type="button" onClick={onCancel} style={{ padding: '8px 16px', background: 'none', border: '1px solid var(--color-border)', borderRadius: '6px', cursor: 'pointer' }}>Annuler</button>
+                <div className="address-form-actions">
+                    <button type="submit" className="btn-save">Enregistrer</button>
+                    <button type="button" onClick={onCancel} className="btn-secondary">Annuler</button>
                 </div>
             </form>
         </div>
@@ -364,23 +350,16 @@ const Adresses = ({ user, onUpdateUser }) => {
             <h2>Mes adresses</h2>
             
             {message.text && (
-                <div style={{
-                    padding: '10px',
-                    marginBottom: '15px',
-                    borderRadius: '6px',
-                    backgroundColor: message.type === 'success' ? '#d4edda' : '#f8d7da',
-                    color: message.type === 'success' ? '#155724' : '#721c24',
-                    border: `1px solid ${message.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`
-                }}>
+                <div className={`account-message ${message.type}`}>
                     {message.text}
                 </div>
             )}
 
-            <div className="addresses-grid" style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+            <div className="addresses-grid">
                 
                 {/* Adresse de Livraison */}
-                <div className="address-card" style={{ border: '1px solid var(--color-border)', padding: '1.5rem', borderRadius: '8px', backgroundColor: 'var(--color-background-offwhite)' }}>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--color-text-dark)' }}>Adresse de Livraison</h3>
+                <div className="address-card">
+                    <h3>Adresse de Livraison</h3>
                     
                     {editingAddress === 'livraison' ? (
                         <AddressForm 
@@ -401,20 +380,18 @@ const Adresses = ({ user, onUpdateUser }) => {
                                     <p>{user.adresse_livraison}</p>
                                     <p>{user.cp_livraison} {user.ville_livraison}</p>
                                     <button 
-                                        className="btn-edit" 
+                                        className="btn-edit-address"
                                         onClick={() => setEditingAddress('livraison')}
-                                        style={{ marginTop: '1rem', color: 'var(--color-accent-gold)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', padding: 0 }}
                                     >
                                         Modifier
                                     </button>
                                 </div>
                             ) : (
                                 <div>
-                                    <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>Aucune adresse de livraison enregistrée.</p>
+                                    <p className="no-address-msg">Aucune adresse de livraison enregistrée.</p>
                                     <button 
-                                        className="btn-add" 
+                                        className="btn-add-address"
                                         onClick={() => setEditingAddress('livraison')}
-                                        style={{ marginTop: '1rem', color: 'var(--color-primary-green)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', padding: 0 }}
                                     >
                                         + Ajouter une adresse
                                     </button>
@@ -425,8 +402,8 @@ const Adresses = ({ user, onUpdateUser }) => {
                 </div>
 
                 {/* Adresse de Facturation */}
-                <div className="address-card" style={{ border: '1px solid var(--color-border)', padding: '1.5rem', borderRadius: '8px', backgroundColor: 'var(--color-background-offwhite)' }}>
-                    <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--color-text-dark)' }}>Adresse de Facturation</h3>
+                <div className="address-card">
+                    <h3>Adresse de Facturation</h3>
                     
                     {editingAddress === 'facturation' ? (
                         <AddressForm 
@@ -447,20 +424,18 @@ const Adresses = ({ user, onUpdateUser }) => {
                                     <p>{user.adresse_facturation}</p>
                                     <p>{user.cp_facturation} {user.ville_facturation}</p>
                                     <button 
-                                        className="btn-edit" 
+                                        className="btn-edit-address"
                                         onClick={() => setEditingAddress('facturation')}
-                                        style={{ marginTop: '1rem', color: 'var(--color-accent-gold)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', padding: 0 }}
                                     >
                                         Modifier
                                     </button>
                                 </div>
                             ) : (
                                 <div>
-                                    <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>Aucune adresse de facturation enregistrée.</p>
+                                    <p className="no-address-msg">Aucune adresse de facturation enregistrée.</p>
                                     <button 
-                                        className="btn-add" 
+                                        className="btn-add-address"
                                         onClick={() => setEditingAddress('facturation')}
-                                        style={{ marginTop: '1rem', color: 'var(--color-primary-green)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', padding: 0 }}
                                     >
                                         + Ajouter une adresse
                                     </button>
@@ -474,11 +449,9 @@ const Adresses = ({ user, onUpdateUser }) => {
     );
 };
 
-// --- Composants Historique et Suivi utilisant OrderList ---
-
 const HistoriqueCommandes = ({ orders, isLoading, error, onViewDetails }) => {
     if (isLoading) return <div>Chargement de l'historique...</div>;
-    if (error) return <div style={{color: 'var(--color-accent-danger)'}}>{error}</div>;
+    if (error) return <div className="account-message error">{error}</div>;
 
     return (
         <div className="account-section">
@@ -490,10 +463,9 @@ const HistoriqueCommandes = ({ orders, isLoading, error, onViewDetails }) => {
 
 const SuiviCommandes = ({ orders, isLoading, error, onViewDetails }) => {
     if (isLoading) return <div>Chargement du suivi...</div>;
-    if (error) return <div style={{color: 'var(--color-accent-danger)'}}>{error}</div>;
+    if (error) return <div className="account-message error">{error}</div>;
 
-    // Filtrer les commandes en cours (tout ce qui n'est pas Livré ou Annulé)
-    const activeOrders = orders.filter(order => 
+    const activeOrders = orders.filter(order =>
         order.statut_commande !== 'Livré' && order.statut_commande !== 'Annulé'
     );
 

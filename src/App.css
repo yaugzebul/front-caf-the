@@ -21,6 +21,7 @@
     --color-btn-text: #3C2F2F;
     --color-titles: #1B3022;/* Texte sur bouton doré (toujours foncé) */
     --color-tr-bg: #f4f1ea;
+    --color-btn-account: #1b3022
 }
 
 /* --- Thème Sombre --- */
@@ -43,6 +44,7 @@
     /* Le texte sur bouton doré reste foncé pour le contraste */
     --color-btn-text: #121212;
     --color-tr-bg: #f4f1ea;
+    --color-btn-account: #1b3022;
 }
 
 /* --- Styles Globaux de Typographie --- */
