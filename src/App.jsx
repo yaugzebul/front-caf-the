@@ -7,13 +7,14 @@ import { CartProvider } from "./context/CartContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import './App.css';
 
-// Imports Lazy pour optimiser le chargement initial (Code Splitting)
+// Imports Lazy
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Register = lazy(() => import("./pages/Register.jsx"));
 const Account = lazy(() => import("./pages/Account.jsx"));
 const CGV = lazy(() => import("./pages/CGV.jsx"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx")); // Importer Contact
 const Accueil = lazy(() => import("./pages/Accueil.jsx"));
 const Products = lazy(() => import("./pages/ProductList.jsx"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail.jsx"));
@@ -54,6 +55,7 @@ function App() {
                                     <Route path="cgv" element={<CGV />} />
                                     <Route path="politique-confidentialite" element={<PrivacyPolicy />} />
                                     <Route path="about" element={<About />} />
+                                    <Route path="contact" element={<Contact />} /> {/* Ajouter la route */}
                                 </Route>
                             </Routes>
                         </Suspense>
