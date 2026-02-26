@@ -29,7 +29,7 @@ const About = () => {
                     </p>
                 </div>
                 <div className="about-image">
-                    <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop" alt="Notre boutique originale" />
+                    <img src="/images/boutique.webp" alt="Notre boutique originale" />
                 </div>
             </section>
 
@@ -43,7 +43,7 @@ const About = () => {
                     </ul>
                 </div>
                 <div className="about-image">
-                    <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1000&auto=format&fit=crop" alt="Dégustation de café" />
+                    <img src="/images/valeurs.webp" alt="Dégustation de café" />
                 </div>
             </section>
 

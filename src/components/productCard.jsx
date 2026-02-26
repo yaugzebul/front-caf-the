@@ -41,7 +41,6 @@ const ProductCard = ({ produit, viewMode = 'grid', priority = false }) => {
                         src={imageURL} 
                         alt={produit.nom_produit} 
                         className="product-card-img"
-                        loading={priority ? "eager" : "lazy"}
                         fetchPriority={priority ? "high" : "auto"}
                     />
                     {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}
