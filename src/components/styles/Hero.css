@@ -36,6 +36,7 @@
 .hero-text p {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.3rem;
+    font-weight: bold;
     max-width: 600px;
     margin: 0 auto 3rem auto;
     opacity: 0.9;

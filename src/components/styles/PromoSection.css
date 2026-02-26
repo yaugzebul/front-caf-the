@@ -27,6 +27,7 @@
 
 .promo-subtitle {
     font-size: 1.3rem;
+    font-weight: bold;
     color: var(--color-btn-text);
     max-width: 600px;
     margin: 0 auto;

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ProductCard from "../components/productCard.jsx";
 import ProductFilters from "../components/ProductFilters.jsx";
 import Pagination from "../components/Pagination.jsx";
+import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
 import './styles/ProductList.css';
 
 const ITEMS_PER_PAGE = 12;
@@ -29,6 +30,26 @@ const ProductList = () => {
     const urlCategoryMap = useMemo(() => ({
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
+
+    // Titre et mots-clés dynamiques pour le SEO
+    const pageTitle = useMemo(() => {
+        if (filters.search) return `Résultats pour "${filters.search}" - Caf'Thé`;
+        if (filters.category !== 'all') {
+            const catName = urlCategoryMap[filters.category] || filters.category;
+            return `${catName}s - Notre sélection | Caf'Thé`;
+        }
+        return "Tous nos produits - Caf'Thé";
+    }, [filters.search, filters.category, urlCategoryMap]);
+
+    const pageKeywords = useMemo(() => {
+        let keywords = "achat café, achat thé, boutique en ligne, bio, vrac";
+        if (filters.category === 'cafes') keywords += ", café en grain, café moulu, arabica, robusta";
+        if (filters.category === 'thes') keywords += ", thé vert, thé noir, infusion, rooibos, matcha";
+        if (filters.category === 'accessoires') keywords += ", théière, cafetière, mug, filtre";
+        return keywords;
+    }, [filters.category]);
+
+    useDocumentTitle(pageTitle, "Parcourez notre catalogue complet de thés, cafés et accessoires. Trouvez le produit idéal pour vos moments de dégustation.", pageKeywords);
 
     const displayFilters = useMemo(() => {
         const mappedCategory = urlCategoryMap[filters.category];
@@ -78,7 +99,6 @@ const ProductList = () => {
             }
         }
         
-        // Correction : On ne réinitialise la page à 1 que si on change un filtre AUTRE que la page
         if (filterName !== 'page') {
             newParams.set('page', '1');
         }

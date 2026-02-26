@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PasswordChangeModal from '../components/PasswordChangeModal.jsx';
 import DetailedOrderModal from '../components/DetailedOrderModal.jsx';
 import OrderList from '../components/OrderList.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import './styles/Account.css';
 
 const Account = () => {
@@ -15,6 +16,19 @@ const Account = () => {
     const [isLoadingOrders, setIsLoadingOrders] = useState(true);
     const [ordersError, setOrdersError] = useState(null);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
+
+    // Titre dynamique en fonction de l'onglet
+    const tabTitles = {
+        infos: "Mes Informations - Mon Compte",
+        adresses: "Mes Adresses - Mon Compte",
+        historique: "Historique des commandes - Mon Compte",
+        suivi: "Suivi de commande - Mon Compte"
+    };
+    useDocumentTitle(
+        tabTitles[activeTab] || "Mon Compte", 
+        "Gérez vos informations personnelles, vos adresses et consultez vos commandes sur Caf'Thé.",
+        "mon compte, espace client, mes informations, mes commandes, suivi de commande, adresses"
+    );
 
     useEffect(() => {
         if (user) {
@@ -136,7 +150,8 @@ const Account = () => {
 const InfosPersonnelles = ({ user, onUpdateUser }) => {
     const [formData, setFormData] = useState({
         nom: user.nom || '',
-        prenom: user.prenom || ''
+        prenom: user.prenom || '',
+        email: user.email || ''
     });
     const [message, setMessage] = useState({ type: '', text: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -214,11 +229,23 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" defaultValue={user.email} disabled />
-                    <small className="input-help">L'email ne peut pas être modifié.</small>
+                    <label htmlFor="email">Email</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           value={user.email}
+                           onChange={handleChange}
+                           required
+                           defaultValue={user.email}  />
+
                 </div>
-                
+
+                <div className="form-actions">
+                    <button className="btn-save" disabled={isSubmitting}>
+                        {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                    </button>
+                </div>
+
                 <div className="security-section">
                     <label>Sécurité</label>
                     <button 
@@ -230,11 +257,7 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
                     </button>
                 </div>
 
-                <div className="form-actions">
-                    <button className="btn-save" disabled={isSubmitting}>
-                        {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                    </button>
-                </div>
+
             </form>
 
             {isPasswordModalOpen && (

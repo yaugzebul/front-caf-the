@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { X } from 'lucide-react';
+// Import optimisé
+import X from 'lucide-react/dist/esm/icons/x';
 import './styles/PasswordChangeModal.css';
 
 const PasswordChangeModal = ({ onClose }) => {

@@ -11,7 +11,9 @@ const Layout = () => {
     return (
         <>
             <Header />
-            <Outlet />
+            <main>
+                <Outlet />
+            </main>
             <Footer />
 
             {/* La modale s'affichera ici si elle est active */}

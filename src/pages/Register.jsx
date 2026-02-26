@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
 import "./styles/Register.css";
 
 const Register = () => {
-    const { login } = useContext(AuthContext); // Pour connecter l'utilisateur directement après inscription
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
@@ -14,8 +15,11 @@ const Register = () => {
         mdp_client: "",
         confirm_mdp: ""
     });
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
     
     const [errorMsg, setErrorMsg] = useState("");
+
+    useDocumentTitle("Inscription - Caf'Thé", "Créez votre compte pour profiter de nos offres exclusives et suivre vos commandes.", "inscription, créer compte, fidélité, register, nouveau client");
 
     const handleChange = (e) => {
         setFormData({
@@ -33,8 +37,12 @@ const Register = () => {
             return;
         }
 
+        if (!agreedToTerms) {
+            setErrorMsg("Vous devez accepter les conditions générales de vente.");
+            return;
+        }
+
         try {
-            // On prépare les données à envoyer (sans la confirmation de mdp)
             const dataToSend = {
                 nom: formData.nom_client,
                 prenom: formData.prenom_client,
@@ -59,8 +67,6 @@ const Register = () => {
                 return;
             }
 
-            // Si l'inscription réussit, on connecte l'utilisateur (si l'API renvoie le client)
-            // Sinon, on redirige vers le login
             if (data.client) {
                 login(data.client);
                 navigate("/");
@@ -142,6 +148,18 @@ const Register = () => {
                         placeholder="Confirmez votre mot de passe"
                         onChange={handleChange}
                     />
+                </div>
+
+                <div className="form-group terms-group">
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        checked={agreedToTerms} 
+                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    />
+                    <label htmlFor="terms">
+                        J'accepte les <Link to="/cgv" target="_blank">Conditions Générales de Vente</Link>
+                    </label>
                 </div>
 
                 {errorMsg && <div className="error-message">{errorMsg}</div>}

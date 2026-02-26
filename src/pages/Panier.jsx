@@ -1,11 +1,14 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import './styles/Panier.css';
 
 const Panier = () => {
     // On récupère les nouvelles valeurs du contexte
     const { cartItems, increaseQuantity, decreaseQuantity, clearCart, cartTotal, cartTotalWithoutPromo, hasPromo } = useCart();
+
+    useDocumentTitle("Mon Panier - Caf'Thé", "Vérifiez vos articles et finalisez votre commande de thés et cafés d'exception.", "panier, commande, checkout, paiement, achat en ligne");
 
     if (cartItems.length === 0) {
         return (

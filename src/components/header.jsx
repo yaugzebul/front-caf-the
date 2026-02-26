@@ -1,15 +1,22 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { useTheme } from "../context/ThemeContext.jsx"; // 1. Importer le hook
+import { useTheme } from "../context/ThemeContext.jsx";
 import CartIcon from './CartIcon.jsx';
-import { Search, Menu, X, User, Sun, Moon } from 'lucide-react'; // 2. Importer Sun et Moon
+// Imports optimisés pour le Tree Shaking
+import Search from 'lucide-react/dist/esm/icons/search';
+import Menu from 'lucide-react/dist/esm/icons/menu';
+import X from 'lucide-react/dist/esm/icons/x';
+import User from 'lucide-react/dist/esm/icons/user';
+import Sun from 'lucide-react/dist/esm/icons/sun';
+import Moon from 'lucide-react/dist/esm/icons/moon';
+
 import './styles/header.css';
 import logo from '/images/logo-site.svg';
 
 const Header = () => {
     const { user, isAuthenticated, logout } = useContext(AuthContext);
-    const { theme, toggleTheme } = useTheme(); // 3. Utiliser le hook
+    const { theme, toggleTheme } = useTheme();
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,7 +62,6 @@ const Header = () => {
                 <Link to="/produits?category=accessoires" className="nav-link" onClick={closeMenu}>ACCESSOIRES</Link>
                 
                 <div className="mobile-auth-links">
-                    {/* Bouton Thème Mobile */}
                     <button className="theme-toggle-btn mobile" onClick={toggleTheme}>
                         {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                         <span>{theme === 'light' ? 'Mode Sombre' : 'Mode Clair'}</span>
@@ -74,7 +80,6 @@ const Header = () => {
             </div>
 
             <div className="navbar-right">
-                {/* Bouton Thème Desktop */}
                 <button className="theme-toggle-btn desktop" onClick={toggleTheme} title="Changer de thème">
                     {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
                 </button>

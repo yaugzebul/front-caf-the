@@ -1,0 +1,135 @@
+.about-container {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-text-dark);
+}
+
+.about-hero {
+    background-color: var(--color-primary-green);
+    color: var(--color-text-dark);
+    text-align: center;
+    padding: 6rem 2rem;
+    margin-bottom: 4rem;
+}
+
+.about-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+}
+
+.about-hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    color: var(--color-text-light);
+}
+
+.about-section {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto 6rem auto;
+    padding: 0 2rem;
+}
+
+.about-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.about-content {
+    flex: 1;
+}
+
+.about-content h2 {
+    color: var(--color-titles);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+}
+
+.about-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-content li {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.about-content li::before {
+    content: '•';
+    color: var(--color-accent-gold);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.about-image {
+    flex: 1;
+    height: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.about-image:hover img {
+    transform: scale(1.05);
+}
+
+.about-commitment {
+    background-color: var(--color-primary-green);
+    text-align: center;
+    padding: 5rem 2rem;
+    margin-top: 4rem;
+}
+
+.about-commitment h2 {
+    color: var(--color-text-light);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-commitment p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-light);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .about-section {
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .about-section.reverse {
+        flex-direction: column;
+    }
+
+    .about-image {
+        width: 100%;
+        height: 300px;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+    }
+}

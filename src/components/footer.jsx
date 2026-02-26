@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './styles/footer.css';
-import {FaFacebook, FaInstagram, FaTwitter} from "react-icons/fa";
+// Remplacement de react-icons par des composants SVG locaux légers
+import { FacebookIcon, InstagramIcon, TwitterIcon } from './icons/SocialIcons.jsx';
 
 const Footer = () => {
     return (
@@ -18,8 +19,8 @@ const Footer = () => {
                         <li><Link to="/about">À Propos</Link></li>
                         <li><Link to="/faq">FAQ</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
-                        <li><Link to="#">CGV</Link></li>
-                        <li><Link to="#">Politique de confidentialité</Link></li>
+                        <li><Link to="/cgv">CGV</Link></li>
+                        <li><Link to="/politique-confidentialite">Politique de confidentialité</Link></li>
                     </ul>
                 </div>
 
@@ -35,14 +36,14 @@ const Footer = () => {
                 <div className="footer-section social">
                     <h3 className="footer-title">Suivez-nous</h3>
                     <div className="social-icons">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                            <FaFacebook  size={20} />
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Suivez-nous sur Facebook">
+                            <FacebookIcon size={20} />
                         </a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                            <FaInstagram  size={20} />
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Suivez-nous sur Instagram">
+                            <InstagramIcon size={20} />
                         </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                            <FaTwitter  size={20} />
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Suivez-nous sur Twitter">
+                            <TwitterIcon size={20} />
                         </a>
                     </div>
                 </div>

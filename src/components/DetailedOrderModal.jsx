@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { X, Package, CreditCard, Calendar, DollarSign, Truck } from 'lucide-react';
+// Imports optimisés pour le Tree Shaking
+import X from 'lucide-react/dist/esm/icons/x';
+import Package from 'lucide-react/dist/esm/icons/package';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import Truck from 'lucide-react/dist/esm/icons/truck';
+
 import './styles/DetailedOrderModal.css';
 
 const DetailedOrderModal = ({ orderId, onClose }) => {

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useCart } from "../context/CartContext.jsx";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import "./styles/ProductDetail.css";
 
 const ProductDetails = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const { addToCart, cartItems } = useCart();
 
     const [produit, setProduit] = useState(null);
@@ -17,6 +17,13 @@ const ProductDetails = () => {
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
     const itemInCart = cartItems.find(item => String(item.id_article) === id);
+
+    // Titre et mots-clés dynamiques pour le SEO
+    const pageTitle = produit ? `${produit.nom_produit} | Caf'Thé` : "Détail produit - Caf'Thé";
+    const pageDescription = produit ? produit.description.substring(0, 160) : "Découvrez ce produit d'exception sur Caf'Thé.";
+    const pageKeywords = produit ? `${produit.nom_produit}, achat ${produit.nom_produit}, ${produit.type_vente === 'vrac' ? 'vrac' : 'unitaire'}, bio, équitable` : "café, thé, produit";
+    
+    useDocumentTitle(pageTitle, pageDescription, pageKeywords);
 
     useEffect(() => {
         const fetchProduit = async () => {
@@ -52,8 +59,6 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         addToCart(produit, quantity);
-        // La logique de la modale est maintenant gérée par le CartContext
-        // La logique de la modale est maintenant gérée par le CartContext
     };
 
     const closeImageModal = () => {
@@ -63,19 +68,6 @@ const ProductDetails = () => {
             setIsAnimatingOut(false);
         }, 300);
     };
-
-    if (isLoading) {
-        return (
-            <div className="product-details-skeleton">
-                <Skeleton height={400} width={400} />
-                <div style={{ marginTop: 20, flex: 1 }}>
-                    <Skeleton height={30} width="50%" />
-                    <div style={{ marginTop: 20 }}><Skeleton count={3} /></div>
-                    <div style={{ marginTop: 20 }}><Skeleton height={40} width="30%" /></div>
-                </div>
-            </div>
-        );
-    }
 
     if (isLoading) {
         return (

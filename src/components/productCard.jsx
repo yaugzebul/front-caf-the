@@ -3,17 +3,16 @@ import { Link } from "react-router-dom";
 import { useCart } from '../context/CartContext';
 import './styles/productCard.css';
 
-const ProductCard = ({ produit, viewMode = 'grid' }) => {
-    // On utilise la fonction addToCart du contexte, qui gère maintenant la modale
+const ProductCard = ({ produit, viewMode = 'grid', priority = false }) => {
     const { addToCart } = useCart();
 
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
     const [selectedWeight, setSelectedWeight] = useState(weightOptions[0] || 0);
-    const [quantity, setQuantity] = useState(1); // Pour les produits unitaires
+    const [quantity, setQuantity] = useState(1);
 
     const hasImage = produit.image_url && produit.image_url.trim() !== '' && produit.image_url !== 'null';
     const imageURL = hasImage 
-        ? `${import.meta.env.VITE_API_URL}/images/sm${produit.image_url}`
+        ? `${import.meta.env.VITE_API_URL}/images/${produit.image_url}` 
         : `https://placehold.co/600x400/EEE/31343C?text=${encodeURIComponent(produit.nom_produit)}`;
 
     const shortDescription = produit.description ? produit.description.substring(0, 100) + '...' : '';
@@ -32,12 +31,19 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
         }
     };
 
+    const selectId = `weight-select-${produit.id_article}`;
+
     return (
-        // On retire le fragment et la logique de modale locale
         <div className={`product-card ${viewMode}`}>
             <Link to={`/produit/${produit.id_article}`} className="product-card-link">
                 <div className="product-card-img-container">
-                    <img loading={"lazy"} src={imageURL} alt={produit.nom_produit} className="product-card-img" />
+                    <img 
+                        src={imageURL} 
+                        alt={produit.nom_produit} 
+                        className="product-card-img"
+                        loading={priority ? "eager" : "lazy"}
+                        fetchPriority={priority ? "high" : "auto"}
+                    />
                     {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}
                 </div>
             </Link>
@@ -60,7 +66,11 @@ const ProductCard = ({ produit, viewMode = 'grid' }) => {
                 <div className="product-card-actions">
                     {produit.type_vente === 'vrac' ? (
                         <div className="vrac-controls">
+                            <label htmlFor={selectId} className="visually-hidden">
+                                Choisir la quantité
+                            </label>
                             <select 
+                                id={selectId}
                                 value={selectedWeight} 
                                 onChange={(e) => setSelectedWeight(Number(e.target.value))} 
                             >

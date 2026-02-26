@@ -1,14 +1,16 @@
 import React, { useState, useContext } from "react";
 import { AuthContext} from "../context/AuthContext.jsx";
-import { useNavigate, Link } from "react-router-dom"; // Importer Link
+import { Link } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import "./styles/Login.css";
 
 const Login = () => {
     const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [motDePasse, setMotDePasse] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+
+    useDocumentTitle("Connexion - Caf'Thé", "Connectez-vous à votre compte Caf'Thé pour suivre vos commandes et gérer vos informations.", "connexion compte, espace client, suivi commande, login");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
