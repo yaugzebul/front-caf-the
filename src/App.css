@@ -101,6 +101,7 @@
     --color-tr-bg: #f4f1ea;
     --color-btn-account: #1b3022;
     --color-bg-header: #f4f1ea;
+    --color-bread: #3C2F2F;
 }
 
 /* --- Thème Sombre --- */
@@ -124,7 +125,8 @@
     --color-btn-text: #121212;
     --color-tr-bg: #f4f1ea;
     --color-btn-account: #1b3022;
-    --color-bg-header: #121212
+    --color-bg-header: #121212;
+    --color-bread: #c5a059;
 ;
 
 }

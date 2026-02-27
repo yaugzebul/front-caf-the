@@ -4,7 +4,7 @@ import ProductCard from "../components/productCard.jsx";
 import ProductFilters from "../components/ProductFilters.jsx";
 import Pagination from "../components/Pagination.jsx";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
-import { useDebounce } from "../hooks/useDebounce.js"; // Importer le hook debounce
+import { useDebounce } from "../hooks/useDebounce.js";
 import './styles/ProductList.css';
 
 const ITEMS_PER_PAGE = 12;
@@ -19,20 +19,18 @@ const ProductList = () => {
     const navigate = useNavigate();
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
-    // État local pour la recherche, pour une réactivité instantanée de l'input
     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-    const debouncedSearchTerm = useDebounce(searchTerm, 300); // Délai de 300ms
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     const filters = {
         category: searchParams.get('category') || 'all',
         minPrice: Number(searchParams.get('minPrice')) || 0,
         maxPrice: Number(searchParams.get('maxPrice')) || 9999,
         sort: searchParams.get('sort') || 'default',
-        search: debouncedSearchTerm, // Utiliser la valeur "débouncée" pour le filtrage
+        search: debouncedSearchTerm,
         page: Number(searchParams.get('page')) || 1,
     };
 
-    // Effet pour mettre à jour l'URL quand la recherche "débouncée" change
     useEffect(() => {
         const newParams = new URLSearchParams(location.search);
         if (debouncedSearchTerm) {
@@ -40,10 +38,9 @@ const ProductList = () => {
         } else {
             newParams.delete('search');
         }
-        newParams.set('page', '1'); // Revenir à la page 1 à chaque nouvelle recherche
+        newParams.set('page', '1');
         navigate(`?${newParams.toString()}`, { replace: true });
     }, [debouncedSearchTerm]);
-
 
     const urlCategoryMap = useMemo(() => ({
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
@@ -96,7 +93,7 @@ const ProductList = () => {
 
     const handleFilterChange = (filterName, value) => {
         if (filterName === 'search') {
-            setSearchTerm(value); // Mettre à jour l'état local de la recherche
+            setSearchTerm(value);
             return;
         }
 
@@ -133,28 +130,29 @@ const ProductList = () => {
 
     const totalPages = Math.ceil(sortedAndFilteredProduits.length / ITEMS_PER_PAGE);
 
-    if (isLoading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <div className="product-list-container">
             <h2 className="product-list-title">{pageTitle}</h2>
             <div className="top-controls">
-                {produits.length > 0 && (
-                    <ProductFilters 
-                        categories={uniqueCategories}
-                        filters={{...filters, search: searchTerm}} // Passer la valeur instantanée à l'input
-                        onFilterChange={handleFilterChange}
-                        priceRange={priceRange}
-                    />
-                )}
+                <ProductFilters 
+                    categories={uniqueCategories}
+                    filters={{...filters, search: searchTerm}}
+                    onFilterChange={handleFilterChange}
+                    priceRange={priceRange}
+                />
                 <div className="view-controls">
                     <button onClick={() => setViewMode('grid')} className={viewMode === 'grid' ? 'active' : ''}>Grille</button>
                     <button onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'active' : ''}>Liste</button>
                 </div>
             </div>
             <div className={`product-list ${viewMode}`}>
-                {paginatedProduits.length > 0 ? (
+                {isLoading ? (
+                    Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+                        <ProductCard key={index} isLoading={true} viewMode={viewMode} />
+                    ))
+                ) : paginatedProduits.length > 0 ? (
                     paginatedProduits.map((produit) => (
                         <ProductCard key={produit.id_article} produit={produit} viewMode={viewMode} />
                     ))

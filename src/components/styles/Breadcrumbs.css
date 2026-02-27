@@ -1,0 +1,31 @@
+.breadcrumbs-container {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 2rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.breadcrumbs-container a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumbs-container a:hover {
+    color: var(--color-titles);
+    text-decoration: underline;
+}
+
+.breadcrumbs-container span {
+    color: var(--color-bread);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .breadcrumbs-container {
+        padding: 0 1rem;
+        font-size: 0.8rem;
+    }
+}

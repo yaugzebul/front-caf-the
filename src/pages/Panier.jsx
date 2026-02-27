@@ -2,6 +2,7 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { formatDisplayQuantity } from '../utils/formatUtils'; // Importer la fonction utilitaire
 import './styles/Panier.css';
 
 const Panier = () => {
@@ -66,7 +67,8 @@ const Panier = () => {
                             <div className="item-quantity">
                                 <div className="quantity-control">
                                     <button onClick={() => decreaseQuantity(item.id_article)}>-</button>
-                                    <span>{item.quantity} {item.type_vente === 'vrac' ? 'g' : ''}</span>
+                                    {/* Utilisation de la fonction de formatage */}
+                                    <span>{formatDisplayQuantity(item.quantity, item.type_vente)}</span>
                                     <button onClick={() => increaseQuantity(item.id_article)}>+</button>
                                 </div>
                             </div>

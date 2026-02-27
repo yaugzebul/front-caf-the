@@ -1,9 +1,32 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { useCart } from '../context/CartContext';
+import { formatDisplayQuantity } from '../utils/formatUtils';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import './styles/productCard.css';
 
-const ProductCard = ({ produit, viewMode = 'grid', priority = false }) => {
+const ProductCard = ({ produit, viewMode = 'grid', priority = false, isLoading = false }) => {
+    // Si isLoading est true, on affiche le squelette
+    if (isLoading) {
+        return (
+            <div className={`product-card ${viewMode}`}>
+                <div className="product-card-img-container">
+                    <Skeleton height="100%" />
+                </div>
+                <div className="product-card-content">
+                    <h3><Skeleton width="80%" /></h3>
+                    <div className="product-card-price-container">
+                        <Skeleton width="40%" height={24} />
+                    </div>
+                    <div className="product-card-actions">
+                        <Skeleton height={40} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const { addToCart } = useCart();
 
     const weightOptions = produit.choix_poids ? produit.choix_poids.split(',').map(Number).sort((a, b) => a - b) : [];
@@ -73,7 +96,11 @@ const ProductCard = ({ produit, viewMode = 'grid', priority = false }) => {
                                 value={selectedWeight} 
                                 onChange={(e) => setSelectedWeight(Number(e.target.value))} 
                             >
-                                {weightOptions.map(w => <option key={w} value={w}>{w}g</option>)}
+                                {weightOptions.map(w => (
+                                    <option key={w} value={w}>
+                                        {formatDisplayQuantity(w, 'vrac')}
+                                    </option>
+                                ))}
                             </select>
                             <button onClick={handleAddToCart} className="add-to-cart-btn">
                                 Ajouter

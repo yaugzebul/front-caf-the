@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useCart } from "../context/CartContext.jsx";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { formatDisplayQuantity } from "../utils/formatUtils"; // Importer la fonction utilitaire
 import "./styles/ProductDetail.css";
 
 const ProductDetails = () => {
@@ -18,7 +19,6 @@ const ProductDetails = () => {
 
     const itemInCart = cartItems.find(item => String(item.id_article) === id);
 
-    // Titre et mots-clés dynamiques pour le SEO
     const pageTitle = produit ? `${produit.nom_produit} | Caf'Thé` : "Détail produit - Caf'Thé";
     const pageDescription = produit ? produit.description.substring(0, 160) : "Découvrez ce produit d'exception sur Caf'Thé.";
     const pageKeywords = produit ? `${produit.nom_produit}, achat ${produit.nom_produit}, ${produit.type_vente === 'vrac' ? 'vrac' : 'unitaire'}, bio, équitable` : "café, thé, produit";
@@ -145,12 +145,12 @@ const ProductDetails = () => {
                     <p className="stock-info">
                         <strong>Stock :</strong> 
                         {produit.quantite_stock > 0 
-                            ? ` ${produit.quantite_stock} ${produit.type_vente === 'vrac' ? 'g' : 'unités'} disponibles` 
+                            ? ` ${formatDisplayQuantity(produit.quantite_stock, produit.type_vente)} disponibles` 
                             : <span className="stock-out">Rupture de stock</span>
                         }
                         {itemInCart && (
                             <span className="stock-in-cart">
-                                (dont {itemInCart.quantity}{itemInCart.type_vente === 'vrac' ? 'g' : ''} dans votre panier)
+                                (dont {formatDisplayQuantity(itemInCart.quantity, itemInCart.type_vente)} dans votre panier)
                             </span>
                         )}
                     </p>
@@ -159,7 +159,7 @@ const ProductDetails = () => {
                         <div className="add-to-cart-section">
                             <div className="quantity-selector">
                                 <button onClick={handleDecrement}>-</button>
-                                <span>{quantity} {produit.type_vente === 'vrac' ? 'g' : ''}</span>
+                                <span>{formatDisplayQuantity(quantity, produit.type_vente)}</span>
                                 <button onClick={handleIncrement}>+</button>
                             </div>
                             <div className="total-price-display">

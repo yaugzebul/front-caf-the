@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom'; // 1. Importer useNavigate
+import { useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
+import { formatDisplayQuantity } from '../utils/formatUtils'; // Importer la fonction
 import './styles/ConfirmationModal.css';
 
 const ConfirmationModal = ({ product, quantity, onClose }) => {
-    const navigate = useNavigate(); // 2. Initialiser le hook
-
-
+    const navigate = useNavigate();
 
     const handleGoToCart = () => {
-        onClose(); // Ferme la modale avant de naviguer
+        onClose();
         navigate('/panier');
     };
 
@@ -30,11 +29,10 @@ const ConfirmationModal = ({ product, quantity, onClose }) => {
                     <div className="modal-product-details">
                         <p className="modal-product-name">{product.nom_produit}</p>
                         <p className="modal-product-quantity">
-                            Quantité : {quantity} {product.type_vente === 'vrac' ? 'g' : ''}
+                            Quantité : {formatDisplayQuantity(quantity, product.type_vente)}
                         </p>
                     </div>
                 </div>
-                {/* 3. Ajouter les boutons d'action */}
                 <div className="modal-actions">
                     <button onClick={onClose} className="btn-secondary">
                         Continuer mes achats
