@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { fetchProductById } from '../services/api.js'; // Importer la fonction d'API
 import './styles/Breadcrumbs.css';
 
 const Breadcrumbs = () => {
@@ -10,18 +11,15 @@ const Breadcrumbs = () => {
 
     useEffect(() => {
         if (pathnames[0] === 'produit' && pathnames.length > 1) {
-            const fetchProductName = async () => {
+            const loadProductName = async () => {
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/${pathnames[1]}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setProductName(data.article.nom_produit);
-                    }
+                    const data = await fetchProductById(pathnames[1]);
+                    setProductName(data.article.nom_produit);
                 } catch (error) {
                     console.error("Erreur chargement nom produit pour fil d'Ariane:", error);
                 }
             };
-            fetchProductName();
+            loadProductName();
         }
     }, [location.pathname, pathnames]);
 
@@ -52,7 +50,6 @@ const Breadcrumbs = () => {
         <nav className="breadcrumbs-container">
             <Link to="/">Accueil</Link>
             {pathnames.map((value, index) => {
-                // Correction de la logique de l'URL
                 let to = `/${pathnames.slice(0, index + 1).join('/')}`;
                 if (value === 'produit' && index === 0) {
                     to = '/produits';

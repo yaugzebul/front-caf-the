@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './productCard.jsx';
 import Skeleton from 'react-loading-skeleton';
+import { fetchProducts } from '../services/api.js'; // Importer la fonction d'API
 import './styles/PromoSection.css';
 
 const PromoSection = () => {
@@ -9,19 +10,12 @@ const PromoSection = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const loadProducts = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles`);
-                if (!response.ok) {
-                    throw new Error('Impossible de charger les produits.');
-                }
-                const data = await response.json();
-
+                const data = await fetchProducts();
                 const filteredPromos = data.articles.filter(p => p.promotion === 1);
-                
                 setPromoProducts(filteredPromos);
-
             } catch (err) {
                 setError(err.message);
                 console.error("Erreur lors du chargement des produits pour la section promo :", err);
@@ -30,7 +24,7 @@ const PromoSection = () => {
             }
         };
 
-        fetchProducts();
+        loadProducts();
     }, []);
 
     if (!isLoading && !error && promoProducts.length === 0) {
@@ -48,11 +42,7 @@ const PromoSection = () => {
                 {isLoading && (
                     <div className="promo-grid">
                         {[...Array(4)].map((_, index) => (
-                            <div key={index} className="product-card-skeleton">
-                                <Skeleton height={200} />
-                                <Skeleton height={30} style={{ marginTop: '1rem' }} />
-                                <Skeleton count={2} />
-                            </div>
+                            <ProductCard key={index} isLoading={true} />
                         ))}
                     </div>
                 )}

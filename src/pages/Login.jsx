@@ -1,11 +1,13 @@
 import React, { useState, useContext } from "react";
-import { AuthContext} from "../context/AuthContext.jsx";
-import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { Link, useNavigate } from "react-router-dom"; // Importer useNavigate
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { loginUser } from "../services/api.js";
 import "./styles/Login.css";
 
 const Login = () => {
     const { login } = useContext(AuthContext);
+    const navigate = useNavigate(); // Initialiser le hook
     const [email, setEmail] = useState("");
     const [motDePasse, setMotDePasse] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
@@ -17,35 +19,12 @@ const Login = () => {
         setErrorMsg("");
 
         try {
-            const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/clients/login`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        email,
-                        mot_de_passe: motDePasse,
-                    }),
-                },
-            );
-
-            const data = await response.json();
-            console.log(data);
-            if (!response.ok) {
-                setErrorMsg(data.message || "Erreur de connexion");
-                return;
-            }
-
-            // Appel au login via le contexte
+            const data = await loginUser(email, motDePasse);
             login(data.client);
-            
-            // Force le rechargement de la page pour s'assurer que toutes les données sont à jour
-            window.location.href = "/";
-
+            navigate("/"); // Utiliser navigate pour une redirection fluide
         } catch (error) {
             console.error("Erreur lors de la connexion: ", error);
-            setErrorMsg("Une erreur s'est produite lors de la connexion");
+            setErrorMsg(error.message || "Une erreur s'est produite lors de la connexion");
         }
     };
 
@@ -78,21 +57,20 @@ const Login = () => {
                     />
                 </div>
 
-                {/* Affichage conditionnel du message d'erreur */}
                 {errorMsg && <div className="error-message">{errorMsg}</div>}
 
                 <button type="submit" className="login-button">
                     Se Connecter
                 </button>
 
-                <button type="submit" className="login-button" disabled>
+                <button type="button" className="login-button" disabled>
                     Mot de passe oublié
                 </button>
 
             </form>
 
-            <div className="register-link" style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem' }}>
-                Pas encore de compte ? <Link to="/register" style={{ color: 'var(--color-primary-green)', fontWeight: '600', textDecoration: 'none' }}>S'inscrire</Link>
+            <div className="register-link">
+                Pas encore de compte ? <Link to="/register">S'inscrire</Link>
             </div>
         </div>
     );

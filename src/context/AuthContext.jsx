@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { checkUserSession, logoutUser } from "../services/api.js"; // Importer les fonctions d'API
 
 export const AuthContext = createContext(null);
 
@@ -6,21 +7,19 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Verifie si un cookie de session valide existe
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(
-                    `${import.meta.env.VITE_API_URL}/api/clients/me`,
-                    { credentials: "include" }
-                );
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data.client);
-                }
+                const data = await checkUserSession();
+                setUser(data.client);
             } catch (error) {
-                console.error("Erreur vérification session:", error);
+                // C'est normal d'avoir une erreur si l'utilisateur n'est pas connecté
+                // On ne log que si ce n'est pas une erreur 401 (Non autorisé)
+                if (error.message.includes("401")) {
+                    // Pas d'erreur à afficher, l'utilisateur n'est juste pas connecté
+                } else {
+                    console.error("Erreur vérification session:", error);
+                }
             } finally {
                 setLoading(false);
             }
@@ -35,13 +34,7 @@ export function AuthProvider({ children }) {
 
     const logout = async () => {
         try {
-            await fetch(
-                `${import.meta.env.VITE_API_URL}/api/clients/logout`,
-                {
-                    method: "POST",
-                    credentials: "include"
-                }
-            );
+            await logoutUser();
         } catch (error) {
             console.error("Erreur lors de la déconnexion:", error);
         }

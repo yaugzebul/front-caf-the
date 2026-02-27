@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { formatDisplayQuantity } from '../utils/formatUtils';
+import { fetchOrderDetails } from '../services/api.js';
 // Imports optimisés
 import X from 'lucide-react/dist/esm/icons/x';
 import Package from 'lucide-react/dist/esm/icons/package';
@@ -17,17 +18,11 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchOrderDetails = async () => {
+        const loadOrderDetails = async () => {
+            if (!orderId) return;
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, {
-                    credentials: 'include'
-                });
-
-                if (!response.ok) {
-                    throw new Error('Impossible de récupérer les détails de la commande');
-                }
-
-                const data = await response.json();
+                setIsLoading(true);
+                const data = await fetchOrderDetails(orderId);
                 setOrder(data.order);
             } catch (err) {
                 console.error(err);
@@ -36,10 +31,7 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
                 setIsLoading(false);
             }
         };
-
-        if (orderId) {
-            fetchOrderDetails();
-        }
+        loadOrderDetails();
     }, [orderId]);
 
     if (!orderId) return null;
@@ -75,13 +67,32 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
                         <div className="error-state">{error}</div>
                     ) : order ? (
                         <>
-                            {/* ... (le reste du composant) ... */}
+                            <div className="status-section">
+                                <span className={`status-badge ${order.statut_commande ? order.statut_commande.toLowerCase().replace(' ', '-') : 'inconnu'}`}>
+                                    {order.statut_commande || 'Statut inconnu'}
+                                </span>
+                            </div>
+
+                            <ul className="info-list">
+                                <li className="info-row">
+                                    <span className="info-label"><Calendar size={14} /> Date</span>
+                                    <span className="info-value">{order.date_commande ? new Date(order.date_commande).toLocaleDateString() : 'Inconnue'}</span>
+                                </li>
+                                <li className="info-row">
+                                    <span className="info-label"><DollarSign size={14} /> Total</span>
+                                    <span className="info-value">{order.montant_paiement ? `${order.montant_paiement} €` : 'Non défini'}</span>
+                                </li>
+                                <li className="info-row">
+                                    <span className="info-label"><Truck size={14} /> Mode</span>
+                                    <span className="info-value">{order.mode_commande || 'Non spécifié'}</span>
+                                </li>
+                            </ul>
+
                             <div className="order-section">
                                 <h4 className="section-title"><Package size={20} /> Articles</h4>
                                 <div className="articles-list">
                                     {order.items && order.items.length > 0 ? (
                                         order.items.map((item, index) => {
-                                            console.log("Item data in modal:", item); // Ligne de débogage
                                             const itemPrice = calculateItemPrice(item);
                                             return (
                                                 <div key={index} className="article-item">
@@ -100,7 +111,20 @@ const DetailedOrderModal = ({ orderId, onClose }) => {
                                     )}
                                 </div>
                             </div>
-                            {/* ... (le reste du composant) ... */}
+
+                            <div className="order-section">
+                                <h4 className="section-title"><CreditCard size={20} /> Paiement</h4>
+                                <ul className="info-list">
+                                    <li className="info-row">
+                                        <span className="info-label">Moyen</span>
+                                        <span className="info-value">{order.moyen_paiement || 'Non spécifié'}</span>
+                                    </li>
+                                    <li className="info-row">
+                                        <span className="info-label">Date</span>
+                                        <span className="info-value">{order.date_paiement ? new Date(order.date_paiement).toLocaleDateString() : 'En attente'}</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </>
                     ) : null}
                 </div>

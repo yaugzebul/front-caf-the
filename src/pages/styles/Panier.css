@@ -76,6 +76,11 @@
     flex-shrink: 0;
 }
 
+.total-price-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
 .item-details { display: flex; flex-direction: column; }
 .item-name { font-weight: 600; font-size: 1.1rem; color: var(--color-text-dark); }
 .item-unit-price { color: var(--color-primary-green); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -101,8 +106,8 @@
 .btn-primary, .btn-secondary { padding: 1rem 2rem; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; color: white; font-weight: 600; font-size: 1rem; transition: all 0.2s; }
 .btn-primary { background-color: var(--color-accent-gold); color: var(--color-text-dark); }
 .btn-primary:hover { background-color: var(--color-accent-gold-darker); transform: translateY(-2px); }
-.btn-secondary { background: none; border: 1px solid var(--color-titles); color: var(--color-titles); }
-.btn-secondary:hover { border: 1px solid transparent; background-color: var(--color-titles); color: var(--color-background-offwhite); }
+.btn-secondary { background-color: var(--color-text-light); border: 1px solid var(--color-titles); color: var(--color-btn-text); }
+.btn-secondary:hover { border: 1px solid var(--color-btn-text); background-color: var(--color-btn-text); color: var(--color-text-light) }
 
 /* Responsive */
 @media (max-width: 768px) {

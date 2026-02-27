@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-// Import optimisé
+import { changePassword } from '../services/api.js';
 import X from 'lucide-react/dist/esm/icons/x';
 import './styles/PasswordChangeModal.css';
 
@@ -8,7 +8,7 @@ const PasswordChangeModal = ({ onClose }) => {
     const [formData, setFormData] = useState({
         ancien_mot_de_passe: '',
         nouveau_mot_de_passe: '',
-        confirmation_mot_de_passe: '' // Nom aligné avec l'API
+        confirmation_mot_de_passe: ''
     });
     const [message, setMessage] = useState({ type: '', text: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +21,6 @@ const PasswordChangeModal = ({ onClose }) => {
         e.preventDefault();
         setMessage({ type: '', text: '' });
 
-        // Validation côté front
         if (formData.nouveau_mot_de_passe !== formData.confirmation_mot_de_passe) {
             setMessage({ type: 'error', text: 'Les nouveaux mots de passe ne correspondent pas.' });
             return;
@@ -30,25 +29,7 @@ const PasswordChangeModal = ({ onClose }) => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clients/password`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    ancien_mot_de_passe: formData.ancien_mot_de_passe,
-                    nouveau_mot_de_passe: formData.nouveau_mot_de_passe,
-                    confirmation_mot_de_passe: formData.confirmation_mot_de_passe // Ajout du champ manquant
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Erreur lors du changement de mot de passe');
-            }
-
+            await changePassword(formData);
             setMessage({ type: 'success', text: 'Mot de passe modifié avec succès !' });
             
             setTimeout(() => {
@@ -108,7 +89,7 @@ const PasswordChangeModal = ({ onClose }) => {
                         <input 
                             type="password" 
                             id="confirmation_mot_de_passe"
-                            name="confirmation_mot_de_passe" // Nom aligné avec le state et l'API
+                            name="confirmation_mot_de_passe"
                             value={formData.confirmation_mot_de_passe}
                             onChange={handleChange}
                             required

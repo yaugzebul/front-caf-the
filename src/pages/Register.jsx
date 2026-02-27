@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
+import { registerUser } from "../services/api.js";
 import "./styles/Register.css";
 
 const Register = () => {
@@ -9,14 +10,13 @@ const Register = () => {
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
-        nom_client: "",
-        prenom_client: "",
-        email_client: "",
-        mdp_client: "",
+        nom: "",
+        prenom: "",
+        email: "",
+        mot_de_passe: "",
         confirm_mdp: ""
     });
     const [agreedToTerms, setAgreedToTerms] = useState(false);
-    
     const [errorMsg, setErrorMsg] = useState("");
 
     useDocumentTitle("Inscription - Caf'Thé", "Créez votre compte pour profiter de nos offres exclusives et suivre vos commandes.", "inscription, créer compte, fidélité, register, nouveau client");
@@ -32,7 +32,7 @@ const Register = () => {
         e.preventDefault();
         setErrorMsg("");
 
-        if (formData.mdp_client !== formData.confirm_mdp) {
+        if (formData.mot_de_passe !== formData.confirm_mdp) {
             setErrorMsg("Les mots de passe ne correspondent pas.");
             return;
         }
@@ -43,29 +43,8 @@ const Register = () => {
         }
 
         try {
-            const dataToSend = {
-                nom: formData.nom_client,
-                prenom: formData.prenom_client,
-                email: formData.email_client,
-                mot_de_passe: formData.mdp_client
-            };
-
-            const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/clients/register`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify(dataToSend),
-                },
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                setErrorMsg(data.message || "Erreur lors de l'inscription");
-                return;
-            }
+            const { confirm_mdp, ...dataToSend } = formData;
+            const data = await registerUser(dataToSend);
 
             if (data.client) {
                 login(data.client);
@@ -76,99 +55,43 @@ const Register = () => {
 
         } catch (error) {
             console.error("Erreur lors de l'inscription: ", error);
-            setErrorMsg("Une erreur s'est produite lors de l'inscription");
+            setErrorMsg(error.message || "Une erreur s'est produite lors de l'inscription");
         }
     };
 
     return (
         <div className="register-container">
             <h2>Inscription</h2>
-
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="nom_client">Nom :</label>
-                    <input
-                        id="nom_client"
-                        name="nom_client"
-                        type="text"
-                        value={formData.nom_client}
-                        required
-                        placeholder="Votre nom"
-                        onChange={handleChange}
-                    />
+                    <label htmlFor="nom">Nom :</label>
+                    <input id="nom" name="nom" type="text" value={formData.nom} required placeholder="Votre nom" onChange={handleChange} />
                 </div>
-
                 <div className="form-group">
-                    <label htmlFor="prenom_client">Prénom :</label>
-                    <input
-                        id="prenom_client"
-                        name="prenom_client"
-                        type="text"
-                        value={formData.prenom_client}
-                        required
-                        placeholder="Votre prénom"
-                        onChange={handleChange}
-                    />
+                    <label htmlFor="prenom">Prénom :</label>
+                    <input id="prenom" name="prenom" type="text" value={formData.prenom} required placeholder="Votre prénom" onChange={handleChange} />
                 </div>
-
                 <div className="form-group">
-                    <label htmlFor="email_client">Email :</label>
-                    <input
-                        id="email_client"
-                        name="email_client"
-                        type="email"
-                        value={formData.email_client}
-                        required
-                        placeholder="votre@email.fr"
-                        onChange={handleChange}
-                    />
+                    <label htmlFor="email">Email :</label>
+                    <input id="email" name="email" type="email" value={formData.email} required placeholder="votre@email.fr" onChange={handleChange} />
                 </div>
-
                 <div className="form-group">
-                    <label htmlFor="mdp_client">Mot de passe :</label>
-                    <input
-                        id="mdp_client"
-                        name="mdp_client"
-                        type="password"
-                        value={formData.mdp_client}
-                        required
-                        placeholder="Votre mot de passe"
-                        onChange={handleChange}
-                    />
+                    <label htmlFor="mot_de_passe">Mot de passe :</label>
+                    <input id="mot_de_passe" name="mot_de_passe" type="password" value={formData.mot_de_passe} required placeholder="Votre mot de passe" onChange={handleChange} />
                 </div>
-
                 <div className="form-group">
                     <label htmlFor="confirm_mdp">Confirmer le mot de passe :</label>
-                    <input
-                        id="confirm_mdp"
-                        name="confirm_mdp"
-                        type="password"
-                        value={formData.confirm_mdp}
-                        required
-                        placeholder="Confirmez votre mot de passe"
-                        onChange={handleChange}
-                    />
+                    <input id="confirm_mdp" name="confirm_mdp" type="password" value={formData.confirm_mdp} required placeholder="Confirmez votre mot de passe" onChange={handleChange} />
                 </div>
-
                 <div className="form-group terms-group">
-                    <input 
-                        type="checkbox" 
-                        id="terms" 
-                        checked={agreedToTerms} 
-                        onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    />
+                    <input type="checkbox" id="terms" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)} />
                     <label htmlFor="terms">
                         J'accepte les <Link to="/cgv" target="_blank">Conditions Générales de Vente</Link>
                     </label>
                 </div>
-
                 {errorMsg && <div className="error-message">{errorMsg}</div>}
-
-                <button type="submit" className="register-button">
-                    S'inscrire
-                </button>
+                <button type="submit" className="register-button">S'inscrire</button>
             </form>
-
             <div className="login-link">
                 Déjà un compte ? <Link to="/login">Se connecter</Link>
             </div>

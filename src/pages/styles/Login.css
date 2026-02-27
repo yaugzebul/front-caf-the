@@ -67,12 +67,30 @@
 }
 
 .error-message {
-    background-color: #f8d7da; /* Note: couleur non standard */
-    color: #721c24; /* Note: couleur non standard */
-    border: 1px solid #f5c6cb; /* Note: couleur non standard */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 0.95rem;
+}
+
+/* Styles ajoutés pour remplacer le style en ligne */
+.register-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.register-link a {
+    color: var(--color-accent-gold);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+    color: var(--color-accent-gold-darker);
 }

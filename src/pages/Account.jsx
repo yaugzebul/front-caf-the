@@ -5,6 +5,7 @@ import PasswordChangeModal from '../components/PasswordChangeModal.jsx';
 import DetailedOrderModal from '../components/DetailedOrderModal.jsx';
 import OrderList from '../components/OrderList.jsx';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
+import { fetchOrders, updateUser } from '../services/api.js';
 import './styles/Account.css';
 
 const Account = () => {
@@ -17,7 +18,6 @@ const Account = () => {
     const [ordersError, setOrdersError] = useState(null);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-    // Titre dynamique en fonction de l'onglet
     const tabTitles = {
         infos: "Mes Informations - Mon Compte",
         adresses: "Mes Adresses - Mon Compte",
@@ -32,29 +32,20 @@ const Account = () => {
 
     useEffect(() => {
         if (user) {
-            fetchOrders();
+            const loadOrders = async () => {
+                try {
+                    const data = await fetchOrders();
+                    setOrders(data.orders || data);
+                } catch (err) {
+                    console.error(err);
+                    setOrdersError('Impossible de charger l\'historique des commandes.');
+                } finally {
+                    setIsLoadingOrders(false);
+                }
+            };
+            loadOrders();
         }
     }, [user]);
-
-    const fetchOrders = async () => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-                credentials: 'include'
-            });
-            
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des commandes');
-            }
-            
-            const data = await response.json();
-            setOrders(data.orders || data);
-        } catch (err) {
-            console.error(err);
-            setOrdersError('Impossible de charger l\'historique des commandes.');
-        } finally {
-            setIsLoadingOrders(false);
-        }
-    };
 
     if (!user) {
         navigate('/login');
@@ -91,104 +82,36 @@ const Account = () => {
             <aside className="account-sidebar">
                 <h3>Mon Compte</h3>
                 <ul className="account-nav">
-                    <li>
-                        <button
-                            className={`account-btn ${activeTab === 'infos' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('infos')}
-                        >
-                            Infos personnelles
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            className={`account-btn ${activeTab === 'adresses' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('adresses')}
-                        >
-                            Mes adresses
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            className={`account-btn ${activeTab === 'historique' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('historique')}
-                        >
-                            Historique commandes
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            className={`account-btn ${activeTab === 'suivi' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('suivi')}
-                        >
-                            Suivi commandes
-                        </button>
-                    </li>
-                    <li>
-                        <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>
-                            Déconnexion
-                        </button>
-                    </li>
+                    <li><button className={`account-btn ${activeTab === 'infos' ? 'active' : ''}`} onClick={() => setActiveTab('infos')}>Infos personnelles</button></li>
+                    <li><button className={`account-btn ${activeTab === 'adresses' ? 'active' : ''}`} onClick={() => setActiveTab('adresses')}>Mes adresses</button></li>
+                    <li><button className={`account-btn ${activeTab === 'historique' ? 'active' : ''}`} onClick={() => setActiveTab('historique')}>Historique commandes</button></li>
+                    <li><button className={`account-btn ${activeTab === 'suivi' ? 'active' : ''}`} onClick={() => setActiveTab('suivi')}>Suivi commandes</button></li>
+                    <li><button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>Déconnexion</button></li>
                 </ul>
             </aside>
-            
-            <main className="account-content">
-                {renderContent()}
-            </main>
-
-            {selectedOrderId && (
-                <DetailedOrderModal 
-                    orderId={selectedOrderId} 
-                    onClose={() => setSelectedOrderId(null)} 
-                />
-            )}
+            <main className="account-content">{renderContent()}</main>
+            {selectedOrderId && <DetailedOrderModal orderId={selectedOrderId} onClose={() => setSelectedOrderId(null)} />}
         </div>
     );
 };
 
-// --- Sous-composants ---
-
 const InfosPersonnelles = ({ user, onUpdateUser }) => {
-    const [formData, setFormData] = useState({
-        nom: user.nom || '',
-        prenom: user.prenom || '',
-        email: user.email || ''
-    });
+    const [formData, setFormData] = useState({ nom: user.nom || '', prenom: user.prenom || '' });
     const [message, setMessage] = useState({ type: '', text: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setMessage({ type: '', text: '' });
-
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clients/me`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Erreur lors de la mise à jour');
-            }
-
+            await updateUser(formData);
             setMessage({ type: 'success', text: 'Informations mises à jour avec succès !' });
-            
-            const updatedUser = { ...user, nom: formData.nom, prenom: formData.prenom };
-            onUpdateUser(updatedUser);
-
+            onUpdateUser({ ...user, ...formData });
         } catch (err) {
-            console.error(err);
             setMessage({ type: 'error', text: err.message });
         } finally {
             setIsSubmitting(false);
@@ -198,132 +121,15 @@ const InfosPersonnelles = ({ user, onUpdateUser }) => {
     return (
         <div className="account-section">
             <h2>Mes informations personnelles</h2>
-            
-            {message.text && (
-                <div className={`account-message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
-
+            {message.text && <div className={`account-message ${message.type}`}>{message.text}</div>}
             <form className="account-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="prenom">Prénom</label>
-                    <input 
-                        type="text" 
-                        id="prenom"
-                        name="prenom"
-                        value={formData.prenom} 
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="nom">Nom</label>
-                    <input 
-                        type="text" 
-                        id="nom"
-                        name="nom"
-                        value={formData.nom} 
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="email"
-                           id="email"
-                           name="email"
-                           value={user.email}
-                           onChange={handleChange}
-                           required
-                           defaultValue={user.email}  />
-
-                </div>
-
-                <div className="form-actions">
-                    <button className="btn-save" disabled={isSubmitting}>
-                        {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                    </button>
-                </div>
-
-                <div className="security-section">
-                    <label>Sécurité</label>
-                    <button 
-                        type="button" 
-                        className="btn-secondary" 
-                        onClick={() => setIsPasswordModalOpen(true)}
-                    >
-                        Modifier mon mot de passe
-                    </button>
-                </div>
-
-
+                <div className="form-group"><label htmlFor="prenom">Prénom</label><input type="text" id="prenom" name="prenom" value={formData.prenom} onChange={handleChange} required /></div>
+                <div className="form-group"><label htmlFor="nom">Nom</label><input type="text" id="nom" name="nom" value={formData.nom} onChange={handleChange} required /></div>
+                <div className="form-group"><label>Email</label><input type="email" defaultValue={user.email} disabled /><small className="input-help">L'email ne peut pas être modifié.</small></div>
+                <div className="security-section"><label>Sécurité</label><button type="button" className="btn-secondary" onClick={() => setIsPasswordModalOpen(true)}>Modifier mon mot de passe</button></div>
+                <div className="form-actions"><button className="btn-save" disabled={isSubmitting}>{isSubmitting ? 'Enregistrement...' : 'Enregistrer'}</button></div>
             </form>
-
-            {isPasswordModalOpen && (
-                <PasswordChangeModal onClose={() => setIsPasswordModalOpen(false)} />
-            )}
-        </div>
-    );
-};
-
-const AddressForm = ({ type, initialData, onCancel, onSave }) => {
-    const [formData, setFormData] = useState({
-        adresse: initialData?.adresse || '',
-        cp: initialData?.cp || '',
-        ville: initialData?.ville || ''
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSave(type, formData);
-    };
-
-    return (
-        <div className="address-form-container">
-            <h4>Modifier l'adresse de {type}</h4>
-            <form onSubmit={handleSubmit} className="account-form">
-                <div className="form-group">
-                    <label>Adresse</label>
-                    <input 
-                        type="text" 
-                        name="adresse" 
-                        value={formData.adresse} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div className="form-row">
-                    <div className="form-group" style={{ flex: 1 }}>
-                        <label>Code Postal</label>
-                        <input 
-                            type="text" 
-                            name="cp" 
-                            value={formData.cp} 
-                            onChange={handleChange} 
-                            required 
-                        />
-                    </div>
-                    <div className="form-group" style={{ flex: 2 }}>
-                        <label>Ville</label>
-                        <input 
-                            type="text" 
-                            name="ville" 
-                            value={formData.ville} 
-                            onChange={handleChange} 
-                            required 
-                        />
-                    </div>
-                </div>
-                <div className="address-form-actions">
-                    <button type="submit" className="btn-save">Enregistrer</button>
-                    <button type="button" onClick={onCancel} className="btn-secondary">Annuler</button>
-                </div>
-            </form>
+            {isPasswordModalOpen && <PasswordChangeModal onClose={() => setIsPasswordModalOpen(false)} />}
         </div>
     );
 };
@@ -334,36 +140,13 @@ const Adresses = ({ user, onUpdateUser }) => {
 
     const handleSaveAddress = async (type, addressData) => {
         setMessage({ type: '', text: '' });
-        
-        const dataToSend = {
-            ...user, 
-            [`adresse_${type}`]: addressData.adresse,
-            [`cp_${type}`]: addressData.cp,
-            [`ville_${type}`]: addressData.ville
-        };
-
+        const dataToSend = { [`adresse_${type}`]: addressData.adresse, [`cp_${type}`]: addressData.cp, [`ville_${type}`]: addressData.ville };
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clients/me`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(dataToSend)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Erreur lors de la mise à jour de l\'adresse');
-            }
-
+            await updateUser(dataToSend);
             setMessage({ type: 'success', text: 'Adresse mise à jour avec succès !' });
-            onUpdateUser(dataToSend); 
+            onUpdateUser({ ...user, ...dataToSend });
             setEditingAddress(null);
-
         } catch (err) {
-            console.error(err);
             setMessage({ type: 'error', text: err.message });
         }
     };
@@ -371,100 +154,36 @@ const Adresses = ({ user, onUpdateUser }) => {
     return (
         <div className="account-section">
             <h2>Mes adresses</h2>
-            
-            {message.text && (
-                <div className={`account-message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
-
+            {message.text && <div className={`account-message ${message.type}`}>{message.text}</div>}
             <div className="addresses-grid">
-                
-                {/* Adresse de Livraison */}
                 <div className="address-card">
                     <h3>Adresse de Livraison</h3>
-                    
                     {editingAddress === 'livraison' ? (
-                        <AddressForm 
-                            type="livraison" 
-                            initialData={{
-                                adresse: user.adresse_livraison,
-                                cp: user.cp_livraison,
-                                ville: user.ville_livraison
-                            }}
-                            onCancel={() => setEditingAddress(null)}
-                            onSave={handleSaveAddress}
-                        />
+                        <AddressForm type="livraison" initialData={{ adresse: user.adresse_livraison, cp: user.cp_livraison, ville: user.ville_livraison }} onCancel={() => setEditingAddress(null)} onSave={handleSaveAddress} />
                     ) : (
-                        <>
-                            {user.adresse_livraison ? (
-                                <div className="address-details">
-                                    <p>{user.prenom} {user.nom}</p>
-                                    <p>{user.adresse_livraison}</p>
-                                    <p>{user.cp_livraison} {user.ville_livraison}</p>
-                                    <button 
-                                        className="btn-edit-address"
-                                        onClick={() => setEditingAddress('livraison')}
-                                    >
-                                        Modifier
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <p className="no-address-msg">Aucune adresse de livraison enregistrée.</p>
-                                    <button 
-                                        className="btn-add-address"
-                                        onClick={() => setEditingAddress('livraison')}
-                                    >
-                                        + Ajouter une adresse
-                                    </button>
-                                </div>
-                            )}
-                        </>
+                        user.adresse_livraison ? (
+                            <div className="address-details">
+                                <p>{user.prenom} {user.nom}</p><p>{user.adresse_livraison}</p><p>{user.cp_livraison} {user.ville_livraison}</p>
+                                <button className="btn-edit-address" onClick={() => setEditingAddress('livraison')}>Modifier</button>
+                            </div>
+                        ) : (
+                            <div><p className="no-address-msg">Aucune adresse de livraison.</p><button className="btn-add-address" onClick={() => setEditingAddress('livraison')}>+ Ajouter</button></div>
+                        )
                     )}
                 </div>
-
-                {/* Adresse de Facturation */}
                 <div className="address-card">
                     <h3>Adresse de Facturation</h3>
-                    
                     {editingAddress === 'facturation' ? (
-                        <AddressForm 
-                            type="facturation" 
-                            initialData={{
-                                adresse: user.adresse_facturation,
-                                cp: user.cp_facturation,
-                                ville: user.ville_facturation
-                            }}
-                            onCancel={() => setEditingAddress(null)}
-                            onSave={handleSaveAddress}
-                        />
+                        <AddressForm type="facturation" initialData={{ adresse: user.adresse_facturation, cp: user.cp_facturation, ville: user.ville_facturation }} onCancel={() => setEditingAddress(null)} onSave={handleSaveAddress} />
                     ) : (
-                        <>
-                            {user.adresse_facturation ? (
-                                <div className="address-details">
-                                    <p>{user.prenom} {user.nom}</p>
-                                    <p>{user.adresse_facturation}</p>
-                                    <p>{user.cp_facturation} {user.ville_facturation}</p>
-                                    <button 
-                                        className="btn-edit-address"
-                                        onClick={() => setEditingAddress('facturation')}
-                                    >
-                                        Modifier
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <p className="no-address-msg">Aucune adresse de facturation enregistrée.</p>
-                                    <button 
-                                        className="btn-add-address"
-                                        onClick={() => setEditingAddress('facturation')}
-                                    >
-                                        + Ajouter une adresse
-                                    </button>
-                                </div>
-                            )}
-                        </>
+                        user.adresse_facturation ? (
+                            <div className="address-details">
+                                <p>{user.prenom} {user.nom}</p><p>{user.adresse_facturation}</p><p>{user.cp_facturation} {user.ville_facturation}</p>
+                                <button className="btn-edit-address" onClick={() => setEditingAddress('facturation')}>Modifier</button>
+                            </div>
+                        ) : (
+                            <div><p className="no-address-msg">Aucune adresse de facturation.</p><button className="btn-add-address" onClick={() => setEditingAddress('facturation')}>+ Ajouter</button></div>
+                        )
                     )}
                 </div>
             </div>
@@ -472,10 +191,28 @@ const Adresses = ({ user, onUpdateUser }) => {
     );
 };
 
+const AddressForm = ({ type, initialData, onCancel, onSave }) => {
+    const [formData, setFormData] = useState({ adresse: initialData?.adresse || '', cp: initialData?.cp || '', ville: initialData?.ville || '' });
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleSubmit = (e) => { e.preventDefault(); onSave(type, formData); };
+    return (
+        <div className="address-form-container">
+            <h4>Modifier l'adresse de {type}</h4>
+            <form onSubmit={handleSubmit} className="account-form">
+                <div className="form-group"><label>Adresse</label><input type="text" name="adresse" value={formData.adresse} onChange={handleChange} required /></div>
+                <div className="form-row">
+                    <div className="form-group form-group-cp"><label>Code Postal</label><input type="text" name="cp" value={formData.cp} onChange={handleChange} required /></div>
+                    <div className="form-group form-group-ville"><label>Ville</label><input type="text" name="ville" value={formData.ville} onChange={handleChange} required /></div>
+                </div>
+                <div className="address-form-actions"><button type="submit" className="btn-save">Enregistrer</button><button type="button" onClick={onCancel} className="btn-secondary">Annuler</button></div>
+            </form>
+        </div>
+    );
+};
+
 const HistoriqueCommandes = ({ orders, isLoading, error, onViewDetails }) => {
     if (isLoading) return <div>Chargement de l'historique...</div>;
     if (error) return <div className="account-message error">{error}</div>;
-
     return (
         <div className="account-section">
             <h2>Historique des commandes</h2>
@@ -487,19 +224,11 @@ const HistoriqueCommandes = ({ orders, isLoading, error, onViewDetails }) => {
 const SuiviCommandes = ({ orders, isLoading, error, onViewDetails }) => {
     if (isLoading) return <div>Chargement du suivi...</div>;
     if (error) return <div className="account-message error">{error}</div>;
-
-    const activeOrders = orders.filter(order =>
-        order.statut_commande !== 'Livré' && order.statut_commande !== 'Annulé'
-    );
-
+    const activeOrders = orders.filter(order => order.statut_commande !== 'Livré' && order.statut_commande !== 'Annulé');
     return (
         <div className="account-section">
             <h2>Suivi des commandes</h2>
-            {activeOrders.length === 0 ? (
-                <p>Aucune commande en cours de traitement.</p>
-            ) : (
-                <OrderList orders={activeOrders} onViewDetails={onViewDetails} />
-            )}
+            {activeOrders.length === 0 ? <p>Aucune commande en cours.</p> : <OrderList orders={activeOrders} onViewDetails={onViewDetails} />}
         </div>
     );
 };

@@ -1,4 +1,5 @@
-/* L'import des polices a été déplacé dans App.css */
+
+
 
 .account-container {
     max-width: 1200px;
@@ -10,7 +11,6 @@
     min-height: 60vh;
 }
 
-/* Sidebar de navigation */
 .account-sidebar {
     flex: 0 0 250px;
     background-color: var(--color-background-cream);
@@ -59,10 +59,9 @@
     color: var(--color-text-light);
 }
 
-/* Contenu principal */
 .account-content {
     flex: 1;
-    background-color: var(--color-white);
+    background-color: var(--color-background-cream);
     padding: 2rem;
     border-radius: 12px;
     border: 1px solid var(--color-border);
@@ -75,7 +74,6 @@
     padding-bottom: 1rem;
 }
 
-/* Messages (Succès/Erreur) */
 .account-message {
     padding: 10px;
     margin-bottom: 15px;
@@ -95,7 +93,6 @@
     border: 1px solid #f5c6cb;
 }
 
-/* Formulaires */
 .account-form .form-group {
     margin-bottom: 1.5rem;
 }
@@ -140,10 +137,9 @@
     margin-top: 2rem;
 }
 
-/* Boutons */
 .account-nav .btn-logout {
     background-color: var(--color-accent-danger);
-    color: #ffffff
+    color: #ffffff;
 }
 
 .account-nav .btn-logout:hover {
@@ -171,9 +167,8 @@
 }
 
 .btn-secondary {
-    background-color: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-dark);
+    background-color: var(--color-text-light);
+    color: var(--color-btn-text);
     padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
@@ -183,11 +178,12 @@
 }
 
 .btn-secondary:hover {
-    background-color: var(--color-background-offwhite);
-    border-color: var(--color-text-dark);
+    background-color: var(--color-btn-text);
+    color: var(--color-text-light);
+    transition: 0.3s ease-in-out;
+
 }
 
-/* Adresses */
 .addresses-grid {
     display: grid;
     gap: 2rem;
@@ -227,9 +223,8 @@
     margin-bottom: 1rem;
 }
 
-.btn-edit-address {
+.btn-edit-address, .btn-add-address {
     margin-top: 1rem;
-    color: var(--color-accent-gold);
     background: none;
     border: none;
     cursor: pointer;
@@ -238,28 +233,10 @@
     font-size: 0.95rem;
     align-self: flex-start;
 }
+.btn-edit-address { color: var(--color-accent-gold); }
+.btn-add-address { color: var(--color-accent-gold); }
+.btn-edit-address:hover, .btn-add-address:hover { text-decoration: underline; }
 
-.btn-edit-address:hover {
-    text-decoration: underline;
-}
-
-.btn-add-address {
-    margin-top: 1rem;
-    color: var(--color-primary-green);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 0;
-    font-size: 0.95rem;
-    align-self: flex-start;
-}
-
-.btn-add-address:hover {
-    text-decoration: underline;
-}
-
-/* Formulaire d'adresse (inline) */
 .address-form-container {
     margin-top: 1rem;
     padding: 1rem;
@@ -283,13 +260,20 @@
     margin-bottom: 0;
 }
 
+.form-group-cp {
+    flex: 1;
+}
+
+.form-group-ville {
+    flex: 2;
+}
+
 .address-form-actions {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
 }
 
-/* Historique Commandes (Tableau) */
 .orders-list {
     overflow-x: auto;
 }
@@ -348,9 +332,6 @@
     background-color: var(--color-text-dark);
 }
 
-
-
-/* Responsive */
 @media (max-width: 768px) {
     .account-container {
         flex-direction: column;

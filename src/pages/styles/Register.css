@@ -12,7 +12,7 @@
 
 .register-container h2 {
     font-size: 2.5rem;
-    color: var(--color-primary-green);
+    color: var(--color-titles);
     text-align: center;
     margin-bottom: 2rem;
 }
@@ -67,7 +67,7 @@
 }
 
 .terms-group a {
-    color: var(--color-primary-green);
+    color: var(--color-accent-gold);
     text-decoration: underline;
 }
 
@@ -110,11 +110,12 @@
 }
 
 .login-link a {
-    color: var(--color-primary-green);
+    color: var(--color-accent-gold);
     text-decoration: none;
     font-weight: 600;
 }
 
 .login-link a:hover {
+    color:var(--color-accent-gold-darker);
     text-decoration: underline;
 }

@@ -13,18 +13,8 @@ export const CartProvider = ({ children }) => {
         }
     });
 
-    // État pour la modale de confirmation
-    const [confirmation, setConfirmation] = useState({
-        product: null,
-        quantity: 0,
-        isVisible: false,
-    });
-
-    // État pour la modale d'erreur de stock
-    const [stockError, setStockError] = useState({
-        product: null,
-        isVisible: false,
-    });
+    const [confirmation, setConfirmation] = useState({ product: null, quantity: 0, isVisible: false });
+    const [stockError, setStockError] = useState({ product: null, isVisible: false });
 
     useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -35,10 +25,9 @@ export const CartProvider = ({ children }) => {
         const currentQuantityInCart = existingItem ? existingItem.quantity : 0;
         const totalQuantity = currentQuantityInCart + quantity;
 
-        // Vérification du stock
         if (totalQuantity > product.quantite_stock) {
             setStockError({ product, isVisible: true });
-            return; // Bloque l'ajout
+            return;
         }
 
         setCartItems(prevItems => {
@@ -60,10 +49,9 @@ export const CartProvider = ({ children }) => {
                     const step = item.type_vente === 'vrac' ? 100 : 1;
                     const newQuantity = item.quantity + step;
 
-                    // Vérification du stock
                     if (newQuantity > item.quantite_stock) {
                         setStockError({ product: item, isVisible: true });
-                        return item; // Ne pas augmenter la quantité
+                        return item;
                     }
                     return { ...item, quantity: newQuantity };
                 }
@@ -93,18 +81,27 @@ export const CartProvider = ({ children }) => {
 
     const clearCart = () => setCartItems([]);
 
-    const closeConfirmation = () => {
-        setConfirmation({ product: null, quantity: 0, isVisible: false });
-    };
-
-    const closeStockError = () => {
-        setStockError({ product: null, isVisible: false });
-    };
+    const closeConfirmation = () => setConfirmation({ product: null, quantity: 0, isVisible: false });
+    const closeStockError = () => setStockError({ product: null, isVisible: false });
 
     const itemCount = cartItems.reduce((total, item) => (item.type_vente === 'unitaire' ? total + item.quantity : total + 1), 0);
 
     const { cartTotal, cartTotalWithoutPromo, hasPromo } = cartItems.reduce((totals, item) => {
-        // ... (logique de calcul du total)
+        const originalPrice = parseFloat(item.prix_ttc);
+        if (isNaN(originalPrice)) return totals;
+
+        const isPromo = !!(item.promotion && item.pourcentage_promo > 0);
+        const effectivePrice = isPromo ? (originalPrice * (1 - item.pourcentage_promo / 100)) : originalPrice;
+
+        const itemTotal = item.type_vente === 'vrac' ? (effectivePrice / 1000) * item.quantity : effectivePrice * item.quantity;
+        const itemTotalWithoutPromo = item.type_vente === 'vrac' ? (originalPrice / 1000) * item.quantity : originalPrice * item.quantity;
+
+        totals.cartTotal += itemTotal;
+        totals.cartTotalWithoutPromo += itemTotalWithoutPromo;
+        if (isPromo) {
+            totals.hasPromo = true;
+        }
+
         return totals;
     }, { cartTotal: 0, cartTotalWithoutPromo: 0, hasPromo: false });
 
@@ -121,8 +118,8 @@ export const CartProvider = ({ children }) => {
         hasPromo,
         confirmation,
         closeConfirmation,
-        stockError, // Exporter l'état d'erreur
-        closeStockError, // Exporter la fonction de fermeture
+        stockError,
+        closeStockError,
     };
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

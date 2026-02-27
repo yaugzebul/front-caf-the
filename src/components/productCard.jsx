@@ -7,7 +7,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import './styles/productCard.css';
 
 const ProductCard = ({ produit, viewMode = 'grid', priority = false, isLoading = false }) => {
-    // Si isLoading est true, on affiche le squelette
     if (isLoading) {
         return (
             <div className={`product-card ${viewMode}`}>
@@ -64,6 +63,7 @@ const ProductCard = ({ produit, viewMode = 'grid', priority = false, isLoading =
                         src={imageURL} 
                         alt={produit.nom_produit} 
                         className="product-card-img"
+                        loading={priority ? "eager" : "lazy"}
                         fetchPriority={priority ? "high" : "auto"}
                     />
                     {isPromo && <span className="promo-badge">-{produit.pourcentage_promo}%</span>}

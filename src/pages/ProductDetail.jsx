@@ -3,7 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useCart } from "../context/CartContext.jsx";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { formatDisplayQuantity } from "../utils/formatUtils"; // Importer la fonction utilitaire
+import { formatDisplayQuantity } from "../utils/formatUtils";
+import { fetchProductById } from "../services/api.js";
 import "./styles/ProductDetail.css";
 
 const ProductDetails = () => {
@@ -26,17 +27,18 @@ const ProductDetails = () => {
     useDocumentTitle(pageTitle, pageDescription, pageKeywords);
 
     useEffect(() => {
-        const fetchProduit = async () => {
+        const loadProduct = async () => {
             try {
                 setIsLoading(true);
                 setError(null);
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/${id}`);
-                if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-                const data = await response.json();
+                const data = await fetchProductById(id); // Utilisation de la fonction centralisée
                 setProduit(data.article);
 
-                if (data.article.type_vente === 'vrac') setQuantity(100);
-                else setQuantity(1);
+                if (data.article.type_vente === 'vrac') {
+                    setQuantity(100);
+                } else {
+                    setQuantity(1);
+                }
             } catch (err) {
                 console.error("Erreur lors du chargement du produit :", err);
                 setError("Impossible de charger le produit");
@@ -44,7 +46,7 @@ const ProductDetails = () => {
                 setIsLoading(false);
             }
         };
-        fetchProduit();
+        loadProduct();
     }, [id]);
 
     const handleIncrement = () => {
@@ -133,7 +135,7 @@ const ProductDetails = () => {
                         ) : (
                             <span className="price">{originalPrice.toFixed(2)} €</span>
                         )}
-                        {produit.type_vente === 'vrac' && <span style={{fontSize: '0.6em', color: '#666', marginLeft: '5px'}}> / kg</span>}
+                        {produit.type_vente === 'vrac' && <span className="price-unit"> / kg</span>}
                     </div>
 
                     {produit.origine && (

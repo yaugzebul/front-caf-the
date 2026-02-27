@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
-import Skeleton from 'react-loading-skeleton';
+import { fetchTopSellingProducts } from '../services/api.js'; // Importer la fonction d'API
 import './styles/Hero.css';
 
 const Hero = () => {
@@ -10,16 +10,10 @@ const Hero = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchTopProducts = async () => {
+        const loadTopProducts = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles/top-selling`);
-                
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`);
-                }
-                
-                const data = await response.json();
+                const data = await fetchTopSellingProducts();
                 setTopProducts(data.articles);
             } catch (err) {
                 console.error("Erreur lors du chargement des meilleures ventes :", err);
@@ -29,7 +23,7 @@ const Hero = () => {
             }
         };
 
-        fetchTopProducts();
+        loadTopProducts();
     }, []);
 
     return (
@@ -41,27 +35,22 @@ const Hero = () => {
 
             <div className="top-products-list">
                 {isLoading ? (
-                    <>
-                        {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="product-skeleton">
-                                <Skeleton height={200} width={300} />
-                                <Skeleton height={20} width="70%" style={{ marginTop: '1rem' }} />
-                                <Skeleton height={20} width="40%" style={{ marginTop: '0.5rem' }} />
-                            </div>
-                        ))}
-                    </>
+                    Array.from({ length: 3 }).map((_, i) => (
+                        <ProductCard key={i} isLoading={true} />
+                    ))
                 ) : error ? (
                     <div className="error-message">{error}</div>
                 ) : (
-                    <>
-                        {topProducts.map(product => (
-                            <ProductCard key={product.id_article} produit={product} />
-                        ))}
-                    </>
+                    topProducts.map(product => (
+                        <ProductCard 
+                            key={product.id_article} 
+                            produit={product} 
+                            priority={true} 
+                        />
+                    ))
                 )}
             </div>
 
-            {/* Bouton CTA déplacé ici, après la liste des produits */}
             <div className="hero-cta-container">
                 <Link to="/produits" className="hero-cta-btn">
                     Découvrez notre catalogue de produits !

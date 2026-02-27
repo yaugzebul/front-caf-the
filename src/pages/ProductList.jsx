@@ -5,6 +5,7 @@ import ProductFilters from "../components/ProductFilters.jsx";
 import Pagination from "../components/Pagination.jsx";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
 import { useDebounce } from "../hooks/useDebounce.js";
+import { fetchProducts } from "../services/api.js"; // Importer la fonction d'API
 import './styles/ProductList.css';
 
 const ITEMS_PER_PAGE = 12;
@@ -66,12 +67,10 @@ const ProductList = () => {
     useDocumentTitle(pageTitle, "Parcourez notre catalogue complet de thés, cafés et accessoires.", pageKeywords);
 
     useEffect(() => {
-        const fetchProduits = async () => {
+        const loadProducts = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles`);
-                if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-                const data = await response.json();
+                const data = await fetchProducts(); // Utiliser la fonction du service
                 setProduits(data.articles);
             } catch (err) {
                 setError("Impossible de charger les produits.");
@@ -79,7 +78,7 @@ const ProductList = () => {
                 setIsLoading(false);
             }
         };
-        fetchProduits();
+        loadProducts();
     }, []);
 
     const { uniqueCategories, priceRange } = useMemo(() => {
