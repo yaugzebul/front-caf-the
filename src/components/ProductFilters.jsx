@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './styles/ProductFilters.css';
 
 const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => {
-    // État local pour savoir si le filtre de prix est activé par l'utilisateur
-    // On l'initialise à true si le prix max actuel est différent de la valeur par défaut (9999)
     const [isPriceFilterActive, setIsPriceFilterActive] = useState(filters.maxPrice < 9999);
 
     const handleFilter = (e) => {
@@ -15,16 +13,27 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
         setIsPriceFilterActive(isActive);
         
         if (!isActive) {
-            // Si on désactive, on remet le prix max à 9999 (ou infini) pour tout afficher
             onFilterChange('maxPrice', 9999);
         } else {
-            // Si on active, on met le prix max à la valeur max réelle de la gamme
             onFilterChange('maxPrice', priceRange.max);
         }
     };
 
     return (
         <div className="product-filters">
+            {/* Champ de recherche */}
+            <div className="filter-group search-group">
+                <label htmlFor="search-input">Rechercher</label>
+                <input
+                    type="text"
+                    id="search-input"
+                    name="search"
+                    placeholder="Nom du produit..."
+                    value={filters.search}
+                    onChange={handleFilter}
+                />
+            </div>
+
             {/* Filtre par catégorie */}
             <div className="filter-group">
                 <label htmlFor="category-select">Catégorie</label>
@@ -41,7 +50,7 @@ const ProductFilters = ({ categories, filters, onFilterChange, priceRange }) => 
                 </select>
             </div>
 
-            {/* Filtre par prix amélioré */}
+            {/* Filtre par prix */}
             <div className="filter-group price-filter-group">
                 <div className="price-header">
                     <input 

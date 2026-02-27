@@ -36,7 +36,7 @@ const About = () => {
             <section className="about-section reverse">
                 <div className="about-content">
                     <h2>Nos Valeurs</h2>
-                    <ul>
+                    <ul className="list-unstyled">
                         <li><strong>Qualité :</strong> Nous sélectionnons rigoureusement chaque produit pour ses qualités gustatives uniques.</li>
                         <li><strong>Éthique :</strong> Nous privilégions les circuits courts et le commerce équitable.</li>
                         <li><strong>Expertise :</strong> Nos baristas et sommeliers du thé sont formés pour vous conseiller au mieux.</li>

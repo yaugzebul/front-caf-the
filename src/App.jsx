@@ -14,7 +14,9 @@ const Account = lazy(() => import("./pages/Account.jsx"));
 const CGV = lazy(() => import("./pages/CGV.jsx"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
-const Contact = lazy(() => import("./pages/Contact.jsx")); // Importer Contact
+const Contact = lazy(() => import("./pages/Contact.jsx"));
+const FAQ = lazy(() => import("./pages/FAQ.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx")); // Importer NotFound
 const Accueil = lazy(() => import("./pages/Accueil.jsx"));
 const Products = lazy(() => import("./pages/ProductList.jsx"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail.jsx"));
@@ -55,7 +57,10 @@ function App() {
                                     <Route path="cgv" element={<CGV />} />
                                     <Route path="politique-confidentialite" element={<PrivacyPolicy />} />
                                     <Route path="about" element={<About />} />
-                                    <Route path="contact" element={<Contact />} /> {/* Ajouter la route */}
+                                    <Route path="contact" element={<Contact />} />
+                                    <Route path="faq" element={<FAQ />} />
+                                    {/* Route 404 - doit être la dernière */}
+                                    <Route path="*" element={<NotFound />} />
                                 </Route>
                             </Routes>
                         </Suspense>

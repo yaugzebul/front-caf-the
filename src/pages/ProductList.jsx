@@ -4,6 +4,7 @@ import ProductCard from "../components/productCard.jsx";
 import ProductFilters from "../components/ProductFilters.jsx";
 import Pagination from "../components/Pagination.jsx";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
+import { useDebounce } from "../hooks/useDebounce.js"; // Importer le hook debounce
 import './styles/ProductList.css';
 
 const ITEMS_PER_PAGE = 12;
@@ -18,20 +19,36 @@ const ProductList = () => {
     const navigate = useNavigate();
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
+    // État local pour la recherche, pour une réactivité instantanée de l'input
+    const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+    const debouncedSearchTerm = useDebounce(searchTerm, 300); // Délai de 300ms
+
     const filters = {
         category: searchParams.get('category') || 'all',
         minPrice: Number(searchParams.get('minPrice')) || 0,
         maxPrice: Number(searchParams.get('maxPrice')) || 9999,
         sort: searchParams.get('sort') || 'default',
-        search: searchParams.get('search') || '',
+        search: debouncedSearchTerm, // Utiliser la valeur "débouncée" pour le filtrage
         page: Number(searchParams.get('page')) || 1,
     };
+
+    // Effet pour mettre à jour l'URL quand la recherche "débouncée" change
+    useEffect(() => {
+        const newParams = new URLSearchParams(location.search);
+        if (debouncedSearchTerm) {
+            newParams.set('search', debouncedSearchTerm);
+        } else {
+            newParams.delete('search');
+        }
+        newParams.set('page', '1'); // Revenir à la page 1 à chaque nouvelle recherche
+        navigate(`?${newParams.toString()}`, { replace: true });
+    }, [debouncedSearchTerm]);
+
 
     const urlCategoryMap = useMemo(() => ({
         'cafes': 'Café', 'thes': 'Thé', 'accessoires': 'Accessoire', 'cadeaux': 'Cadeau'
     }), []);
 
-    // Titre et mots-clés dynamiques pour le SEO
     const pageTitle = useMemo(() => {
         if (filters.search) return `Résultats pour "${filters.search}" - Caf'Thé`;
         if (filters.category !== 'all') {
@@ -49,15 +66,7 @@ const ProductList = () => {
         return keywords;
     }, [filters.category]);
 
-    useDocumentTitle(pageTitle, "Parcourez notre catalogue complet de thés, cafés et accessoires. Trouvez le produit idéal pour vos moments de dégustation.", pageKeywords);
-
-    const displayFilters = useMemo(() => {
-        const mappedCategory = urlCategoryMap[filters.category];
-        return {
-            ...filters,
-            category: mappedCategory ? mappedCategory.toLowerCase() : filters.category
-        };
-    }, [filters, urlCategoryMap]);
+    useDocumentTitle(pageTitle, "Parcourez notre catalogue complet de thés, cafés et accessoires.", pageKeywords);
 
     useEffect(() => {
         const fetchProduits = async () => {
@@ -86,48 +95,33 @@ const ProductList = () => {
     }, [produits]);
 
     const handleFilterChange = (filterName, value) => {
+        if (filterName === 'search') {
+            setSearchTerm(value); // Mettre à jour l'état local de la recherche
+            return;
+        }
+
         const newParams = new URLSearchParams(location.search);
-        
         if (filterName === 'price') {
             newParams.set('minPrice', value.min);
             newParams.set('maxPrice', value.max);
         } else {
-            if (value === 'all' || !value) {
-                newParams.delete(filterName);
-            } else {
-                newParams.set(filterName, value);
-            }
+            if (value === 'all' || !value) newParams.delete(filterName);
+            else newParams.set(filterName, value);
         }
-        
-        if (filterName !== 'page') {
-            newParams.set('page', '1');
-        }
-        
+        if (filterName !== 'page') newParams.set('page', '1');
         navigate(`?${newParams.toString()}`);
     };
 
     const sortedAndFilteredProduits = useMemo(() => {
-        const categoryTarget = urlCategoryMap[filters.category] || filters.category;
-
         let filtered = produits.filter(produit => {
-            const categoryMatch = filters.category === 'all' || 
-                (produit.id_categorie && produit.id_categorie.toLowerCase() === categoryTarget.toLowerCase());
-            
-            const price = parseFloat(produit.prix_ttc);
-            const priceMatch = price >= filters.minPrice && price <= filters.maxPrice;
-            
-            const searchMatch = filters.search 
-                ? produit.nom_produit.toLowerCase().includes(filters.search.toLowerCase()) 
-                : true;
-
+            const categoryMatch = filters.category === 'all' || (produit.id_categorie && produit.id_categorie.toLowerCase() === (urlCategoryMap[filters.category] || filters.category).toLowerCase());
+            const priceMatch = parseFloat(produit.prix_ttc) >= filters.minPrice && parseFloat(produit.prix_ttc) <= filters.maxPrice;
+            const searchMatch = filters.search ? produit.nom_produit.toLowerCase().includes(filters.search.toLowerCase()) : true;
             return categoryMatch && priceMatch && searchMatch;
         });
 
-        if (filters.sort === 'price-asc') {
-            filtered.sort((a, b) => parseFloat(a.prix_ttc) - parseFloat(b.prix_ttc));
-        } else if (filters.sort === 'price-desc') {
-            filtered.sort((a, b) => parseFloat(b.prix_ttc) - parseFloat(a.prix_ttc));
-        }
+        if (filters.sort === 'price-asc') filtered.sort((a, b) => parseFloat(a.prix_ttc) - parseFloat(b.prix_ttc));
+        else if (filters.sort === 'price-desc') filtered.sort((a, b) => parseFloat(b.prix_ttc) - parseFloat(a.prix_ttc));
 
         return filtered;
     }, [produits, filters, urlCategoryMap]);
@@ -139,20 +133,17 @@ const ProductList = () => {
 
     const totalPages = Math.ceil(sortedAndFilteredProduits.length / ITEMS_PER_PAGE);
 
-    if (isLoading) { return <div>Chargement...</div> }
-    if (error) { return <div>{error}</div> }
+    if (isLoading) return <div>Chargement...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <div className="product-list-container">
-            <h2 className="product-list-title">
-                {filters.search ? `Résultats pour "${filters.search}"` : "Nos Produits"}
-            </h2>
-            
+            <h2 className="product-list-title">{pageTitle}</h2>
             <div className="top-controls">
                 {produits.length > 0 && (
                     <ProductFilters 
                         categories={uniqueCategories}
-                        filters={displayFilters}
+                        filters={{...filters, search: searchTerm}} // Passer la valeur instantanée à l'input
                         onFilterChange={handleFilterChange}
                         priceRange={priceRange}
                     />
@@ -162,7 +153,6 @@ const ProductList = () => {
                     <button onClick={() => setViewMode('list')} className={viewMode === 'list' ? 'active' : ''}>Liste</button>
                 </div>
             </div>
-
             <div className={`product-list ${viewMode}`}>
                 {paginatedProduits.length > 0 ? (
                     paginatedProduits.map((produit) => (
@@ -172,7 +162,6 @@ const ProductList = () => {
                     <p className="no-products-message">Aucun produit ne correspond à vos critères.</p>
                 )}
             </div>
-
             {totalPages > 1 && (
                 <Pagination 
                     currentPage={filters.page}

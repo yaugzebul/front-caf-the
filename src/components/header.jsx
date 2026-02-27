@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import CartIcon from './CartIcon.jsx';
-// Imports optimisés pour le Tree Shaking
-import Search from 'lucide-react/dist/esm/icons/search';
+// Imports optimisés
 import Menu from 'lucide-react/dist/esm/icons/menu';
 import X from 'lucide-react/dist/esm/icons/x';
 import User from 'lucide-react/dist/esm/icons/user';
@@ -12,29 +11,19 @@ import Sun from 'lucide-react/dist/esm/icons/sun';
 import Moon from 'lucide-react/dist/esm/icons/moon';
 
 import './styles/header.css';
-import logo from '/images/logo-site.svg';
+// Importer les deux logos
+import logoLight from '/images/logo-site.svg';
+import logoDark from '/images/logo-site-dm.svg';
 
 const Header = () => {
     const { user, isAuthenticated, logout } = useContext(AuthContext);
     const { theme, toggleTheme } = useTheme();
-    const [isSearchVisible, setIsSearchVisible] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
         setIsMenuOpen(false);
     }
-
-    const handleSearch = (e) => {
-        if (e.key === 'Enter' && searchQuery.trim()) {
-            navigate(`/produits?search=${encodeURIComponent(searchQuery.trim())}`);
-            setIsSearchVisible(false);
-            setSearchQuery('');
-            setIsMenuOpen(false);
-        }
-    };
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -52,7 +41,11 @@ const Header = () => {
 
             <div className="navbar-center">
                 <Link to="/" onClick={closeMenu}>
-                    <img src={logo} alt="Logo Caf'Thé" className="navbar-logo" />
+                    <img 
+                        src={theme === 'light' ? logoLight : logoDark} 
+                        alt="Logo Caf'Thé" 
+                        className="navbar-logo" 
+                    />
                 </Link>
             </div>
 
@@ -83,24 +76,6 @@ const Header = () => {
                 <button className="theme-toggle-btn desktop" onClick={toggleTheme} title="Changer de thème">
                     {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
                 </button>
-
-                {isSearchVisible ? (
-                    <div className="search-bar-active">
-                        <input 
-                            type="text" 
-                            placeholder="Rechercher..." 
-                            autoFocus 
-                            value={searchQuery} 
-                            onChange={(e) => setSearchQuery(e.target.value)} 
-                            onKeyDown={handleSearch} 
-                        />
-                        <button onClick={() => setIsSearchVisible(false)} className="close-search-btn">X</button>
-                    </div>
-                ) : (
-                    <div className="search-icon" onClick={() => setIsSearchVisible(true)}>
-                        <Search size={22} />
-                    </div>
-                )}
 
                 <CartIcon />
                 

@@ -22,13 +22,20 @@
     color: var(--color-text-dark);
 }
 
-.filter-group select {
+.filter-group select,
+.filter-group input[type="text"] {
     padding: 8px;
     border: 1px solid var(--color-border-light);
     border-radius: 5px;
     min-width: 200px;
     background-color: var(--color-white);
     color: var(--color-text-dark);
+}
+
+.filter-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-accent-gold);
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2);
 }
 
 /* Styles spécifiques pour le groupe de prix */

@@ -1,0 +1,48 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 60vh;
+    padding: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-text-dark);
+}
+
+.not-found-title {
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--color-titles);
+    margin: 0;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+
+.not-found-subtitle {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+    color: var(--color-text-dark);
+}
+
+.not-found-text {
+    font-size: 1.1rem;
+    color: var(--color-text-dark);
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+}
+
+.btn-home {
+    background-color: var(--color-accent-gold);
+    color: var(--color-btn-text);
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-home:hover {
+    background-color: var(--color-accent-gold-darker);
+    transform: translateY(-2px);
+}
